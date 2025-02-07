@@ -1,7 +1,7 @@
 package com.bytebreeze.quickdrop.enums;
 
 public enum Role {
-    ADMIN,
-    USER,
-    RIDER
+    ROLE_ADMIN,
+    ROLE_USER,
+    ROLE_RIDER
 }
