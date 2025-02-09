@@ -1,4 +1,4 @@
-<div class="w-64 h-full min-h-screen bg-white dark:bg-gray-800 shadow-lg ">
+<div class="w-64 h-full min-h-screen bg-white dark:bg-gray-800 shadow-lg">
     <div class="p-6">
         <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-200">Dashboard</h2>
     </div>
@@ -8,7 +8,8 @@
                 <a href="/" class="block px-6 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded">
                     Home
                 </a>
-            </li><li>
+            </li>
+            <li>
                 <a href="/forms" class="block px-6 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded">
                     Forms
                 </a>
@@ -22,14 +23,24 @@
                 <a href="/account-settings" class="block px-6 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded">
                     Account Settings
                 </a>
-            </li><li>
+            </li>
+            <li>
                 <a href="/auth/login" class="block px-6 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded">
                     Login
                 </a>
-            </li><li>
+            </li>
+            <li>
                 <a href="/auth/register" class="block px-6 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded">
                     Register
                 </a>
+            </li>
+            <li>
+                <form th:action="@{/logout}" method="post" class="w-full">
+                    <button type="submit"
+                            class="block w-full text-left px-6 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded">
+                        Logout
+                    </button>
+                </form>
             </li>
         </ul>
     </nav>
