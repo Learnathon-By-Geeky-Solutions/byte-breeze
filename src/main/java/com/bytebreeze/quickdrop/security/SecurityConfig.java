@@ -4,6 +4,7 @@ import com.bytebreeze.quickdrop.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,7 +22,11 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/images/auth-logo.png").permitAll()
+                                .requestMatchers(
+                                        "/images/auth-logo.png",
+                                        "/css/**",
+                                        "/js/**"
+                                ).permitAll()
                                 .anyRequest().authenticated()
                 )
                 .formLogin(formLogin ->
@@ -31,9 +36,7 @@ public class SecurityConfig {
                                 .defaultSuccessUrl("/")
                                 .permitAll()
                 )
-                .logout(logout ->
-                        logout.permitAll()
-                );
+                .logout(LogoutConfigurer::permitAll);
         return http.build();
     }
 
