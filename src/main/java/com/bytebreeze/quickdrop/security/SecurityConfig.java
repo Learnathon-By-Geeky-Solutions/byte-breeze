@@ -27,7 +27,8 @@ public class SecurityConfig {
                                 .requestMatchers(
                                         "/images/auth-logo.png",
                                         "/css/**",
-                                        "/js/**"
+                                        "/js/**",
+                                        "/auth/register"
                                 ).permitAll()
                                 .anyRequest().authenticated()
                 )
@@ -44,6 +45,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
+
         return new BCryptPasswordEncoder();
     }
 }
