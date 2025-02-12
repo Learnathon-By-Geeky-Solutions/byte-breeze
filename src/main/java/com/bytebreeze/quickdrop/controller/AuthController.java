@@ -1,6 +1,5 @@
 package com.bytebreeze.quickdrop.controller;
 
-
 import com.bytebreeze.quickdrop.dto.UserRegistrationRequestDTO;
 import com.bytebreeze.quickdrop.service.UserService;
 import jakarta.validation.Valid;
@@ -11,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,11 +34,10 @@ public class AuthController {
                                          BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
         if(bindingResult.hasErrors()){
             model.addAttribute("error");
-            //bindingResult.getAllErrors().forEach(error -> System.out.println(error.getDefaultMessage()));
 
             // Collect all validation error messages
             List<String> errorMessages = bindingResult.getAllErrors().stream()
-                    .map(error -> error.getDefaultMessage()) // Get default messages
+                    .map(error -> error.getDefaultMessage()) // Get default messages from dto
                     .collect(Collectors.toList());
 
             // Add error messages to the model
@@ -55,21 +52,11 @@ public class AuthController {
             redirectAttributes.addFlashAttribute("success", true); // Add flash attribute
             return "redirect:/auth/login";
 
-           //return "redirect:/auth/login?success=true";
         }catch (Exception e){
             model.addAttribute("errorMessage",e.getMessage());
             return "auth/register";
         }
     }
-
-
-
-
-
-
-
-    //-------------------------------------------------------------------------------------------------
-
 
 
     @GetMapping("/login")
@@ -90,7 +77,5 @@ public class AuthController {
         model.addAttribute("message", "Reset your password");
         return "auth/reset-password";  // Removed leading slash
     }
-
-
 
 }
