@@ -30,7 +30,7 @@ public class User {
     private String phoneNumber;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = true)
     private EmailVerified emailVerified;
 
     @Column(nullable = true)
