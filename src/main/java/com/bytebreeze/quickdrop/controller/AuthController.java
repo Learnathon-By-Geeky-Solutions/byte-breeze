@@ -2,16 +2,27 @@ package com.bytebreeze.quickdrop.controller;
 
 
 import com.bytebreeze.quickdrop.dto.UserRegistrationRequestDTO;
+import com.bytebreeze.quickdrop.service.UserService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Controller
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
+
+    @Autowired
+    private final UserService userService;
 
     @GetMapping("/register")
     public String getRegistrationPage(Model model) {
@@ -22,21 +33,42 @@ public class AuthController {
 
     @PostMapping ("/register")
     public String submitRegistrationForm(@Valid @ModelAttribute("userRegistrationRequestDTO") UserRegistrationRequestDTO userRegistrationRequestDTO,
-                                         BindingResult bindingResult) {
+                                         BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
         if(bindingResult.hasErrors()){
-            bindingResult.getAllErrors().forEach(error -> System.out.println(error.getDefaultMessage()));
+            model.addAttribute("error");
+            //bindingResult.getAllErrors().forEach(error -> System.out.println(error.getDefaultMessage()));
+
+            // Collect all validation error messages
+            List<String> errorMessages = bindingResult.getAllErrors().stream()
+                    .map(error -> error.getDefaultMessage()) // Get default messages
+                    .collect(Collectors.toList());
+
+            // Add error messages to the model
+            model.addAttribute("validationErrors", errorMessages);
+
             return "auth/register";
         }
-        System.out.println("Form Data name: "+ userRegistrationRequestDTO.getFullName());
-        System.out.println("Form Data email: "+ userRegistrationRequestDTO.getEmail());
-        System.out.println("Form Data password: "+ userRegistrationRequestDTO.getPassword());
 
-        return "redirect:/auth/login";
+        try{
+            userService.registerUser(userRegistrationRequestDTO);
+
+            redirectAttributes.addFlashAttribute("success", true); // Add flash attribute
+            return "redirect:/auth/login";
+
+           //return "redirect:/auth/login?success=true";
+        }catch (Exception e){
+            model.addAttribute("errorMessage",e.getMessage());
+            return "auth/register";
+        }
     }
 
 
 
 
+
+
+
+    //-------------------------------------------------------------------------------------------------
 
 
 

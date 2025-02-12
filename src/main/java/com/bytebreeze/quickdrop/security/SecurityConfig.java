@@ -28,7 +28,8 @@ public class SecurityConfig {
                                         "/images/auth-logo.png",
                                         "/css/**",
                                         "/js/**",
-                                        "/auth/register"
+                                        "/auth/register",
+                                        "/auth/login?success=true"
                                 ).permitAll()
                                 .anyRequest().authenticated()
                 )
