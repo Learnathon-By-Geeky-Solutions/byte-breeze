@@ -11,12 +11,19 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.google.common.util.concurrent.RateLimiter;
+
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService(UserRepository userRepository) {
         return new CustomUserDetailsService(userRepository);
+    }
+
+    @Bean
+    public RateLimiter registrationRateLimiter() {
+        return RateLimiter.create(10.0); // 10 requests per second
     }
     
     @Bean
