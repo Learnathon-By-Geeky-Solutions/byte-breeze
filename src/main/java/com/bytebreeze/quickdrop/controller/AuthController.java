@@ -19,14 +19,15 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AuthController {
 
-    @Autowired
     private final UserService userService;
+
+    private static final String AUTH_REGISTER_VIEW = "auth/register";
 
     @GetMapping("/register")
     public String getRegistrationPage(Model model) {
         model.addAttribute("userRegistrationRequestDTO",new UserRegistrationRequestDTO());
 
-        return "auth/register";
+        return AUTH_REGISTER_VIEW;
     }
 
     @PostMapping ("/register")
@@ -43,7 +44,7 @@ public class AuthController {
             // Add error messages to the model
             model.addAttribute("validationErrors", errorMessages);
 
-            return "auth/register";
+            return AUTH_REGISTER_VIEW;
         }
 
         try{
@@ -54,7 +55,7 @@ public class AuthController {
 
         }catch (Exception e){
             model.addAttribute("errorMessage",e.getMessage());
-            return "auth/register";
+            return AUTH_REGISTER_VIEW;
         }
     }
 
