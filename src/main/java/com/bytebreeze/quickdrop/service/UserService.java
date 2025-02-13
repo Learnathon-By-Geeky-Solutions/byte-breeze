@@ -2,9 +2,9 @@ package com.bytebreeze.quickdrop.service;
 
 
 import com.bytebreeze.quickdrop.dto.UserRegistrationRequestDTO;
+import com.bytebreeze.quickdrop.exception.custom.AlreadyExistsException;
 import com.bytebreeze.quickdrop.model.User;
 import com.bytebreeze.quickdrop.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +29,8 @@ public class UserService {
     public String registerUser(UserRegistrationRequestDTO dto){
 
         if(isEmailAlreadyInUse(dto.getEmail())){
-            throw new RuntimeException("Email already exists");
+
+            throw new AlreadyExistsException("Provided email already registered");
         }
 
         User user = new User();
