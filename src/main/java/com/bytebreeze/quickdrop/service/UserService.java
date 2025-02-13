@@ -11,17 +11,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
 
     public boolean isEmailAlreadyInUse(String email) {
-        if(userRepository.findByEmail(email).isPresent()){
-            return true;
-        }
-        return false;
+        return userRepository.findByEmail(email).isPresent();
+
     }
 
 
