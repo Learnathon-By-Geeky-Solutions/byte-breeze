@@ -32,6 +32,9 @@ dependencies {
 
 	// for validation
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	// Provide common library for java like 'RateLimiter'
+	implementation 'com.google.guava:guava:32.1.2-jre' // Use the latest version available
 }
 
 tasks.named('test') {
