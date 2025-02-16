@@ -1,12 +1,16 @@
 package com.bytebreeze.quickdrop.service;
 
 
+import com.bytebreeze.quickdrop.dto.UserProfileUpdateDto;
 import com.bytebreeze.quickdrop.dto.UserRegistrationRequestDTO;
 import com.bytebreeze.quickdrop.exception.custom.AlreadyExistsException;
 import com.bytebreeze.quickdrop.model.User;
 import com.bytebreeze.quickdrop.repository.UserRepository;
+import com.bytebreeze.quickdrop.util.AuthUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -41,5 +45,17 @@ public class UserService {
         userRepository.save(user);
 
         return "User registered successfully";
+    }
+
+    public UserProfileUpdateDto userProfileUpdateGet()
+    {
+        String authenticatedUserEmail = AuthUtil.getAuthenticatedUsername();
+        Optional<User> userOptional = userRepository.findByEmail(authenticatedUserEmail);
+        User user = userOptional.orElseThrow(() -> new RuntimeException("User not found"));
+        UserProfileUpdateDto userProfileUpdateDto = new UserProfileUpdateDto();
+        userProfileUpdateDto.setFullName(user.getFullName());
+        userProfileUpdateDto.setPassword(user.getPassword());
+        userProfileUpdateDto.setPhoneNumber(user.getPhoneNumber());
+        return userProfileUpdateDto;
     }
 }
