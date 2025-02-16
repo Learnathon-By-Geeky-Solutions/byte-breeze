@@ -61,7 +61,6 @@ public class AuthController {
 
     @GetMapping("/login")
     public String login(Model model) {
-        model.addAttribute("message", "Login to your account");
         return "auth/login";  // Removed leading slash
     }
 
