@@ -17,7 +17,7 @@ public class Dashboard {
     @GetMapping("/")
     public String home(Model model) {
         model.addAttribute("title", "Dashboard - Home");
-        return "dashboard/home";  // Removed leading slash
+        return "index";  // Removed leading slash
     }
 
     @GetMapping("/forms")
