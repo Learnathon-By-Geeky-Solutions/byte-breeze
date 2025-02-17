@@ -3,6 +3,7 @@ package com.bytebreeze.quickdrop.service;
 
 import com.bytebreeze.quickdrop.dto.UserProfileUpdateDto;
 import com.bytebreeze.quickdrop.dto.UserRegistrationRequestDTO;
+import com.bytebreeze.quickdrop.enums.Role;
 import com.bytebreeze.quickdrop.exception.custom.AlreadyExistsException;
 import com.bytebreeze.quickdrop.model.User;
 import com.bytebreeze.quickdrop.repository.UserRepository;
@@ -10,6 +11,8 @@ import com.bytebreeze.quickdrop.util.AuthUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Optional;
 
 @Service
@@ -41,7 +44,9 @@ public class UserService {
         user.setFullName(dto.getFullName());
         user.setEmail(dto.getEmail());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
-
+        if (user.getRoles() == null || user.getRoles().isEmpty()) {
+            user.setRoles(new HashSet<>(Collections.singletonList(Role.ROLE_USER)));
+        }
         userRepository.save(user);
 
         return "User registered successfully";
