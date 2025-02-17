@@ -47,15 +47,43 @@ public class UserService {
         return "User registered successfully";
     }
 
-    public UserProfileUpdateDto userProfileUpdateGet()
+    public User getAuthenticatedUser()
     {
         String authenticatedUserEmail = AuthUtil.getAuthenticatedUsername();
         Optional<User> userOptional = userRepository.findByEmail(authenticatedUserEmail);
-        User user = userOptional.orElseThrow(() -> new RuntimeException("User not found"));
+        return userOptional.orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    public UserProfileUpdateDto userProfileUpdateGet()
+    {
+        User user = this.getAuthenticatedUser();
         UserProfileUpdateDto userProfileUpdateDto = new UserProfileUpdateDto();
         userProfileUpdateDto.setFullName(user.getFullName());
         userProfileUpdateDto.setPassword(user.getPassword());
         userProfileUpdateDto.setPhoneNumber(user.getPhoneNumber());
+        userProfileUpdateDto.setProfileImageUrl(user.getProfilePicture());
         return userProfileUpdateDto;
     }
+
+    public boolean updateUserProfile(UserProfileUpdateDto userProfileUpdateDto) {
+        User user = this.getAuthenticatedUser();
+
+        if(userProfileUpdateDto.getFullName() != null) {
+            user.setFullName(userProfileUpdateDto.getFullName());
+        }
+
+        // Only update password if a new, non-empty password is provided
+        if(userProfileUpdateDto.getPassword() != null &&
+                !userProfileUpdateDto.getPassword().trim().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(userProfileUpdateDto.getPassword()));
+        }
+
+        if(userProfileUpdateDto.getPhoneNumber() != null) {
+            user.setPhoneNumber(userProfileUpdateDto.getPhoneNumber());
+        }
+
+        userRepository.save(user);
+        return true;
+    }
+
 }
