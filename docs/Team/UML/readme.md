@@ -81,6 +81,37 @@ The main actors in our system are:
 - **Delivery Rider** - Accepts and delivers parcels.
 - **System Admin** - Manages users and monitors system activities.
 
+
+Here are the top use cases of the smart parcel delivery system:
+- **Book Parcel**: Customers can book a parcel for delivery.
+- **Cancel Parcel Request**: Customers can cancel a parcel request before it is accepted by a rider.
+- **Track Parcel**: Customers can track the status of their parcel delivery.
+- **Review Rider**: Customers can review riders after delivery.
+- **Process Payments**: The system can process payments for parcel delivery.
+- **Register**: Customers can register in the system.
+- **Login**: Customers can log in to the system.
+- **Verify Rider During Handover**: Customers can verify the rider during parcel handover.
+- **Verify Parcel Receiver**: Riders can verify the parcel receiver during delivery.
+- **Complete Delivery**: Riders can complete the delivery process.
+- **Withdraw Earnings**: Riders can withdraw their earnings.
+- **Onboarding**: Riders can onboard into the system.
+- **Update Availability**: Riders can update their availability status.
+- **Accept Delivery Request**: Riders can accept delivery requests.
+- **Manage Parcels**: Admins can manage parcels in the system.
+- **Manage Pricing**: Admins can manage pricing rules.
+- **Generate Reports**: Admins can generate various reports.
+
+
+Here is the use case diagram of our smart parcel delivery system:
+
+<p align="center">
+    <img src="uml_use_case_diagram_Bytr_breeze.jpg" alt="smart parcel delivery system">
+    <br />
+    Use Case Diagram for smart parcel delivery system
+</p>
+
+
+
 ## Class Diagram
 ### Key Classes:
 1. **User** (Base class for Customer, Seller, Rider, and Admin).
