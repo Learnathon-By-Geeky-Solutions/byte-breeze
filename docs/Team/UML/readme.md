@@ -28,7 +28,7 @@ satisfaction.
 
 
 <p align="center">
-    <img src="smart parcel deliverysystem.webp" alt="smart parcel delivery cl">
+    <img src="images/smart parcel deliverysystem.webp" alt="smart parcel delivery cl">
     <br />
     Smart parcel delivery system
 </p>
@@ -140,19 +140,24 @@ Here is the use case diagram of our smart parcel delivery system:
    
 
 ## Activity Diagrams
-### Parcel Booking Process:
-1. Customer logs in.
-2. Enters parcel details (weight, dimensions, destination).
-3. Confirms order and selects payment method.
-4. System assigns a delivery rider.
-5. Customer receives confirmation notification.
+### Parcel Booking Process by Customer(sender):
 
-### Parcel Delivery Process:
-1. Rider receives a new delivery request.
-2. Rider picks up the parcel from the sender.
-3. Rider follows GPS-based route optimization.
-4. Rider verifies the receiver upon delivery.
-5. Payment is processed, and a confirmation notification is sent.
+<p align="center">
+    <img src="uml_customer_activity_diagram_Bytr_breeze.jpg" alt=" Activity Diagram for Customer(sender)">
+    <br />
+    Activity Diagram for Customer(sender) of Smart Parcel Delivery System
+</p>
+
+
+### Parcel Delivery Process By Rider:
+
+<p align="center">
+    <img src="uml_rider_activity_diagram.jpg" alt="Activity Diagram for Delivery Rider">
+    <br />
+    Activity Diagram for Delivery Rider of Smart Parcel Delivery System
+</p>
+
+
 
 ## Code
 The system will be implemented using Java for backend processing, MySQL for database management, and a frontend interface designed in HTML/CSS with JavaScript for interactivity.
