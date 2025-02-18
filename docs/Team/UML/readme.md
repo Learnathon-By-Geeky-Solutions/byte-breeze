@@ -28,9 +28,9 @@ satisfaction.
 
 
 <p align="center">
-    <img src="smart parcel deliverysystem.webp" alt="smart parcel delivery system">
+    <img src="smart parcel deliverysystem.webp" alt="smart parcel delivery cl">
     <br />
-    smart parcel delivery system
+    Smart parcel delivery system
 </p>
 
 
@@ -105,9 +105,9 @@ Here are the top use cases of the smart parcel delivery system:
 Here is the use case diagram of our smart parcel delivery system:
 
 <p align="center">
-    <img src="uml_use_case_diagram_Bytr_breeze.jpg" alt="smart parcel delivery system">
+    <img src="uml_use_case_diagram_Bytr_breeze.jpg" alt="smart parcel delivery Use case">
     <br />
-    Use Case Diagram for smart parcel delivery system
+    Use Case Diagram for Smart parcel delivery system
 </p>
 
 
@@ -115,12 +115,29 @@ Here is the use case diagram of our smart parcel delivery system:
 ## Class Diagram
 ### Key Classes:
 1. **User** (Base class for Customer, Seller, Rider, and Admin).
-2. **Parcel** (Represents a package to be delivered).
-3. **Order** (Contains parcel details and tracking information).
-4. **Delivery** (Manages the rider and status updates).
-5. **Payment** (Handles transactions upon delivery completion).
-6. **Notification** (Sends alerts for status updates).
-7. **Review** (Handles customer ratings and feedback).
+2. **Customer** (Send the parcel delivery request)
+3. **Rider** (Delivery the parcel from sender to receiver)
+4. **Admin** (Manages the system and parcel)
+5. **Parcel** (Represents a Parcel to be delivered).
+6. **Payment** (Handles transactions for sending a parcel ).
+7. **Pricing Rule** (Set the price for a specific parcel).
+8. **Review** (Handles customer ratings and feedback).
+
+
+
+<p align="center">
+    <img src="uml_class_diagram_Bytr_breeze.jpg" alt="Parcel Delivery Class Diagram">
+    <br />
+    Class Diagram for Smart Parcel Delivery System
+</p>
+
+<p align="center">
+    <img src="images/classdiagram convention.jpg" alt="Class diagram convention">
+    <br />
+    Type of UML relationship sign
+</p>
+
+   
 
 ## Activity Diagrams
 ### Parcel Booking Process:
