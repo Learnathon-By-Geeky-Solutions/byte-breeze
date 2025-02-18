@@ -26,11 +26,15 @@ The Smart Parcel Delivery System addresses urban personal and e-commerce deliver
 - **Database:** PostgreSQL
 - **Other:** Git, Docker,
 
-## UML & Database Design
-### UML Diagram
+## Documents
+- [`Requirement Breakdown`](https://docs.google.com/spreadsheets/d/1xkvcfqKs8xaK-G49qsPYhYuLTmGR0uW70pVxoA6MyY0/edit?gid=1403762707#gid=1403762707)
+- [`Project Documentation`](docs/Team/)
+
+
+## UML Diagram
 [`UML Diagram`](docs/Team/UML/)
 
-### Database Schema
+## Database Schema
 [`Database Schema`](docs/Team/database/)
 
 
