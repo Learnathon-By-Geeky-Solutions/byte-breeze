@@ -33,7 +33,7 @@ Welcome to the **Smart parcel delivery system Documentation**. This folder conta
 
 ### 4️⃣ **UML Diagrams**
 📁 Located in **[`UML/`](UML/)**:
-- [`UML.md`](UML/UML.md) - UML diagram explanation
+- [`UML.md`](UML/readme.md) - UML diagram explanation
 - [`class-diagram`](UML/uml_class_diagram_Bytr_breeze.jpg) - Class Diagram for object-oriented design.
 - [`Use-Case-diagram`](UML/uml_use_case_diagram_Bytr_breeze.jpg) - Use case Diagram for identify functional requirements.
 - [`Customer-activity-Diagram`](UML/uml_customer_activity_diagram_Bytr_breeze.jpg) - Customer activity diagram for `Customer` process flows and decision points.
