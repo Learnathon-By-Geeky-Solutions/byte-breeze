@@ -1,7 +1,5 @@
-# Smart Parcel Delivery System
-
-## Overview
-The Smart Parcel Delivery System is designed to provide an efficient and seamless delivery experience for customers, e-commerce sellers, and delivery riders. The system ensures real-time parcel tracking, automated parcel management, and role-based access control.
+<h1 align = "center"> Smart Parcel Delivery System</h1>
+<h3 align="center">Let's design Smart Parcel Delivery System</h3>
 
 ## Table of Contents
 - [System Requirements](#system-requirements)
@@ -9,6 +7,32 @@ The Smart Parcel Delivery System is designed to provide an efficient and seamles
 - [Class Diagram](#class-diagram)
 - [Activity Diagrams](#activity-diagrams)
 - [Code](#code)
+
+
+
+## Overview
+The rapid growth of urbanization and e-commerce has significantly increased the 
+demand for efficient parcel delivery services. Customers expect quick, reliable, 
+and transparent delivery systems, especially for intra-city delivery services. 
+However, traditional delivery systems often suffer from inefficiencies such as 
+delays, lack of tracking, and poor communication. To address these challenges, 
+the Smart Parcel Delivery System provides a tech-driven solution leveraging 
+modern technologies for seamless parcel management, real-time tracking, and 
+role-specific functionalities. 
+
+This project aims to bridge the gap between 
+customers, e-commerce sellers and delivery riders through a robust, user-friendly 
+platform, ensuring timely deliveries and transparency. With features like GPS-based rider assignment, real-time tracking, and feedback systems, this solution 
+aims to set new benchmarks in parcel delivery efficiency and customer 
+satisfaction.
+
+
+<p align="center">
+    <img src="smart parcel deliverysystem.webp" alt="smart parcel delivery system">
+    <br />
+    smart parcel delivery system
+</p>
+
 
 ## System Requirements
 We will focus on the following set of requirements while designing the Smart Parcel Delivery System:
