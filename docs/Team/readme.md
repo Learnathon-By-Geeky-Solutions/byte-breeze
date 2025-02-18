@@ -27,7 +27,7 @@ Welcome to the **Smart parcel delivery system Documentation**. This folder conta
 
 ### 3️⃣ **Database Documentation**
 📁 Located in **[`database/`](database/)**:
-- [`DATABASE.md`](database/DATABASE.md) - Database schema explanation.
+- [`DATABASE.md`](database/readme.md) - Database schema explanation.
 - [`ER-Diagram image`](database/ER_Diagram_V2.jpeg) - Entity-Relationship Diagram.
 - `queries.sql`) - SQL scripts for creating database tables.
 
