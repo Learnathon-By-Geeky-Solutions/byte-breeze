@@ -17,39 +17,42 @@ Welcome to the **Smart parcel delivery system Documentation**. This folder conta
 
 
 ### 1️⃣ **Project Overview**
-- [`OVERVIEW.md`](OVERVIEW.md) - High-level summary of the project.
-- [`INSTALLATION.md`](INSTALLATION.md) - Step-by-step guide to installing and setting up the project.
-- [`USAGE.md`](USAGE.md) - Instructions on how to use the project.
+- `OVERVIEW.md` - High-level summary of the project.
+- `INSTALLATION.md` - Step-by-step guide to installing and setting up the project.
+- `USAGE.md`) - Instructions on how to use the project.
 
 ### 2️⃣ **System Design**
-- [`ARCHITECTURE.md`](ARCHITECTURE.md) - Description of system components, workflow, and architecture.
-- [`ROADMAP.md`](ROADMAP.md) - Future features and development plans.
+- `ARCHITECTURE.md` - Description of system components, workflow, and architecture.
+- `ROADMAP.md` - Future features and development plans.
 
 ### 3️⃣ **Database Documentation**
 📁 Located in **[`database/`](database/)**:
 - [`DATABASE.md`](database/DATABASE.md) - Database schema explanation.
-- [`ER-Diagram.png`](database/ER-Diagram.png) - Entity-Relationship Diagram.
-- [`queries.sql`](database/queries.sql) - SQL scripts for creating database tables.
+- [`ER-Diagram image`](database/ER_Diagram_V2.jpeg) - Entity-Relationship Diagram.
+- `queries.sql`) - SQL scripts for creating database tables.
 
 ### 4️⃣ **UML Diagrams**
 📁 Located in **[`UML/`](UML/)**:
-- [`class-diagram.png`](UML/class-diagram.png) - Class Diagram for object-oriented design.
-- [`sequence-diagram.png`](UML/sequence-diagram.png) - Sequence Diagram showing data flow.
+- [`UML.md`](UML/UML.md) - UML diagram explanation
+- [`class-diagram`](UML/uml_class_diagram_Bytr_breeze.jpg) - Class Diagram for object-oriented design.
+- [`Use-Case-diagram`](UML/uml_use_case_diagram_Bytr_breeze.jpg) - Use case Diagram for identify functional requirements.
+- [`Customer-activity-Diagram`](UML/uml_customer_activity_diagram_Bytr_breeze.jpg) - Customer activity diagram for `Customer` process flows and decision points.
+- [`Rider-activity-Diagram`](UML/uml_rider_activity_diagram.jpg) - Rider activity diagram for `Rider` process flows and decision points.
 
 ### 5️⃣ **API Documentation**
-📁 Located in **[`api/`](api/)**:
-- [`API.md`](api/API.md) - REST API endpoints and request/response formats.
-- [`swagger.yaml`](api/swagger.yaml) - OpenAPI/Swagger specification.
+📁 Located in **`api/`**:
+- `API.md`) - REST API endpoints and request/response formats.
+- `swagger.yaml` - OpenAPI/Swagger specification.
 
 ### 6️⃣ **Additional References**
-- [`CHANGELOG.md`](CHANGELOG.md) - Version history and release notes.
-- [`LICENSE.md`](LICENSE.md) - Project license details.
-- [`FAQ.md`](FAQ.md) - Frequently asked questions and troubleshooting tips.
+- `CHANGELOG.md` - Version history and release notes.
+- `LICENSE.md` - Project license details.
+- `FAQ.md` - Frequently asked questions and troubleshooting tips.
 
 ---
 
 ## 🛠️ Contributing
-If you want to contribute, please check our [CONTRIBUTING.md](CONTRIBUTING.md) guide.
+If you want to contribute, please check our `CONTRIBUTING.md` guide.
 
 ---
 
