@@ -1,12 +1,12 @@
 # byte-breeze
 
 ## Team Members
-- suvashsumon (Team Leader)
-- KhairulBasharbd
-- Tofaal9152
+- [suvashsumon](https://github.com/suvashsumon) (Team Leader)
+- [KhairulBasharbd](https://github.com/KhairulBasharbd)
+- [Tofaal9152](https://github.com/Tofaal9152)
 
 ## Mentor
-- jamilxt
+- [jamilxt](https://github.com/jamilxt)
 
 ## Project Description
 Add your project description here.
