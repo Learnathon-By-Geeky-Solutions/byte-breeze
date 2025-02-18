@@ -162,7 +162,7 @@ Here is the use case diagram of our smart parcel delivery system:
 ## Code
 The system will be implemented using Java spring boot for backend processing, postgreSQL for database management, and a frontend interface designed in HTML/CSS, Thymeleaf with JavaScript for interactivity.
 
-Example structure of a `Parcel` class in Java:
+A Demo Example structure of a `Parcel` class in Java:
 ```java
 public class Parcel {
     private String trackingNumber;
