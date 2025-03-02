@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
-
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
