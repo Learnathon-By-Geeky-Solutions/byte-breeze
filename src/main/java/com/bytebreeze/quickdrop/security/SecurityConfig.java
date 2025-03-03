@@ -20,6 +20,7 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 public class SecurityConfig {
     @Value("${quickdrop.security.remember-me.key}")
     private String rememberMeKey;
+    private int rememberMeTokenValidityInSeconds = 30 * 24 * 60 * 60; // one month
 
     @Bean
     public UserDetailsService userDetailsService(UserRepository userRepository) {
@@ -45,6 +46,12 @@ public class SecurityConfig {
                         .loginProcessingUrl("/admin/login")
                         .defaultSuccessUrl("/admin/dashboard")  // Redirect to admin dashboard after successful login
                         .failureUrl("/admin/login?error=true")  // Redirect back to login on failure
+                )
+                .rememberMe((rememberMe)->rememberMe
+                        .key(rememberMeKey)
+                        .rememberMeParameter("remember-me")
+                        .tokenValiditySeconds(rememberMeTokenValidityInSeconds)
+                        .rememberMeCookieName("admin-remember-me")
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
@@ -77,7 +84,7 @@ public class SecurityConfig {
                 .rememberMe((rememberMe)->rememberMe
                         .key(rememberMeKey)
                         .rememberMeParameter("remember-me")
-                        .tokenValiditySeconds(60)
+                        .tokenValiditySeconds(rememberMeTokenValidityInSeconds)
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
