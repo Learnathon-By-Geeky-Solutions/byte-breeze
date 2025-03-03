@@ -1,6 +1,7 @@
 package com.bytebreeze.quickdrop.security;
 
 import com.bytebreeze.quickdrop.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -17,6 +18,9 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
+    @Value("${quickdrop.security.remember-me.key}")
+    private String rememberMeKey;
+
     @Bean
     public UserDetailsService userDetailsService(UserRepository userRepository) {
         return new CustomUserDetailsService(userRepository);
@@ -69,6 +73,11 @@ public class SecurityConfig {
                         .loginProcessingUrl("/user/login")
                         .defaultSuccessUrl("/user/dashboard")
                         .failureUrl("/auth/login?error=true")
+                )
+                .rememberMe((rememberMe)->rememberMe
+                        .key(rememberMeKey)
+                        .rememberMeParameter("remember-me")
+                        .tokenValiditySeconds(60)
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
