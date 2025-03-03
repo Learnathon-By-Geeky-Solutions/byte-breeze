@@ -16,7 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/admin")
 public class AdminController {
 
-    private static final String DASHBOARD_PROFILE_SETTINGS_PAGE = "/dashboard/admin-account";
+    private static final String DASHBOARD_PROFILE_SETTINGS_PAGE = "dashboard/admin-account";
 
     private UserService userService;
 
