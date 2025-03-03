@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parcel Tracking</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 h-screen flex">
+<div th:replace="~{fragments/sidebar.html}"></div>
+
+<div class="flex-1 flex flex-col w-full">
+    <div th:replace="~{fragments/navbar.html}"></div>
+    <h2 class="text-2xl font-bold text-center text-gray-800 mb-6 mt-4">Parcel Tracking</h2>
+    <div th:if="${message}" class="bg-green-500 text-center  text-white p-4 mb-4 rounded-md">
+        <p th:text="${message}"></p>
+    </div>
+    <form th:action="@{/user/parcel-tracking}" method="post"
+          class="space-y-4 max-w-lg w-full mx-auto bg-white p-8 rounded-lg shadow-md">
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Category</label>
+            <input type="text" name="category" required
+                   class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Description</label>
+            <textarea name="description" required
+                      class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Weight (kg)</label>
+            <input type="number" name="weight" required
+                   class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Size</label>
+            <input type="text" name="size" required
+                   class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Pickup Location</label>
+            <input type="text" name="pickup_location" required
+                   class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Receiver Name</label>
+            <input type="text" name="receiver_name" required
+                   class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Receiver Address</label>
+            <input type="text" name="receiver_address" required
+                   class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <div>
+            <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-500">
+                Submit
+            </button>
+        </div>
+    </form>
+</div>
+</body>
+
+</html>

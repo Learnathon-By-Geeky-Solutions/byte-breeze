@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parcel Tracking List</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 h-screen flex">
+<div th:replace="~{fragments/sidebar.html}"></div>
+
+<div class="flex-1 flex flex-col w-full">
+    <div th:replace="~{fragments/navbar.html}"></div>
+    <h2 class="text-2xl font-bold text-center text-gray-800 mb-6 mt-4">Parcel Tracking</h2>
+
+    <div class="max-w-7xl mx-auto p-6">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">Parcel Tracking List</h1>
+
+        <table class="min-w-full table-auto border-collapse">
+            <thead>
+            <tr>
+                <th class="px-4 py-2 text-left border">Category</th>
+                <th class="px-4 py-2 text-left border">Description</th>
+                <th class="px-4 py-2 text-left border">Weight (kg)</th>
+                <th class="px-4 py-2 text-left border">Size</th>
+                <th class="px-4 py-2 text-left border">Pickup Location</th>
+                <th class="px-4 py-2 text-left border">Receiver Name</th>
+                <th class="px-4 py-2 text-left border">Receiver Address</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Iterate over the parcels list and display each parcel -->
+            <tr th:each="parcel : ${parcels}">
+                <td th:text="${parcel.category}" class="px-4 py-2 border"></td>
+                <td th:text="${parcel.description}" class="px-4 py-2 border"></td>
+                <td th:text="${parcel.weight}" class="px-4 py-2 border"></td>
+                <td th:text="${parcel.size}" class="px-4 py-2 border"></td>
+                <td th:text="${parcel.pickupLocation}" class="px-4 py-2 border"></td>
+                <td th:text="${parcel.receiverName}" class="px-4 py-2 border"></td>
+                <td th:text="${parcel.receiverAddress}" class="px-4 py-2 border"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>
