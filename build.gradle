@@ -35,7 +35,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
 	// Provide common library for java like 'RateLimiter'
-	implementation 'com.google.guava:guava:33.4.0-jre' // Use the latest version available
+	implementation 'com.google.guava:guava:33.4.0-jre'
+
+	// MapStruct is a mapping code generation tool between different object types
+	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 }
 
 tasks.named('test') {
