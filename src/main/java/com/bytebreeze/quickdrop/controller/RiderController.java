@@ -2,8 +2,6 @@ package com.bytebreeze.quickdrop.controller;
 
 
 import com.bytebreeze.quickdrop.dto.RiderOnboardingDTO;
-import com.bytebreeze.quickdrop.dto.UserRegistrationRequestDTO;
-import com.bytebreeze.quickdrop.model.Rider;
 import com.bytebreeze.quickdrop.service.RiderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
