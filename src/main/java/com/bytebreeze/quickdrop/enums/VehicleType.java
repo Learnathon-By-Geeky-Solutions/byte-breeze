@@ -2,5 +2,5 @@ package com.bytebreeze.quickdrop.enums;
 
 public enum VehicleType {
 
-    MOTORCYCLE, BYCYCLE, CAR, SCOOTER, OTHER
+    Motorcycle, Bycycle, Car, Scooter, Other
 }
