@@ -4,8 +4,6 @@ import com.bytebreeze.quickdrop.enums.VehicleType;
 import com.bytebreeze.quickdrop.enums.VerificationStatus;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import java.time.LocalDate;
 
