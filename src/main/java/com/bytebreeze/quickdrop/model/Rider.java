@@ -4,6 +4,8 @@ import com.bytebreeze.quickdrop.enums.VehicleType;
 import com.bytebreeze.quickdrop.enums.VerificationStatus;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.time.LocalDate;
 
@@ -89,7 +91,7 @@ public class Rider extends User {
     private VerificationStatus verificationStatus = VerificationStatus.PENDING;
 
     @Column(nullable = true)
-    private boolean isActive;
+    private Boolean wantToDelivery = false;
 
     @Column(nullable = true)
     private double riderAvgRating = 0.0;
