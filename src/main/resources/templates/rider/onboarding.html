@@ -4,15 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title >Rider Onboarding</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
+    <title>Rider Onboarding - Multi-Step Form</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom CSS for additional styles -->
     <style>
-        body {
-            background-color: #f8f9fa;
-        }
-
         .form-container {
             background-color: #ffffff;
             padding: 2rem;
@@ -22,218 +18,332 @@
             max-width: 800px;
         }
 
-        .form-title {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 1.5rem;
-            color: #333;
+        .form-step {
+            display: none;
         }
 
-        .card {
-            margin-bottom: 1.5rem;
-            border: 1px solid #e0e0e0;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .card-header {
-            background-color: #007bff;
-            color: #fff;
-            font-weight: bold;
-            padding: 0.75rem 1.25rem;
-            border-radius: 10px 10px 0 0;
-        }
-
-        .card-body {
-            padding: 1.25rem;
-        }
-
-        .form-label {
-            font-weight: 500;
-            color: #333;
-        }
-
-        .form-control {
-            border-radius: 5px;
+        .form-step.active {
+            display: block;
         }
 
         .btn-submit {
-            background-color: #007bff;
+            background-color: #3b82f6;
+            /* Tailwind's blue-500 */
             color: #fff;
             font-weight: bold;
             padding: 0.5rem 2rem;
             border-radius: 5px;
             border: none;
+            transition: background-color 0.3s ease;
         }
 
         .btn-submit:hover {
-            background-color: #0056b3;
+            background-color: #2563eb;
+            /* Tailwind's blue-600 */
         }
     </style>
 </head>
 
-<body>
-<div class="container">
+<body class="bg-gray-100">
+<div class="container mx-auto px-4">
     <div class="form-container">
-        <form th:action="@{/submitRiderForm}" method="POST" enctype="multipart/form-data">
-            <div class="form-title">Rider Onboarding Form</div>
-
-            <!-- Personal Information Card -->
-            <div class="card">
-                <div class="card-header">1. Personal Information</div>
-                <div class="card-body">
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label for="dob" class="form-label">Date of Birth</label>
-                            <input type="date" class="form-control" id="dob" name="dob" required>
+        <!-- Step Progress Bar -->
+        <div class="flex justify-center mb-8">
+            <div class="w-full max-w-3xl">
+                <div class="flex items-center">
+                    <!-- Step 1 -->
+                    <div class="flex items-center relative">
+                        <div
+                                class="step-indicator w-8 h-8 flex items-center justify-center rounded-full bg-blue-500 text-white font-bold">
+                            1
                         </div>
-                        <div class="col-md-6">
-                            <label for="gender" class="form-label">Gender</label>
-                            <select class="form-select" id="gender" name="gender" required>
-                                <option value="">Select Gender</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Other">Third Gender</option>
-                            </select>
+                        <div class="ml-2 text-sm font-medium text-gray-700">Personal Info</div>
+                        <div class="progress-line absolute top-4 left-8 w-16 h-0.5 bg-blue-500"></div>
+                    </div>
+                    <!-- Step 2 -->
+                    <div class="flex items-center relative">
+                        <div
+                                class="step-indicator w-8 h-8 flex items-center justify-center rounded-full bg-gray-300 text-white font-bold">
+                            2
                         </div>
-                        <div class="col-12">
-                            <label for="address" class="form-label">Residential Address</label>
-                            <input type="text" class="form-control" id="address" name="address" required>
+                        <div class="ml-2 text-sm font-medium text-gray-700">Vehicle Info</div>
+                        <div class="progress-line absolute top-4 left-8 w-16 h-0.5 bg-gray-300"></div>
+                    </div>
+                    <!-- Step 3 -->
+                    <div class="flex items-center relative">
+                        <div
+                                class="step-indicator w-8 h-8 flex items-center justify-center rounded-full bg-gray-300 text-white font-bold">
+                            3
                         </div>
-                        <div class="col-md-6">
-                            <label for="thana" class="form-label">Thana/Upazila</label>
-                            <input type="text" class="form-control" id="thana" name="thana" required>
+                        <div class="ml-2 text-sm font-medium text-gray-700">Documents</div>
+                        <div class="progress-line absolute top-4 left-8 w-16 h-0.5 bg-gray-300"></div>
+                    </div>
+                    <!-- Step 4 -->
+                    <div class="flex items-center">
+                        <div
+                                class="step-indicator w-8 h-8 flex items-center justify-center rounded-full bg-gray-300 text-white font-bold">
+                            4
                         </div>
-                        <div class="col-md-4">
-                            <label for="district" class="form-label">District</label>
-                            <input type="text" class="form-control" id="district" name="district" required>
-                        </div>
-                        <div class="col-md-2">
-                            <label for="postalCode" class="form-label">Postal Code</label>
-                            <input type="text" class="form-control" id="postalCode" name="postalCode" required>
-                        </div>
+                        <div class="ml-2 text-sm font-medium text-gray-700">Declaration</div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Vehicle Information Card -->
-            <div class="card">
-                <div class="card-header">2. Vehicle Information</div>
-                <div class="card-body">
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label for="vehicleType" class="form-label">Vehicle Type</label>
-                            <select class="form-select" id="vehicleType" name="vehicleType" required>
-                                <option value="">Select Vehicle Type</option>
-                                <option value="Motorcycle">Motorcycle</option>
-                                <option value="Bicycle">Bicycle</option>
-                                <option value="Car">Car</option>
-                                <option value="Scooter">Scooter</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="vehicleModel" class="form-label">Vehicle Make/Model</label>
-                            <input type="text" class="form-control" id="vehicleModel" name="vehicleModel">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="registrationNumber" class="form-label">Vehicle Registration Number</label>
-                            <input type="text" class="form-control" id="registrationNumber"
-                                   name="registrationNumber" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="insuranceProvider" class="form-label">Vehicle Insurance Provider</label>
-                            <input type="text" class="form-control" id="insuranceProvider" name="insuranceProvider">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="insuranceExpiry" class="form-label">Insurance Expiry Date</label>
-                            <input type="date" class="form-control" id="insuranceExpiry" name="insuranceExpiry">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="registrationDoc" class="form-label">Upload Vehicle Registration
-                                Document</label>
-                            <input type="file" class="form-control" id="registrationDoc" name="registrationDoc">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="insuranceDoc" class="form-label">Upload Insurance Document</label>
-                            <input type="file" class="form-control" id="insuranceDoc" name="insuranceDoc">
+        <form th:action="@{/rider/onboarding}" th:object="${riderOnboardingDTO}" method="POST"
+              enctype="multipart/form-data">
+            <!-- Step 1: Personal Information -->
+            <div class="form-step active" id="step-1">
+                <div class="card">
+                    <div class="card-header">1. Personal Information</div>
+                    <div class="card-body">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="dob" class="form-label">Date of Birth</label>
+                                <input type="date" class="w-full p-2 border border-gray-300 rounded-md" id="dob"
+                                       name="dob" th:field="*{dateOfBirth}" required>
+                            </div>
+                            <div>
+                                <label for="gender" class="form-label">Gender</label>
+                                <select class="w-full p-2 border border-gray-300 rounded-md" id="gender"
+                                        name="gender" th:field="*{gender}" required>
+                                    <option value="">Select Gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Third</option>
+                                </select>
+                            </div>
+                            <div class="col-span-2">
+                                <label for="address" class="form-label">Residential Address</label>
+                                <input type="text" class="w-full p-2 border border-gray-300 rounded-md" id="address"
+                                       name="address" th:field="*{address}" required>
+                            </div>
+                            <div>
+                                <label for="thana" class="form-label">Thana/Upazila</label>
+                                <input type="text" class="w-full p-2 border border-gray-300 rounded-md" id="thana"
+                                       name="thana" th:field="*{upazila}" required>
+                            </div>
+                            <div>
+                                <label for="district" class="form-label">District</label>
+                                <input type="text" class="w-full p-2 border border-gray-300 rounded-md"
+                                       id="district" name="district" th:field="*{district}" required>
+                            </div>
+                            <div>
+                                <label for="postalCode" class="form-label">Postal Code</label>
+                                <input type="text" class="w-full p-2 border border-gray-300 rounded-md"
+                                       id="postalCode" name="postalCode" th:field="*{postalCode}" required>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <div class="flex justify-between mt-6">
+                    <button type="button" class="btn-submit" disabled>Previous</button>
+                    <button type="button" class="btn-submit next-step" data-next="2">Next</button>
+                </div>
             </div>
 
-            <!-- Identification Documents Card -->
-            <div class="card">
-                <div class="card-header">3. Identification Documents</div>
-                <div class="card-body">
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label for="nationalId" class="form-label">National ID Number</label>
-                            <input type="text" class="form-control" id="nationalId" name="nationalId" required>
+            <!-- Step 2: Vehicle Information -->
+            <div class="form-step" id="step-2">
+                <div class="card">
+                    <div class="card-header">2. Vehicle Information</div>
+                    <div class="card-body">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="vehicleType" class="form-label">Vehicle Type</label>
+                                <select class="w-full p-2 border border-gray-300 rounded-md" id="vehicleType"
+                                        name="vehicleType" th:field="*{vehicleType}" required>
+                                    <option value="">Select Vehicle Type</option>
+                                    <option value="Motorcycle">Motorcycle</option>
+                                    <option value="Bicycle">Bicycle</option>
+                                    <option value="Car">Car</option>
+                                    <option value="Scooter">Scooter</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="vehicleModel" class="form-label">Vehicle Make/Model</label>
+                                <input type="text" class="w-full p-2 border border-gray-300 rounded-md"
+                                       id="vehicleModel" th:field="*{vehicleModel}" name="vehicleModel">
+                            </div>
+                            <div>
+                                <label for="registrationNumber" class="form-label">Vehicle Registration
+                                    Number</label>
+                                <input type="text" class="w-full p-2 border border-gray-300 rounded-md"
+                                       id="registrationNumber" name="registrationNumber"
+                                       th:field="*{vehicleRegistrationNumber}" required>
+                            </div>
+                            <div>
+                                <label for="insuranceProvider" class="form-label">Vehicle Insurance Provider</label>
+                                <input type="text" class="w-full p-2 border border-gray-300 rounded-md"
+                                       id="insuranceProvider" th:field="*{vehicleInsuranceProvider}"
+                                       name="insuranceProvider">
+                            </div>
+                            <div>
+                                <label for="insuranceExpiry" class="form-label">Insurance Expiry Date</label>
+                                <input type="date" class="w-full p-2 border border-gray-300 rounded-md"
+                                       id="insuranceExpiry" th:field="*{insuranceExpiryDate}" name="insuranceExpiry">
+                            </div>
+                            <div>
+                                <label for="registrationDoc" class="form-label">Upload Vehicle Registration
+                                    Document</label>
+                                <input type="file" class="w-full p-2 border border-gray-300 rounded-md"
+                                       id="registrationDoc" th:field="*{vehicleRegistrationDocument}"
+                                       name="registrationDoc">
+                            </div>
+                            <div>
+                                <label for="insuranceDoc" class="form-label">Upload Insurance Document</label>
+                                <input type="file" class="w-full p-2 border border-gray-300 rounded-md"
+                                       id="insuranceDoc" th:field="*{insuranceDocument}" name="insuranceDoc">
+                            </div>
                         </div>
-
-                        <div class="col-md-6">
-                            <label for="licenseNumber" class="form-label">Driver’s License Number </label>
-                            <input type="text" class="form-control" id="licenseNumber" name="licenseNumber">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="nationalIdFront" class="form-label">Upload National ID Document
-                                (Front)</label>
-                            <input type="file" class="form-control" id="nationalIdFront" name="nationalIdFront">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="nationalIdBack" class="form-label">Upload National ID Document
-                                (Back)</label>
-                            <input type="file" class="form-control" id="nationalIdBack" name="nationalIdBack">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="licenseFront" class="form-label">Upload Driver’s License (Front)</label>
-                            <input type="file" class="form-control" id="licenseFront" name="licenseFront">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="licenseBack" class="form-label">Upload Driver’s License (Back)</label>
-                            <input type="file" class="form-control" id="licenseBack" name="licenseBack">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="LicenseExpiry" class="form-label">License Expiry Date</label>
-                            <input type="date" class="form-control" id="LicenseExpiry" name="LicenseExpiry">
-                        </div>
-
                     </div>
                 </div>
-            </div>
-
-            <!-- Declaration and Consent Section -->
-            <div class="form-section">
-                <div class="form-section-title">4. Declaration and Consent</div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="accuracyCheck" name="accuracyCheck"
-                           required>
-                    <label class="form-check-label" for="accuracyCheck">
-                        I confirm that all the information provided is accurate and up-to-date.
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="termsCheck" name="termsCheck" required>
-                    <label class="form-check-label" for="termsCheck">
-                        I agree to the Terms of Service and Privacy Policy.
-                    </label>
+                <div class="flex justify-between mt-6">
+                    <button type="button" class="btn-submit prev-step" data-prev="1">Previous</button>
+                    <button type="button" class="btn-submit next-step" data-next="3">Next</button>
                 </div>
             </div>
 
-            <!-- Submit Button -->
-            <div class="text-center">
-                <button type="submit" class="btn btn-submit">Submit</button>
+            <!-- Step 3: Identification Documents -->
+            <div class="form-step" id="step-3">
+                <div class="card">
+                    <div class="card-header">3. Identification Documents</div>
+                    <div class="card-body">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="nationalId" class="form-label">National ID Number</label>
+                                <input type="text" class="w-full p-2 border border-gray-300 rounded-md"
+                                       id="nationalId" th:field="*{nationalIdNumber}" name="nationalId" required>
+                            </div>
+                            <div>
+                                <label for="licenseNumber" class="form-label">Driver’s License Number</label>
+                                <input type="text" class="w-full p-2 border border-gray-300 rounded-md"
+                                       id="licenseNumber" th:field="*{driversLicenseNumber}" name="licenseNumber">
+                            </div>
+                            <div>
+                                <label for="nationalIdFront" class="form-label">Upload National ID Document
+                                    (Front)</label>
+                                <input type="file" class="w-full p-2 border border-gray-300 rounded-md"
+                                       id="nationalIdFront" th:field="*{nationalIdFront}" name="nationalIdFront">
+                            </div>
+                            <div>
+                                <label for="nationalIdBack" class="form-label">Upload National ID Document
+                                    (Back)</label>
+                                <input type="file" class="w-full p-2 border border-gray-300 rounded-md"
+                                       id="nationalIdBack" th:field="*{nationalIdBack}" name="nationalIdBack">
+                            </div>
+                            <div>
+                                <label for="licenseFront" class="form-label">Upload Driver’s License (Front)</label>
+                                <input type="file" class="w-full p-2 border border-gray-300 rounded-md"
+                                       id="licenseFront" th:field="*{driversLicenseFront}" name="licenseFront">
+                            </div>
+                            <div>
+                                <label for="licenseBack" class="form-label">Upload Driver’s License (Back)</label>
+                                <input type="file" class="w-full p-2 border border-gray-300 rounded-md"
+                                       id="licenseBack" th:field="*{driversLicenseBack}" name="licenseBack">
+                            </div>
+                            <div>
+                                <label for="LicenseExpiry" class="form-label">License Expiry Date</label>
+                                <input type="date" class="w-full p-2 border border-gray-300 rounded-md"
+                                       id="LicenseExpiry" th:field="*{licenseExpiryDate}" name="LicenseExpiry">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-between mt-6">
+                    <button type="button" class="btn-submit prev-step" data-prev="2">Previous</button>
+                    <button type="button" class="btn-submit next-step" data-next="4">Next</button>
+                </div>
+            </div>
+
+            <!-- Step 4: Declaration and Consent -->
+            <div class="form-step" id="step-4">
+                <div class="card">
+                    <div class="card-header">4. Declaration and Consent</div>
+                    <div class="card-body">
+                        <div class="space-y-2">
+                            <div class="flex items-center">
+                                <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-500"
+                                       id="accuracyCheck" name="accuracyCheck" required>
+                                <label for="accuracyCheck" class="ml-2">I confirm that all the information provided
+                                    is accurate and up-to-date.</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-500" id="termsCheck"
+                                       name="termsCheck" required>
+                                <label for="termsCheck" class="ml-2">I agree to the Terms of Service and Privacy
+                                    Policy.</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-between mt-6">
+                    <button type="button" class="btn-submit prev-step" data-prev="3">Previous</button>
+                    <button type="submit" class="btn-submit">Submit</button>
+                </div>
             </div>
         </form>
     </div>
 </div>
 
-<!-- Bootstrap JS (Optional) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<!-- JavaScript for Multi-Step Form -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const steps = document.querySelectorAll('.form-step');
+        const stepIndicators = document.querySelectorAll('.step-indicator');
+        const progressLines = document.querySelectorAll('.progress-line');
+        let currentStep = 0;
+
+        function showStep(stepIndex) {
+            // Show/hide steps
+            steps.forEach((step, index) => {
+                step.classList.toggle('active', index === stepIndex);
+            });
+
+            // Update progress bar
+            stepIndicators.forEach((indicator, index) => {
+                if (index <= stepIndex) {
+                    indicator.classList.remove('bg-gray-300');
+                    indicator.classList.add('bg-blue-500');
+                } else {
+                    indicator.classList.remove('bg-blue-500');
+                    indicator.classList.add('bg-gray-300');
+                }
+            });
+
+            progressLines.forEach((line, index) => {
+                if (index < stepIndex) {
+                    line.classList.remove('bg-gray-300');
+                    line.classList.add('bg-blue-500');
+                } else {
+                    line.classList.remove('bg-blue-500');
+                    line.classList.add('bg-gray-300');
+                }
+            });
+        }
+
+        document.querySelectorAll('.next-step').forEach(button => {
+            button.addEventListener('click', () => {
+                if (currentStep < steps.length - 1) {
+                    currentStep++;
+                    showStep(currentStep);
+                }
+            });
+        });
+
+        document.querySelectorAll('.prev-step').forEach(button => {
+            button.addEventListener('click', () => {
+                if (currentStep > 0) {
+                    currentStep--;
+                    showStep(currentStep);
+                }
+            });
+        });
+
+        // Initialize first step
+        showStep(currentStep);
+    });
+</script>
 </body>
 
 </html>
