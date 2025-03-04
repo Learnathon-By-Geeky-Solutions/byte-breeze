@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title >Rider Onboarding</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .form-container {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 2rem auto;
+            max-width: 800px;
+        }
+
+        .form-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+
+        .card {
+            margin-bottom: 1.5rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: #007bff;
+            color: #fff;
+            font-weight: bold;
+            padding: 0.75rem 1.25rem;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .card-body {
+            padding: 1.25rem;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-control {
+            border-radius: 5px;
+        }
+
+        .btn-submit {
+            background-color: #007bff;
+            color: #fff;
+            font-weight: bold;
+            padding: 0.5rem 2rem;
+            border-radius: 5px;
+            border: none;
+        }
+
+        .btn-submit:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <div class="form-container">
+        <form th:action="@{/rider/onboarding}" th:object="${riderOnboardingDTO}" method="POST" enctype="multipart/form-data">
+            <div class="form-title">Rider Onboarding Form</div>
+
+            <!-- Personal Information Card -->
+            <div class="card">
+                <div class="card-header">1. Personal Information</div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="dob" class="form-label">Date of Birth</label>
+                            <input type="date" class="form-control" id="dob" name="dob" th:field = "*{dateOfBirth}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="gender" class="form-label">Gender</label>
+                            <select class="form-select" id="gender" name="gender" th:field = "*{gender}" required>
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Third</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label for="address" class="form-label">Residential Address</label>
+                            <input type="text" class="form-control" id="address" name="address" th:field = "*{address}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="thana" class="form-label">Thana/Upazila</label>
+                            <input type="text" class="form-control" id="thana" name="thana" th:field = "*{upazila}" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="district" class="form-label">District</label>
+                            <input type="text" class="form-control" id="district" name="district" th:field = "*{district}" required>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="postalCode" class="form-label">Postal Code</label>
+                            <input type="text" class="form-control" id="postalCode" name="postalCode" th:field = "*{postalCode}" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vehicle Information Card -->
+            <div class="card">
+                <div class="card-header">2. Vehicle Information</div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="vehicleType" class="form-label">Vehicle Type</label>
+                            <select class="form-select" id="vehicleType" name="vehicleType" th:field = "*{vehicleType}" required>
+                                <option value="">Select Vehicle Type</option>
+                                <option value="Motorcycle">Motorcycle</option>
+                                <option value="Bicycle">Bicycle</option>
+                                <option value="Car">Car</option>
+                                <option value="Scooter">Scooter</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="vehicleModel" class="form-label">Vehicle Make/Model</label>
+                            <input type="text" class="form-control" id="vehicleModel" th:field = "*{vehicleModel}" name="vehicleModel">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="registrationNumber" class="form-label">Vehicle Registration Number</label>
+                            <input type="text" class="form-control" id="registrationNumber"
+                                   name="registrationNumber" th:field = "*{vehicleRegistrationNumber}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="insuranceProvider" class="form-label">Vehicle Insurance Provider</label>
+                            <input type="text" class="form-control" id="insuranceProvider" th:field = "*{vehicleInsuranceProvider}"  name="insuranceProvider">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="insuranceExpiry" class="form-label">Insurance Expiry Date</label>
+                            <input type="date" class="form-control" id="insuranceExpiry" th:field = "*{insuranceExpiryDate}"  name="insuranceExpiry">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="registrationDoc" class="form-label">Upload Vehicle Registration
+                                Document</label>
+                            <input type="file" class="form-control" id="registrationDoc" th:field = "*{vehicleRegistrationDocument}"  name="registrationDoc">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="insuranceDoc" class="form-label">Upload Insurance Document</label>
+                            <input type="file" class="form-control" th:field = "*{insuranceDocument}"  id="insuranceDoc" name="insuranceDoc">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Identification Documents Card -->
+            <div class="card">
+                <div class="card-header">3. Identification Documents</div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="nationalId" class="form-label">National ID Number</label>
+                            <input type="text" class="form-control" th:field = "*{nationalIdNumber}"  id="nationalId" name="nationalId" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="licenseNumber" class="form-label">Driver’s License Number </label>
+                            <input type="text" class="form-control" th:field = "*{driversLicenseNumber}"  id="licenseNumber" name="licenseNumber">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="nationalIdFront" class="form-label">Upload National ID Document
+                                (Front)</label>
+                            <input type="file" class="form-control" th:field = "*{nationalIdFront}"  id="nationalIdFront" name="nationalIdFront">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="nationalIdBack" class="form-label">Upload National ID Document
+                                (Back)</label>
+                            <input type="file" class="form-control" th:field = "*{nationalIdBack}"  id="nationalIdBack" name="nationalIdBack">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="licenseFront" class="form-label">Upload Driver’s License (Front)</label>
+                            <input type="file" class="form-control" th:field = "*{driversLicenseFront}"  id="licenseFront" name="licenseFront">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="licenseBack" class="form-label">Upload Driver’s License (Back)</label>
+                            <input type="file" class="form-control" th:field = "*{driversLicenseBack}"  id="licenseBack" name="licenseBack">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="LicenseExpiry" class="form-label">License Expiry Date</label>
+                            <input type="date" class="form-control" th:field = "*{licenseExpiryDate}"  id="LicenseExpiry" name="LicenseExpiry">
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Declaration and Consent Section -->
+            <div class="form-section">
+                <div class="form-section-title">4. Declaration and Consent</div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="accuracyCheck" name="accuracyCheck"
+                           required>
+                    <label class="form-check-label" for="accuracyCheck">
+                        I confirm that all the information provided is accurate and up-to-date.
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="termsCheck" name="termsCheck" required>
+                    <label class="form-check-label" for="termsCheck">
+                        I agree to the Terms of Service and Privacy Policy.
+                    </label>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button type="submit" class="btn btn-submit">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Bootstrap JS (Optional) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
