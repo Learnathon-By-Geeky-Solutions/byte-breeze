@@ -54,8 +54,10 @@ public class SecurityConfig {
                         .rememberMeCookieName("admin-remember-me")
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/")  // Redirect to login page after logout
+                        .logoutUrl("/admin/logout")
+                        .logoutSuccessUrl("/admin/login")  // Redirect to login page after logout
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
                 )
                 .csrf(csrf -> csrf
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())  // Use cookie-based CSRF token repository
