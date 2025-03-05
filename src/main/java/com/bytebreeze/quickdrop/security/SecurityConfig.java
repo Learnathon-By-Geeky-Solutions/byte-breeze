@@ -92,6 +92,8 @@ public class SecurityConfig {
                 .logout(logout -> logout
                         .logoutUrl("/user/logout")
                         .logoutSuccessUrl("/auth/logout")
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
                 )
                 .csrf(csrf -> csrf
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())  // Use cookie-based CSRF token repository
