@@ -2,6 +2,7 @@ package com.bytebreeze.quickdrop.controller;
 
 import com.bytebreeze.quickdrop.dto.UserProfileUpdateDto;
 import com.bytebreeze.quickdrop.service.UserService;
+import com.bytebreeze.quickdrop.util.AuthUtil;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,15 +19,16 @@ public class AdminController {
 
     private static final String DASHBOARD_PROFILE_SETTINGS_PAGE = "dashboard/admin-account";
 
-    private UserService userService;
+    private final UserService userService;
 
     public AdminController(UserService userService) {
         this.userService = userService;
     }
 
     @GetMapping("/login")
-    public String adminLogin() {
-        return "auth/admin-login"; // Renders `admin-login.html`
+    public String login() {
+        if(AuthUtil.isAuthenticated()) return "redirect:/admin/dashboard";
+        return "auth/admin-login";
     }
 
     @GetMapping("/dashboard")

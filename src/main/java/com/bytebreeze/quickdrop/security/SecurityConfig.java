@@ -68,9 +68,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain userSecurityFilterChain(HttpSecurity http) throws Exception {
         http
-                .securityMatcher("/user/**", "/auth/**", "/logout")
+                .securityMatcher("/user/**", "/auth/**", "/logout", "/")
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/auth/login").permitAll()
+                        .requestMatchers("/").permitAll()
                         .requestMatchers("/auth/register").permitAll()
                         .requestMatchers("/user/**").hasRole("USER")
                         .anyRequest().authenticated()
