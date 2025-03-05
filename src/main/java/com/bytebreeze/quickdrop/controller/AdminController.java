@@ -2,8 +2,8 @@ package com.bytebreeze.quickdrop.controller;
 
 import com.bytebreeze.quickdrop.dto.UserProfileUpdateDto;
 import com.bytebreeze.quickdrop.service.UserService;
+import com.bytebreeze.quickdrop.util.AuthUtil;
 import jakarta.validation.Valid;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,10 +28,7 @@ public class AdminController {
 
     @GetMapping("/login")
     public String login(Authentication authentication) {
-        if (authentication != null && authentication.isAuthenticated()
-                && !(authentication instanceof AnonymousAuthenticationToken)) {
-            return "redirect:/admin/dashboard";
-        }
+        if(AuthUtil.isAuthenticated()) return "redirect:/admin/dashboard";
         return "auth/admin-login";
     }
 
