@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.bytebreeze.quickdrop.model.Employee;
+import com.bytebreeze.quickdrop.util.AuthUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +17,9 @@ public class Dashboard {
 
     @GetMapping("/")
     public String home(Model model) {
+        if(AuthUtil.isAuthenticated()) return "redirect:/user/dashboard";
         model.addAttribute("title", "Dashboard - Home");
-        return "index";  // Removed leading slash
+        return "index";
     }
 
     @GetMapping("/forms")
