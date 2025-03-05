@@ -18,7 +18,7 @@
             <div id="profile-menu-dropdown"
                  class="hidden absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md py-2">
                 <a th:href="@{/user/profile-settings}" class="block px-4 py-2 text-gray-700 hover:bg-gray-200">Settings</a>
-                <form id="logout-form" th:action="@{/logout}" method="POST" class="block">
+                <form id="logout-form" th:action="@{/user/logout}" method="POST" class="block">
                     <button type="submit"
                             class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-200">
                         Sign Out
