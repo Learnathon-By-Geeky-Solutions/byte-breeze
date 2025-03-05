@@ -4,7 +4,6 @@ import com.bytebreeze.quickdrop.dto.UserProfileUpdateDto;
 import com.bytebreeze.quickdrop.service.UserService;
 import com.bytebreeze.quickdrop.util.AuthUtil;
 import jakarta.validation.Valid;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,14 +19,14 @@ public class AdminController {
 
     private static final String DASHBOARD_PROFILE_SETTINGS_PAGE = "dashboard/admin-account";
 
-    private UserService userService;
+    private final UserService userService;
 
     public AdminController(UserService userService) {
         this.userService = userService;
     }
 
     @GetMapping("/login")
-    public String login(Authentication authentication) {
+    public String login() {
         if(AuthUtil.isAuthenticated()) return "redirect:/admin/dashboard";
         return "auth/admin-login";
     }
