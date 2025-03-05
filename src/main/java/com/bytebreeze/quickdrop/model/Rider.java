@@ -15,23 +15,23 @@ import java.time.LocalDate;
 public class Rider extends User {
 
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private LocalDate dateOfBirth;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Gender gender;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String address;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String upazila;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String district;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String postalCode;
 
 
@@ -39,16 +39,16 @@ public class Rider extends User {
 
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = true)
     private VehicleType vehicleType;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String vehicleModel;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String vehicleRegistrationNumber;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String vehicleInsuranceProvider;
 
     @Column(nullable = true)
@@ -63,7 +63,7 @@ public class Rider extends User {
 
 
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = true, unique = true)
     private String nationalIdNumber;
 
     @Column(nullable = true)
@@ -85,7 +85,7 @@ public class Rider extends User {
     private String driversLicenseBackPath;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = true)
     private VerificationStatus verificationStatus = VerificationStatus.PENDING;
 
     @Column(nullable = true)
