@@ -2,6 +2,7 @@ package com.bytebreeze.quickdrop.controller;
 
 import com.bytebreeze.quickdrop.dto.UserRegistrationRequestDTO;
 import com.bytebreeze.quickdrop.service.UserService;
+import com.bytebreeze.quickdrop.util.AuthUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -10,7 +11,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Controller
@@ -24,6 +24,7 @@ public class AuthController {
 
     @GetMapping("/register")
     public String getRegistrationPage(Model model) {
+        if(AuthUtil.isAuthenticated()) return "redirect:/user/dashboard";
         model.addAttribute("userRegistrationRequestDTO",new UserRegistrationRequestDTO());
 
         return AUTH_REGISTER_VIEW;
@@ -37,8 +38,8 @@ public class AuthController {
 
             // Collect all validation error messages
             List<String> errorMessages = bindingResult.getAllErrors().stream()
-                    .map(error -> error.getDefaultMessage()) // Get default messages from dto
-                    .collect(Collectors.toList());
+                    .map(error -> error.getDefaultMessage())
+                    .toList();
 
             // Add error messages to the model
             model.addAttribute("validationErrors", errorMessages);
@@ -49,7 +50,7 @@ public class AuthController {
         try{
             userService.registerUser(userRegistrationRequestDTO);
 
-            redirectAttributes.addFlashAttribute("success", true); // Add flash attribute
+            redirectAttributes.addFlashAttribute("success", true);
             return "redirect:/auth/login";
 
         }catch (Exception e){
@@ -61,20 +62,21 @@ public class AuthController {
 
     @GetMapping("/login")
     public String login(Model model) {
-        return "auth/login";  // Removed leading slash
+        if(AuthUtil.isAuthenticated()) return "redirect:/user/dashboard";
+        return "auth/login";
     }
 
 
     @GetMapping("/forget-password")
     public String forgetPassword(Model model) {
         model.addAttribute("message", "Recover your account");
-        return "auth/forget-password";  // Removed leading slash
+        return "auth/forget-password";
     }
 
     @GetMapping("/reset-password")
     public String resetPassword(Model model) {
         model.addAttribute("message", "Reset your password");
-        return "auth/reset-password";  // Removed leading slash
+        return "auth/reset-password";
     }
 
 }
