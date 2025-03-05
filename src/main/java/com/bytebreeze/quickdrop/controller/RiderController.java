@@ -2,16 +2,16 @@ package com.bytebreeze.quickdrop.controller;
 
 
 import com.bytebreeze.quickdrop.dto.RiderOnboardingDTO;
+import com.bytebreeze.quickdrop.dto.RiderRegistrationRequestDTO;
+import com.bytebreeze.quickdrop.dto.UserRegistrationRequestDTO;
+import com.bytebreeze.quickdrop.model.Rider;
 import com.bytebreeze.quickdrop.service.RiderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -24,21 +24,71 @@ public class RiderController {
 
     private final RiderService riderService;
 
-    @GetMapping("/onboarding")
-    public String showRiderOnboardingForm(Model model){
-
-        model.addAttribute("riderOnboardingDTO",new RiderOnboardingDTO());
-
-        return "rider/onboarding";
+    @GetMapping("/register")
+    public String showRegistrationForm(Model model) {
+        model.addAttribute("riderRegistrationRequestDTO", new RiderRegistrationRequestDTO());
+        return "auth/delivery-rider-register";
     }
+
+    @PostMapping("/register")
+    public String submitRegistrationForm(@Valid @ModelAttribute("riderRegistrationRequestDTO") RiderRegistrationRequestDTO riderRegistrationRequestDTO,
+                                         BindingResult bindingResult,
+                                         Model model,
+                                         RedirectAttributes redirectAttributes
+    ) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("error");
+
+            // Collect all validation error messages
+            List<String> errorMessages = bindingResult.getAllErrors().stream()
+                    .map(error -> error.getDefaultMessage()) // Get default messages from dto
+                    .collect(Collectors.toList());
+
+            // Add error messages to the model
+            model.addAttribute("validationErrors", errorMessages);
+
+            return "auth/delivery-rider-register";
+        }
+
+        try {
+            Rider savedRider = riderService.registerRider(riderRegistrationRequestDTO);
+
+            redirectAttributes.addFlashAttribute("success", "Rider Registration Successful"); // Add flash attribute
+            return "redirect:/rider/onboarding/" + savedRider.getId();
+
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "auth/delivery-rider-register";
+        }
+    }
+
+
+    @GetMapping("/onboarding/{riderId}")
+    public String showRiderOnboardingForm(@PathVariable Long riderId, Model model) {
+
+        try {
+            Rider rider = riderService.findById(riderId);
+            model.addAttribute("rider", rider);
+            model.addAttribute("riderOnboardingDTO", new RiderOnboardingDTO());
+            return "rider/onboarding";
+
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "auth/delivery-rider-register";
+        }
+
+    }
+
+
     @PostMapping("/onboarding")
-    public String submitRiderOnboardingForm(@Valid @ModelAttribute("riderOnboardingDTO") RiderOnboardingDTO riderOnboardingDTO,
+    public String submitRiderOnboardingForm(@RequestParam("riderId") Long riderId,
+                                            @Valid @ModelAttribute("riderOnboardingDTO") RiderOnboardingDTO riderOnboardingDTO,
                                             BindingResult bindingResult,
                                             Model model,
                                             RedirectAttributes redirectAttributes
-    ){
+    ) {
 
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             model.addAttribute("error");
 
             // Collect all validation error messages
@@ -52,7 +102,7 @@ public class RiderController {
             return "rider/onboarding";
         }
         try {
-            riderService.onboardRider(riderOnboardingDTO);
+            riderService.onboardRider(riderId, riderOnboardingDTO);
 
 
             redirectAttributes.addFlashAttribute("success", "Rider Onboarded successfully. Verification Pending.");
