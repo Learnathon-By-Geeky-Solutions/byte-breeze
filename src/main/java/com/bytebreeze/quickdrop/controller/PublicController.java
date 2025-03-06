@@ -20,6 +20,7 @@ public class PublicController {
             List<String> userRoles  = AuthUtil.getAuthenticatedUserRoles();
             if(userRoles.contains("ROLE_ADMIN")) return "redirect:/admin/dashboard";
             if(userRoles.contains("ROLE_USER")) return "redirect:/user/dashboard";
+            if(userRoles.contains("ROLE_RIDER")) return "redirect:/rider/dashboard";
         }
         model.addAttribute("title", "Dashboard - Home");
         return "index";
