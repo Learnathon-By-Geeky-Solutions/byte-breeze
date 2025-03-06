@@ -56,7 +56,7 @@ public class RiderController {
             // Add error messages to the model
             model.addAttribute("validationErrors", errorMessages);
 
-            return "rider-register";
+            return "auth/rider-register";
         }
 
         try {
