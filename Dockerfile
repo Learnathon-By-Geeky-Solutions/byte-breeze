@@ -7,14 +7,14 @@ WORKDIR /app
 # Copy the built JAR file into the container
 COPY build/libs/quickdrop-0.0.1-SNAPSHOT.jar quickdrop.jar
 
+# Set an environment variable for uploads
+ENV UPLOAD_PATH=/app/uploads
+
+# Create an uploads directory inside the container
+RUN mkdir -p $UPLOAD_PATH
+
 # Expose the application port (must match server.port in application.properties)
 EXPOSE 8080
-
-# Define environment variables (can be overridden in docker-compose or run command)
-#ENV PORT=8080
-#ENV DB_URL=jdbc:postgresql://localhost:5432/quickdrop
-#ENV DB_USERNAME=your_db_user
-#ENV DB_PASSWORD=your_db_password
 
 # Run the application
 CMD ["java", "-jar", "quickdrop.jar"]
