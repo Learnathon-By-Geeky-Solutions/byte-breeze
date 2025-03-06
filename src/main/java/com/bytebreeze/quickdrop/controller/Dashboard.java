@@ -15,18 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping
 public class Dashboard {
 
-    @GetMapping("/")
-    public String home(Model model) {
-        if(AuthUtil.isAuthenticated())
-        {
-            List<String> userRoles  = AuthUtil.getAuthenticatedUserRoles();
-            if(userRoles.contains("ROLE_ADMIN")) return "redirect:/admin/dashboard";
-            if(userRoles.contains("ROLE_USER")) return "redirect:/user/dashboard";
-        }
-        model.addAttribute("title", "Dashboard - Home");
-        return "index";
-    }
-
     @GetMapping("/forms")
     public String formPages(Model model) {
         model.addAttribute("title", "Dashboard - Form Pages");
