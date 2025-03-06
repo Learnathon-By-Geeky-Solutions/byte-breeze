@@ -81,6 +81,33 @@ public class SecurityConfig {
     }
 
 
+    @Bean
+    public SecurityFilterChain riderSecurityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .securityMatcher("/rider/**") // Match requests starting with /rider/
+                .authorizeHttpRequests(authorize -> authorize // Allow login page for anyone
+                        .requestMatchers("/rider/login", "/rider/register", "/rider/onboarding/**").permitAll()
+                        .requestMatchers("/rider/**").hasRole("RIDER")  // Only rider can access /rider/** pages
+                        .anyRequest().authenticated()  // Any other request must be authenticated
+                )
+                .formLogin(form -> form
+                        .loginPage("/rider/login")
+                        .loginProcessingUrl("/rider/login")
+                        .defaultSuccessUrl("/rider/dashboard")  // Redirect to rider dashboard after successful login
+                        .failureUrl("/rider/login?error=true")  // Redirect back to login on failure
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/")  // Redirect to login page after logout
+                )
+                .csrf(csrf -> csrf
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())  // Use cookie-based CSRF token repository
+                );
+
+        return http.build();
+    }
+
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
