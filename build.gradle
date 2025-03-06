@@ -40,6 +40,9 @@ dependencies {
 	// MapStruct is a mapping code generation tool between different object types
 	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+
+	// for working with filenames and file paths, file extension
+	implementation 'commons-io:commons-io:2.13.0'
 }
 
 tasks.named('test') {
