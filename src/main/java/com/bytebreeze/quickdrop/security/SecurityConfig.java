@@ -54,8 +54,10 @@ public class SecurityConfig {
                         .rememberMeCookieName("admin-remember-me")
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/")  // Redirect to login page after logout
+                        .logoutUrl("/admin/logout")
+                        .logoutSuccessUrl("/admin/login")  // Redirect to login page after logout
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
                 )
                 .csrf(csrf -> csrf
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())  // Use cookie-based CSRF token repository
@@ -68,7 +70,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain userSecurityFilterChain(HttpSecurity http) throws Exception {
         http
-                .securityMatcher("/user/**", "/auth/**", "/logout", "/")
+                .securityMatcher("/user/**", "/auth/**", "/user/logout", "/")
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/auth/login").permitAll()
                         .requestMatchers("/").permitAll()
@@ -88,8 +90,10 @@ public class SecurityConfig {
                         .tokenValiditySeconds(rememberMeTokenValidityInSeconds)
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/")
+                        .logoutUrl("/user/logout")
+                        .logoutSuccessUrl("/auth/logout")
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
                 )
                 .csrf(csrf -> csrf
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())  // Use cookie-based CSRF token repository

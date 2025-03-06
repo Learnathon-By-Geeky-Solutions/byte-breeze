@@ -17,7 +17,12 @@ public class Dashboard {
 
     @GetMapping("/")
     public String home(Model model) {
-        if(AuthUtil.isAuthenticated()) return "redirect:/user/dashboard";
+        if(AuthUtil.isAuthenticated())
+        {
+            List<String> userRoles  = AuthUtil.getAuthenticatedUserRoles();
+            if(userRoles.contains("ROLE_ADMIN")) return "redirect:/admin/dashboard";
+            if(userRoles.contains("ROLE_USER")) return "redirect:/user/dashboard";
+        }
         model.addAttribute("title", "Dashboard - Home");
         return "index";
     }
