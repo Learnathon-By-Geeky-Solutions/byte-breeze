@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -28,16 +29,16 @@ public class RiderService {
     //private final OnboardRiderMapper onboardRiderMapper;
     private final FileStorageService fileStorageService;
 
-    //private final UserRepository userRepository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RegisterRiderMapper registerRiderMapper;
 
     public boolean isEmailAlreadyInUse(String email) {
-        return riderRepository.findByEmail(email).isPresent();
+        return userRepository.findByEmail(email).isPresent();
 
     }
 
-    public Rider findById(Long id) {
+    public Rider findByRiderId(UUID id) {
         return riderRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 
@@ -60,11 +61,12 @@ public class RiderService {
     }
 
 
-    public Rider onboardRider(Long riderId, RiderOnboardingDTO riderOnboardingDTO){
+    public Rider onboardRider(UUID riderId, RiderOnboardingDTO riderOnboardingDTO){
 
-        Rider rider = findById(riderId);
+        Rider rider = findByRiderId(riderId);
 
-        //rider = onboardRiderMapper.toEntity(riderOnboardingDTO);
+       // rider = onboardRiderMapper.toEntity(riderOnboardingDTO);
+
         rider.setDateOfBirth(riderOnboardingDTO.getDateOfBirth());
         rider.setGender(riderOnboardingDTO.getGender());
         rider.setAddress(riderOnboardingDTO.getAddress());
