@@ -3,7 +3,6 @@ package com.bytebreeze.quickdrop.controller;
 
 import com.bytebreeze.quickdrop.dto.RiderOnboardingDTO;
 import com.bytebreeze.quickdrop.dto.RiderRegistrationRequestDTO;
-import com.bytebreeze.quickdrop.dto.UserRegistrationRequestDTO;
 import com.bytebreeze.quickdrop.model.Rider;
 import com.bytebreeze.quickdrop.service.RiderService;
 import jakarta.validation.Valid;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Controller
@@ -24,10 +24,19 @@ public class RiderController {
 
     private final RiderService riderService;
 
+
+    @GetMapping("/login")
+    public String riderLogin(Model model) {
+        return "auth/rider-login";
+    }
+    @GetMapping("/dashboard")
+    public String adminDashboard() {
+        return "dashboard/rider-dashboard";
+    }
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         model.addAttribute("riderRegistrationRequestDTO", new RiderRegistrationRequestDTO());
-        return "auth/delivery-rider-register";
+        return "auth/rider-register";
     }
 
     @PostMapping("/register")
@@ -47,7 +56,7 @@ public class RiderController {
             // Add error messages to the model
             model.addAttribute("validationErrors", errorMessages);
 
-            return "auth/delivery-rider-register";
+            return "rider-register";
         }
 
         try {
@@ -58,30 +67,30 @@ public class RiderController {
 
         } catch (Exception e) {
             model.addAttribute("errorMessage", e.getMessage());
-            return "auth/delivery-rider-register";
+            return "rider-register";
         }
     }
 
 
     @GetMapping("/onboarding/{riderId}")
-    public String showRiderOnboardingForm(@PathVariable Long riderId, Model model) {
+    public String showRiderOnboardingForm(@PathVariable UUID riderId, Model model) {
 
         try {
-            Rider rider = riderService.findById(riderId);
+            Rider rider = riderService.findByRiderId(riderId);
             model.addAttribute("rider", rider);
             model.addAttribute("riderOnboardingDTO", new RiderOnboardingDTO());
             return "rider/onboarding";
 
         } catch (Exception e) {
             model.addAttribute("errorMessage", e.getMessage());
-            return "auth/delivery-rider-register";
+            return "rider-register";
         }
 
     }
 
 
     @PostMapping("/onboarding")
-    public String submitRiderOnboardingForm(@RequestParam("riderId") Long riderId,
+    public String submitRiderOnboardingForm(@RequestParam("riderId") UUID riderId,
                                             @Valid @ModelAttribute("riderOnboardingDTO") RiderOnboardingDTO riderOnboardingDTO,
                                             BindingResult bindingResult,
                                             Model model,
@@ -97,9 +106,9 @@ public class RiderController {
                     .collect(Collectors.toList());
 
             // Add error messages to the model
-            model.addAttribute("validationErrors", errorMessages);
+            redirectAttributes.addFlashAttribute("validationErrors", errorMessages);
 
-            return "rider/onboarding";
+            return "redirect:/rider/onboarding/" + riderId;
         }
         try {
             riderService.onboardRider(riderId, riderOnboardingDTO);
@@ -107,10 +116,10 @@ public class RiderController {
 
             redirectAttributes.addFlashAttribute("success", "Rider Onboarded successfully. Verification Pending.");
             //return "redirect:/riders/success";
-            return "redirect:/user/dashboard";
+            return "redirect:/rider/login";
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Onboarding failed: " + e.getMessage());
-            return "redirect:/user/dashboard";
+            redirectAttributes.addFlashAttribute("errorMessage", "Onboarding failed: " + e.getMessage());
+            return "redirect:/rider/onboarding/" + riderId;
         }
 
     }
