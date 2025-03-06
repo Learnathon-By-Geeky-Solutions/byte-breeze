@@ -1,6 +1,7 @@
 package com.bytebreeze.quickdrop.security;
 
 import com.bytebreeze.quickdrop.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -17,6 +18,10 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
+    @Value("${quickdrop.security.remember-me.key}")
+    private String rememberMeKey;
+    private int rememberMeTokenValidityInSeconds = 30 * 24 * 60 * 60; // one month
+
     @Bean
     public UserDetailsService userDetailsService(UserRepository userRepository) {
         return new CustomUserDetailsService(userRepository);
@@ -42,9 +47,17 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/admin/dashboard")  // Redirect to admin dashboard after successful login
                         .failureUrl("/admin/login?error=true")  // Redirect back to login on failure
                 )
+                .rememberMe((rememberMe)->rememberMe
+                        .key(rememberMeKey)
+                        .rememberMeParameter("remember-me")
+                        .tokenValiditySeconds(rememberMeTokenValidityInSeconds)
+                        .rememberMeCookieName("admin-remember-me")
+                )
                 .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/")  // Redirect to login page after logout
+                        .logoutUrl("/admin/logout")
+                        .logoutSuccessUrl("/admin/login")  // Redirect to login page after logout
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
                 )
                 .csrf(csrf -> csrf
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())  // Use cookie-based CSRF token repository
@@ -57,9 +70,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain userSecurityFilterChain(HttpSecurity http) throws Exception {
         http
-                .securityMatcher("/user/**", "/auth/**", "/logout")
+                .securityMatcher("/user/**", "/auth/**", "/user/logout", "/")
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/auth/login").permitAll()
+                        .requestMatchers("/").permitAll()
                         .requestMatchers("/auth/register").permitAll()
                         .requestMatchers("/user/**").hasRole("USER")
                         .anyRequest().authenticated()
@@ -70,9 +84,16 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/user/dashboard")
                         .failureUrl("/auth/login?error=true")
                 )
+                .rememberMe((rememberMe)->rememberMe
+                        .key(rememberMeKey)
+                        .rememberMeParameter("remember-me")
+                        .tokenValiditySeconds(rememberMeTokenValidityInSeconds)
+                )
                 .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/")
+                        .logoutUrl("/user/logout")
+                        .logoutSuccessUrl("/auth/logout")
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
                 )
                 .csrf(csrf -> csrf
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())  // Use cookie-based CSRF token repository
@@ -97,8 +118,10 @@ public class SecurityConfig {
                         .failureUrl("/rider/login?error=true")  // Redirect back to login on failure
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/")  // Redirect to login page after logout
+                        .logoutUrl("/rider/logout")
+                        .logoutSuccessUrl("/rider/login")  // Redirect to login page after logout
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
                 )
                 .csrf(csrf -> csrf
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())  // Use cookie-based CSRF token repository

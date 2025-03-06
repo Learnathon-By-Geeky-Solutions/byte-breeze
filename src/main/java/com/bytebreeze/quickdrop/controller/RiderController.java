@@ -67,7 +67,7 @@ public class RiderController {
 
         } catch (Exception e) {
             model.addAttribute("errorMessage", e.getMessage());
-            return "rider-register";
+            return "auth/rider-register";
         }
     }
 
