@@ -106,7 +106,7 @@
     <form th:action="@{/rider/register}" th:object="${riderRegistrationRequestDTO}" method="POST"
           onsubmit="return validateForm()">
 
-<!--        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>-->
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
 
         <!-- Service layer Errors (Global Errors) -->
@@ -180,7 +180,7 @@
 
     <!-- Login Link -->
     <p class="text-center text-sm text-gray-600 mt-4">
-        Already have an account? <a th:href="@{/login}" class="text-blue-500 hover:underline">Login here</a>.
+        Already have an account? <a href="/rider/login" class="text-blue-500 hover:underline">Login here</a>.
     </p>
 </div>
 
