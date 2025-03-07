@@ -1,10 +1,10 @@
-# Stage 1: Build the application using Gradle
+# Stage 1: Build the application using the Gradle wrapper
 FROM gradle:7.6.0-jdk17-alpine AS builder
 WORKDIR /home/gradle/project
 # Copy all project files into the builder container
 COPY . .
-# Run the Gradle build; adjust the command if necessary
-RUN gradle build -x test --no-daemon
+# Make the Gradle wrapper executable and run the build
+RUN chmod +x gradlew && ./gradlew build -x test --no-daemon
 
 # Stage 2: Create the runtime image
 FROM eclipse-temurin:17-jdk-alpine
