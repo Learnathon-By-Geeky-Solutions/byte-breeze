@@ -5,7 +5,7 @@ FROM eclipse-temurin:17-jdk-alpine
 WORKDIR /app
 
 # Copy the built JAR file into the container
-COPY build/libs/quickdrop-0.0.1-SNAPSHOT.jar quickdrop.jar
+COPY build/libs/*.jar quickdrop.jar
 
 # Set an environment variable for uploads
 ENV UPLOAD_PATH=/app/uploads
