@@ -54,4 +54,9 @@ public class UserController {
         redirectAttributes.addFlashAttribute("successMessage", "Profile updated successfully!");
         return "redirect:/user/profile-settings?success";
     }
+
+    @GetMapping("/book-parcel")
+    public String bookParcel() {
+        return "dashboard/book-parcel";
+    }
 }
