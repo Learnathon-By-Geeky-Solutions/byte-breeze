@@ -5,12 +5,15 @@ import java.time.LocalDateTime;
 
 import com.bytebreeze.quickdrop.enums.ParcelStatus;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+
 import java.util.UUID;
 
 @Entity
 @Table(name = "parcels")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class Parcel {
 
     @Id
