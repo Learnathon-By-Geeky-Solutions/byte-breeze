@@ -56,7 +56,8 @@ public class UserController {
     }
 
     @GetMapping("/book-parcel")
-    public String bookParcel() {
+    public String bookParcel(Model model) {
+        model.addAttribute("title", "Book Parcel");
         return "dashboard/book-parcel";
     }
 }
