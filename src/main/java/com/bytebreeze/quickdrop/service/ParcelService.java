@@ -23,10 +23,9 @@ public class ParcelService {
         this.parcelRepository = parcelRepository;
     }
 
-    public boolean bookParcel(ParcelBookingRequestDTO parcelBookingRequestDTO) {
+    public void bookParcel(ParcelBookingRequestDTO parcelBookingRequestDTO) {
         Parcel parcel = mapToParcel(parcelBookingRequestDTO);
         parcelRepository.save(parcel);
-        return true;
     }
 
     public Parcel mapToParcel(ParcelBookingRequestDTO dto) {
