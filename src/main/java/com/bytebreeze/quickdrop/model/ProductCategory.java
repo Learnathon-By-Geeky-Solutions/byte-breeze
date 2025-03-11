@@ -2,7 +2,6 @@ package com.bytebreeze.quickdrop.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.checkerframework.common.aliasing.qual.Unique;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
