@@ -1,6 +1,7 @@
 package com.bytebreeze.quickdrop.controller;
 
 import com.bytebreeze.quickdrop.dto.UserProfileUpdateDto;
+import com.bytebreeze.quickdrop.dto.request.ParcelBookingRequestDTO;
 import com.bytebreeze.quickdrop.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -58,6 +59,7 @@ public class UserController {
     @GetMapping("/book-parcel")
     public String bookParcel(Model model) {
         model.addAttribute("title", "Book Parcel");
+        model.addAttribute("parcelBookingRequestDTO", new ParcelBookingRequestDTO());
         return "dashboard/book-parcel";
     }
 }
