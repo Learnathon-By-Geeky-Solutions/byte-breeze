@@ -1,7 +1,9 @@
 package com.bytebreeze.quickdrop.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -10,7 +12,9 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "productcategory")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class ProductCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
