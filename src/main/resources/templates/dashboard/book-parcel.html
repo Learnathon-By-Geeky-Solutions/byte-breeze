@@ -12,89 +12,83 @@
 
     <div class="bg-white p-6 shadow rounded-lg">
         <form th:action="@{/parcelBooking}" th:object="${parcelBookingRequestDTO}" method="post" class="space-y-6">
-            <!-- Two-column grid for form fields -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label for="categoryId" class="block text-sm font-medium text-gray-700">Category ID</label>
-                    <input type="text" id="categoryId" th:field="*{categoryId}" required
-                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
-                </div>
-                <div>
-                    <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
-                    <textarea id="description" th:field="*{description}"
-                              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"></textarea>
-                </div>
-                <div>
-                    <label for="weight" class="block text-sm font-medium text-gray-700">Weight</label>
-                    <input type="number" step="any" id="weight" th:field="*{weight}" required
-                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
-                </div>
-                <div>
-                    <label for="size" class="block text-sm font-medium text-gray-700">Size</label>
-                    <input type="text" id="size" th:field="*{size}" required
-                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
-                </div>
-                <div>
-                    <label for="receiverName" class="block text-sm font-medium text-gray-700">Receiver Name</label>
-                    <input type="text" id="receiverName" th:field="*{receiverName}" required
-                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
-                </div>
-                <div>
-                    <label for="receiverPhone" class="block text-sm font-medium text-gray-700">Receiver Phone</label>
-                    <input type="text" id="receiverPhone" th:field="*{receiverPhone}" required
-                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
-                </div>
-                <div>
-                    <label for="receiverEmail" class="block text-sm font-medium text-gray-700">Receiver Email</label>
-                    <input type="email" id="receiverEmail" th:field="*{receiverEmail}"
-                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
-                </div>
-                <div>
-                    <label for="receiverAddress" class="block text-sm font-medium text-gray-700">Receiver Address</label>
-                    <input type="text" id="receiverAddress" th:field="*{receiverAddress}" required
-                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
-                </div>
-                <div>
-                    <label for="receiverOtp" class="block text-sm font-medium text-gray-700">Receiver OTP</label>
-                    <input type="text" id="receiverOtp" th:field="*{receiverOtp}"
-                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
-                </div>
-                <div>
-                    <label for="senderId" class="block text-sm font-medium text-gray-700">Sender ID</label>
-                    <input type="number" id="senderId" th:field="*{senderId}" required
-                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
-                </div>
-                <div>
-                    <label for="riderId" class="block text-sm font-medium text-gray-700">Rider ID</label>
-                    <input type="number" id="riderId" th:field="*{riderId}"
-                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
-                </div>
-                <div>
-                    <label for="riderOtp" class="block text-sm font-medium text-gray-700">Rider OTP</label>
-                    <input type="text" id="riderOtp" th:field="*{riderOtp}"
-                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
-                </div>
-                <div>
-                    <label for="pickupTime" class="block text-sm font-medium text-gray-700">Pickup Time</label>
-                    <input type="datetime-local" id="pickupTime" th:field="*{pickupTime}"
-                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
-                </div>
-                <div>
-                    <label for="deliveryTime" class="block text-sm font-medium text-gray-700">Delivery Time</label>
-                    <input type="datetime-local" id="deliveryTime" th:field="*{deliveryTime}"
-                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
-                </div>
-                <div>
-                    <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
-                    <input type="number" step="any" id="price" th:field="*{price}" required
-                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
-                </div>
-                <div>
-                    <label for="distance" class="block text-sm font-medium text-gray-700">Distance</label>
-                    <input type="number" step="any" id="distance" th:field="*{distance}" required
-                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+
+            <!-- Parcel Information Section -->
+            <div>
+                <h3 class="text-lg font-semibold text-gray-800 border-b pb-2 mb-4">Parcel Information</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="categoryId" class="block text-sm font-medium text-gray-700">Category ID</label>
+                        <input type="text" id="categoryId" th:field="*{categoryId}" required
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                    </div>
+                    <div>
+                        <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                        <textarea id="description" th:field="*{description}"
+                                  class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                    </div>
+                    <div>
+                        <label for="weight" class="block text-sm font-medium text-gray-700">Weight</label>
+                        <input type="number" step="any" id="weight" th:field="*{weight}" required
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                    </div>
+                    <div>
+                        <label for="size" class="block text-sm font-medium text-gray-700">Size</label>
+                        <input type="text" id="size" th:field="*{size}" required
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                    </div>
                 </div>
             </div>
+
+            <!-- Receiver Information Section -->
+            <div>
+                <h3 class="text-lg font-semibold text-gray-800 border-b pb-2 mb-4">Receiver Information</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="receiverName" class="block text-sm font-medium text-gray-700">Receiver Name</label>
+                        <input type="text" id="receiverName" th:field="*{receiverName}" required
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                    </div>
+                    <div>
+                        <label for="receiverPhone" class="block text-sm font-medium text-gray-700">Receiver Phone</label>
+                        <input type="text" id="receiverPhone" th:field="*{receiverPhone}" required
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                    </div>
+                    <div>
+                        <label for="receiverEmail" class="block text-sm font-medium text-gray-700">Receiver Email</label>
+                        <input type="email" id="receiverEmail" th:field="*{receiverEmail}"
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                    </div>
+                    <div>
+                        <label for="receiverAddress" class="block text-sm font-medium text-gray-700">Receiver Address</label>
+                        <input type="text" id="receiverAddress" th:field="*{receiverAddress}" required
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                    </div>
+                    <div>
+                        <label for="receiverOtp" class="block text-sm font-medium text-gray-700">Receiver OTP</label>
+                        <input type="text" id="receiverOtp" th:field="*{receiverOtp}"
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Billing Section -->
+            <div>
+                <h3 class="text-lg font-semibold text-gray-800 border-b pb-2 mb-4">Billing</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
+                        <input type="number" step="any" id="price" th:field="*{price}" required
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                    </div>
+                    <div>
+                        <label for="distance" class="block text-sm font-medium text-gray-700">Distance</label>
+                        <input type="number" step="any" id="distance" th:field="*{distance}" required
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                    </div>
+                </div>
+            </div>
+
             <!-- Submit button, full width -->
             <div>
                 <button type="submit"
