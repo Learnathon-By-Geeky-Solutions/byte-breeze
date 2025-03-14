@@ -77,8 +77,15 @@ public class RiderController {
 
         try {
             Rider rider = riderService.findByRiderId(riderId);
+
+            // sending rider to store rider ID
             model.addAttribute("rider", rider);
-            model.addAttribute("riderOnboardingDTO", new RiderOnboardingDTO());
+
+            // Check that previous any page redirect the DTO or Not, if not, then add new dto.
+            if (!model.containsAttribute("riderOnboardingDTO")) {
+                model.addAttribute("riderOnboardingDTO", new RiderOnboardingDTO()); // Initialize if missing
+            }
+            //model.addAttribute("riderOnboardingDTO", new RiderOnboardingDTO());
             return "rider/onboarding";
 
         } catch (Exception e) {
@@ -108,17 +115,23 @@ public class RiderController {
             // Add error messages to the model
             redirectAttributes.addFlashAttribute("validationErrors", errorMessages);
 
+            //Return the DTO as FlashAttribute to next redirect get req. to retain the previous entered data in field.
+            redirectAttributes.addFlashAttribute("riderOnboardingDTO", riderOnboardingDTO);
+
             return "redirect:/rider/onboarding/" + riderId;
         }
         try {
             riderService.onboardRider(riderId, riderOnboardingDTO);
 
-
             redirectAttributes.addFlashAttribute("success", "Rider Onboarded successfully. Verification Pending.");
-            //return "redirect:/riders/success";
+
             return "redirect:/rider/login";
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Onboarding failed: " + e.getMessage());
+
+            //Return the DTO as FlashAttribute to next redirect get req. to retain the previous entered data in field.
+            redirectAttributes.addFlashAttribute("riderOnboardingDTO", riderOnboardingDTO);
+
             return "redirect:/rider/onboarding/" + riderId;
         }
 
