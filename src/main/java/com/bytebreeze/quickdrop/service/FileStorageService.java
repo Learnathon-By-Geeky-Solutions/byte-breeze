@@ -81,7 +81,7 @@ public class FileStorageService {
             Files.createDirectories(filePath.getParent());
             Files.write(filePath, file.getBytes());
 
-            return filePath.toString();
+            return uniqueFileName;
 
         }catch(IOException e){
 
