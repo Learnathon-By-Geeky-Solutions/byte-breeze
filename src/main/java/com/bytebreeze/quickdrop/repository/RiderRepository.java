@@ -12,5 +12,6 @@ import java.util.UUID;
 public interface RiderRepository extends JpaRepository<Rider, UUID>{
     Optional<Rider> findByEmail(String email);
     Optional <Rider> findById(UUID id);
+    Optional <Rider> findByNationalIdNumber(String nationalIdNumber);
 
 }
