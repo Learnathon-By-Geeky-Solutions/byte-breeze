@@ -31,7 +31,7 @@ public class Parcel {
     private Double weight;
 
     @Column(nullable = false)
-    private String size;
+    private Double size;
 
     @Column(name = "receiver_name", nullable = false)
     private String receiverName;

@@ -21,9 +21,9 @@ public class ParcelBookingRequestDTO {
     @Positive(message = "Weight must be a positive number.")
     private Double weight;
 
-    @NotBlank(message = "Size is required.")
-    @Size(max = 50, message = "Size cannot exceed 50 characters.")
-    private String size;
+    @NotNull(message = "Size is required.")
+    @Positive(message = "Weight must be a positive number.")
+    private Double size;
 
     @NotBlank(message = "Receiver name is required.")
     @Size(max = 100, message = "Receiver name cannot exceed 100 characters.")
