@@ -47,4 +47,7 @@ public class ParcelBookingRequestDTO {
     @NotNull(message = "Distance is required.")
     @Positive(message = "Distance must be a positive number.")
     private Double distance;
+
+    @NotNull(message = "Payment method is required.")
+    private String paymentMethod;
 }
