@@ -10,6 +10,7 @@ import com.bytebreeze.quickdrop.repository.UserRepository;
 import com.bytebreeze.quickdrop.util.AuthUtil;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.Optional;
 @Service
 public class ParcelService {
@@ -49,5 +50,20 @@ public class ParcelService {
         parcel.setDistance(dto.getDistance());
 
         return parcel;
+    }
+
+    public String generateTransactionId() {
+        SecureRandom RANDOM = new SecureRandom();
+        final String ALPHANUMERIC = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+        String timePart = Long.toString(System.currentTimeMillis(), 36);
+        int remainingLength = 30 - timePart.length();
+        StringBuilder randomPart = new StringBuilder(remainingLength);
+
+        for (int i = 0; i < remainingLength; i++) {
+            randomPart.append(ALPHANUMERIC.charAt(RANDOM.nextInt(ALPHANUMERIC.length())));
+        }
+
+        return timePart + randomPart.toString();
     }
 }
