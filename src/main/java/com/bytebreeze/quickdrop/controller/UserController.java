@@ -4,6 +4,7 @@ import com.bytebreeze.quickdrop.dto.UserProfileUpdateDto;
 import com.bytebreeze.quickdrop.dto.request.ParcelBookingRequestDTO;
 import com.bytebreeze.quickdrop.repository.ProductCategoryRepository;
 import com.bytebreeze.quickdrop.service.ParcelService;
+import com.bytebreeze.quickdrop.service.SSLCommerzPaymentService;
 import com.bytebreeze.quickdrop.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -20,11 +21,13 @@ public class UserController {
     private static final String DASHBOARD_PROFILE_SETTINGS_PAGE = "dashboard/account";
     private final ProductCategoryRepository productCategoryRepository;
     private final ParcelService parcelService;
+    private final SSLCommerzPaymentService sslCommerzPaymentService;
 
-    public UserController(UserService userService, ProductCategoryRepository productCategoryRepository, ParcelService parcelService) {
+    public UserController(UserService userService, ProductCategoryRepository productCategoryRepository, ParcelService parcelService, SSLCommerzPaymentService sslCommerzPaymentService) {
         this.userService = userService;
         this.productCategoryRepository = productCategoryRepository;
         this.parcelService = parcelService;
+        this.sslCommerzPaymentService = sslCommerzPaymentService;
     }
 
     @GetMapping("/dashboard")
@@ -78,8 +81,13 @@ public class UserController {
             return "dashboard/book-parcel";
         }
 
+        // save the parcel booking information
+        parcelBookingRequestDTO.setTransactionId(parcelService.generateTransactionId());
         parcelService.bookParcel(parcelBookingRequestDTO);
 
-        return "redirect:/user/dashboard?success";
+        // fetch payment gateway url
+        String paymentOperationUrl = sslCommerzPaymentService.getPaymentUrl(parcelBookingRequestDTO);
+
+        return "redirect:"+paymentOperationUrl;
     }
 }
