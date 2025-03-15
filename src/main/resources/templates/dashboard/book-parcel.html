@@ -6,6 +6,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Book Parcel</title>
+    <style>
+        label.selected {
+            border-color: #6366F1 !important; /* Indigo 500 */
+            background-color: #E0E7FF;        /* Indigo 100 */
+        }
+    </style>
 </head>
 <body>
 <!-- Content Fragment -->
@@ -147,13 +153,41 @@
                         <div th:replace="~{fragments/field-error-fragment :: fieldError('distance')}"></div>
                     </div>
                 </div>
+
+                <!-- Payment Type Selection -->
+                <div class="mt-6">
+                    <label class="block text-lg font-semibold text-gray-700">
+                        Select Payment Method <span class="text-red-500">*</span>
+                    </label>
+                    <div class="grid grid-cols-3 gap-4 mt-4">
+                        <!-- Bkash Payment -->
+                        <label class="relative border rounded-lg shadow-sm cursor-pointer p-4 hover:border-indigo-500 transition">
+                            <input type="radio" name="paymentMethod" th:field="*{paymentMethod}" value="bkash" class="hidden" required />
+                            <img src="/images/bkash_payment.png" alt="Standard Delivery" class="h-16 mx-auto">
+                        </label>
+
+                        <!-- Rocket Payment -->
+                        <label class="relative border rounded-lg shadow-sm cursor-pointer p-4 hover:border-indigo-500 transition">
+                            <input type="radio" name="paymentMethod" th:field="*{paymentMethod}" value="rocket" class="hidden" required />
+                            <img src="/images/rocket_payment.png" alt="Express Delivery" class="h-16 mx-auto">
+                        </label>
+
+                        <!-- VISA Payment -->
+                        <label class="relative border rounded-lg shadow-sm cursor-pointer p-4 hover:border-indigo-500 transition">
+                            <input type="radio" name="paymentMethod" th:field="*{paymentMethod}" value="visa" class="hidden" required />
+                            <img src="/images/visa_payment.png" alt="Same Day Delivery" class="h-16 mx-auto my-auto">
+                        </label>
+                    </div>
+                    <div th:replace="~{fragments/field-error-fragment :: fieldError('paymentMethod')}"></div>
+                </div>
             </details>
+
 
             <!-- Submit Button -->
             <div>
                 <button type="submit"
                         class="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700">
-                    Book Parcel
+                    Pay and Book Parcel
                 </button>
             </div>
         </form>
@@ -162,7 +196,31 @@
 
 <!-- Extra Scripts Fragment -->
 <div layout:fragment="extraScripts">
-    <!-- Add extra scripts here if needed -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Select all radio buttons with the name 'paymentMethod'
+            const radios = document.querySelectorAll('input[name="paymentMethod"]');
+
+            radios.forEach(function(radio) {
+                radio.addEventListener("change", function() {
+                    // Remove the 'selected' class from all labels
+                    radios.forEach(function(r) {
+                        const parentLabel = r.closest("label");
+                        if (parentLabel) {
+                            parentLabel.classList.remove("selected");
+                        }
+                    });
+                    // Add the 'selected' class to the parent label of the checked radio
+                    if (radio.checked) {
+                        const selectedLabel = radio.closest("label");
+                        if (selectedLabel) {
+                            selectedLabel.classList.add("selected");
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 </div>
 </body>
 </html>
