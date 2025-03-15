@@ -50,4 +50,6 @@ public class ParcelBookingRequestDTO {
 
     @NotNull(message = "Payment method is required.")
     private String paymentMethod;
+
+    private String transactionId;
 }
