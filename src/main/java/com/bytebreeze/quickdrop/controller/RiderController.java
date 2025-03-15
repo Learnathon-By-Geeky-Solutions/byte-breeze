@@ -30,7 +30,7 @@ public class RiderController {
         return "auth/rider-login";
     }
     @GetMapping("/dashboard")
-    public String adminDashboard() {
+    public String riderDashboard() {
         return "dashboard/rider-dashboard";
     }
     @GetMapping("/register")
