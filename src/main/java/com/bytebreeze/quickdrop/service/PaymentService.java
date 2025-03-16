@@ -8,6 +8,5 @@ public interface PaymentService {
     * This method will initiate payment and fetch the payment url
     * Then return the url to controller layer
      */
-    String getPaymentUrl(ParcelBookingRequestDTO parcelBookingRequestDTO, User user);
-
+    String getPaymentUrl(ParcelBookingRequestDTO parcelBookingRequestDTO, User sender);
 }

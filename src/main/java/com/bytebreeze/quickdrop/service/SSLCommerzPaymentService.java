@@ -1,9 +1,12 @@
 package com.bytebreeze.quickdrop.service;
 
+import com.bytebreeze.quickdrop.enums.PaymentStatus;
+import com.bytebreeze.quickdrop.model.Payment;
 import com.bytebreeze.quickdrop.model.User;
 import com.bytebreeze.quickdrop.dto.paymentapiresponse.SSLCommerzPaymentInitResponseDto;
 import com.bytebreeze.quickdrop.dto.paymentapiresponse.SSLCommerzValidatorResponse;
 import com.bytebreeze.quickdrop.dto.request.ParcelBookingRequestDTO;
+import com.bytebreeze.quickdrop.repository.PaymentRepository;
 import com.bytebreeze.quickdrop.util.SSLCommerzUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -24,10 +27,12 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
 
 @Service
 public class SSLCommerzPaymentService implements PaymentService {
+    private final PaymentRepository paymentRepository;
     private RestTemplate restTemplate;
 
     @Value("${sslcommerz.store-id}")
@@ -54,8 +59,9 @@ public class SSLCommerzPaymentService implements PaymentService {
     private String sslczURL;
     private String validationURL = "/validator/api/validationserverAPI.php";
 
-    public SSLCommerzPaymentService(RestTemplate restTemplate) {
+    public SSLCommerzPaymentService(RestTemplate restTemplate, PaymentRepository paymentRepository) {
         this.restTemplate = restTemplate;
+        this.paymentRepository = paymentRepository;
     }
 
     private String extractRedirectUrl(SSLCommerzPaymentInitResponseDto sslCommerzPaymentInitResponseDto, String paymentMethod) {
@@ -248,6 +254,5 @@ public class SSLCommerzPaymentService implements PaymentService {
                 ? resultString.substring(0, resultString.length() - 1)
                 : resultString;
     }
-
 
 }

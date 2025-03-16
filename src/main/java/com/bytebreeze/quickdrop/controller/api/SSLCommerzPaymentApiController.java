@@ -1,5 +1,6 @@
 package com.bytebreeze.quickdrop.controller.api;
 
+import com.bytebreeze.quickdrop.enums.PaymentStatus;
 import com.bytebreeze.quickdrop.model.Payment;
 import com.bytebreeze.quickdrop.repository.PaymentRepository;
 import com.bytebreeze.quickdrop.service.SSLCommerzPaymentService;
@@ -53,6 +54,10 @@ public class SSLCommerzPaymentApiController {
         if(!sslCommerzPaymentService.orderValidate(marchentTransactionId, marchentTransactionAmount, marchentTransactionCurrency, paramMap)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("status", "error", "message", "Payment verification failed"));
         }
+
+        // Update payment status
+        payment.setPaymentStatus(PaymentStatus.SUCCESS);
+        paymentRepository.save(payment);
 
         // Construct response map
         Map<String, Object> response = new HashMap<>();
