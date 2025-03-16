@@ -1,7 +1,5 @@
 package com.bytebreeze.quickdrop.service;
 
-import com.bytebreeze.quickdrop.enums.PaymentStatus;
-import com.bytebreeze.quickdrop.model.Payment;
 import com.bytebreeze.quickdrop.model.User;
 import com.bytebreeze.quickdrop.dto.paymentapiresponse.SSLCommerzPaymentInitResponseDto;
 import com.bytebreeze.quickdrop.dto.paymentapiresponse.SSLCommerzValidatorResponse;
@@ -27,13 +25,12 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.TreeMap;
 
 @Service
 public class SSLCommerzPaymentService implements PaymentService {
-    private final PaymentRepository paymentRepository;
     private RestTemplate restTemplate;
+    private PaymentRepository paymentRepository;
 
     @Value("${sslcommerz.store-id}")
     private String storeId;
