@@ -1,5 +1,6 @@
 package com.bytebreeze.quickdrop.service;
 
+import com.bytebreeze.quickdrop.model.User;
 import com.bytebreeze.quickdrop.dto.paymentapiresponse.SSLCommerzPaymentInitResponseDto;
 import com.bytebreeze.quickdrop.dto.paymentapiresponse.SSLCommerzValidatorResponse;
 import com.bytebreeze.quickdrop.dto.request.ParcelBookingRequestDTO;
@@ -30,22 +31,28 @@ public class SSLCommerzPaymentService implements PaymentService {
     private RestTemplate restTemplate;
 
     @Value("${sslcommerz.store-id}")
-    String storeId;
+    private String storeId;
 
     @Value("${sslcommerz.store-passwd}")
-    String storePasswd;
+    private String storePasswd;
 
     @Value("${sslcommerz.init-url}")
-    String paymentInitializationUrl;
+    private String paymentInitializationUrl;
+
+    private String successUrl = "/sslcommerz/success";
+    private String failureUrl = "/sslcommerz/failure";
+    private String errorUrl = "/sslcommerz/error";
+
+    @Value("${sslcommerz.base-url}")
+    private String baseUrl;
 
     private String[] keyList;
     private String generateHash;
     private String error;
 
-    private String sslczURL = "https://securepay.sslcommerz.com/";
-    private String submitURL = "gwprocess/v4/api.php";
-    private String validationURL = "validator/api/validationserverAPI.php";
-    private String checkingURL = "validator/api/merchantTransIDvalidationAPI.php";
+    @Value("${sslcommerz.validation-url}")
+    private String sslczURL;
+    private String validationURL = "/validator/api/validationserverAPI.php";
 
     public SSLCommerzPaymentService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -61,7 +68,7 @@ public class SSLCommerzPaymentService implements PaymentService {
     }
 
     @Override
-    public String getPaymentUrl(ParcelBookingRequestDTO parcelBookingRequestDTO) {
+    public String getPaymentUrl(ParcelBookingRequestDTO parcelBookingRequestDTO, User sender) {
         // Prepare form data as MultiValueMap
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
         formData.add("store_id", this.storeId);
@@ -69,28 +76,28 @@ public class SSLCommerzPaymentService implements PaymentService {
         formData.add("total_amount", parcelBookingRequestDTO.getPrice().toString());
         formData.add("currency", "BDT");
         formData.add("tran_id", parcelBookingRequestDTO.getTransactionId());
-        formData.add("success_url", "http://localhost:8080/sslcommerz/success");
-        formData.add("fail_url", "https://yourdomain.com/fail");
-        formData.add("cancel_url", "https://yourdomain.com/cancel");
-        formData.add("cus_name", "Khairul Islam");
-        formData.add("cus_email", "suvashkumarsumon@gmail.com");
-        formData.add("cus_add1", "Binodpur, Rajshahi");
-        formData.add("cus_city", "Rajshahi");
-        formData.add("cus_state", "Rajshahi");
-        formData.add("cus_postcode", "6205");
-        formData.add("cus_country", "Bangladesh");
-        formData.add("cus_phone", "01700000000");
-        formData.add("ship_name", "Khairul Islam");
-        formData.add("ship_add1", "Binodpur, Rajshahi");
-        formData.add("ship_city", "Rajshahi");
-        formData.add("ship_state", "Rajshahi");
-        formData.add("ship_postcode", "6205");
-        formData.add("ship_country", "Bangladesh");
-        formData.add("multi_card_name", "visacard");
-        formData.add("value_a", "ref001");
-        formData.add("value_b", "ref002");
-        formData.add("value_c", "ref003");
-        formData.add("value_d", "ref004");
+        formData.add("success_url", baseUrl+successUrl);
+        formData.add("fail_url", baseUrl+failureUrl);
+        formData.add("cancel_url", baseUrl+errorUrl);
+        formData.add("cus_name", sender.getFullName());
+        formData.add("cus_email", sender.getEmail());
+        formData.add("cus_add1", "");
+        formData.add("cus_city", "");
+        formData.add("cus_state", "");
+        formData.add("cus_postcode", "");
+        formData.add("cus_country", "");
+        formData.add("cus_phone", "");
+        formData.add("ship_name", sender.getFullName());
+        formData.add("ship_add1", "");
+        formData.add("ship_city", "");
+        formData.add("ship_state", "");
+        formData.add("ship_postcode", "");
+        formData.add("ship_country", "");
+        formData.add("multi_card_name", "");
+        formData.add("value_a", "");
+        formData.add("value_b", "");
+        formData.add("value_c", "");
+        formData.add("value_d", "");
         formData.add("product_name", parcelBookingRequestDTO.getCategoryId().toString());
         formData.add("product_category", parcelBookingRequestDTO.getCategoryId().toString());
         formData.add("product_profile", "general");

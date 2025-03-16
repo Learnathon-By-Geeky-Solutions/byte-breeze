@@ -2,10 +2,14 @@ package com.bytebreeze.quickdrop.controller;
 
 import com.bytebreeze.quickdrop.dto.UserProfileUpdateDto;
 import com.bytebreeze.quickdrop.dto.request.ParcelBookingRequestDTO;
+import com.bytebreeze.quickdrop.enums.PaymentStatus;
+import com.bytebreeze.quickdrop.model.Parcel;
+import com.bytebreeze.quickdrop.model.Payment;
 import com.bytebreeze.quickdrop.repository.ProductCategoryRepository;
 import com.bytebreeze.quickdrop.service.ParcelService;
 import com.bytebreeze.quickdrop.service.SSLCommerzPaymentService;
 import com.bytebreeze.quickdrop.service.UserService;
+import com.bytebreeze.quickdrop.util.AuthUtil;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -83,10 +87,13 @@ public class UserController {
 
         // save the parcel booking information
         parcelBookingRequestDTO.setTransactionId(parcelService.generateTransactionId());
-        parcelService.bookParcel(parcelBookingRequestDTO);
+        Parcel parcel = parcelService.bookParcel(parcelBookingRequestDTO);
+
+        // save the payment information
+        parcelService.savePayment(parcel, parcelBookingRequestDTO);
 
         // fetch payment gateway url
-        String paymentOperationUrl = sslCommerzPaymentService.getPaymentUrl(parcelBookingRequestDTO);
+        String paymentOperationUrl = sslCommerzPaymentService.getPaymentUrl(parcelBookingRequestDTO, parcel.getSender());
 
         return "redirect:"+paymentOperationUrl;
     }

@@ -1,10 +1,13 @@
 package com.bytebreeze.quickdrop.service;
 
 import com.bytebreeze.quickdrop.dto.request.ParcelBookingRequestDTO;
+import com.bytebreeze.quickdrop.enums.PaymentStatus;
 import com.bytebreeze.quickdrop.model.Parcel;
+import com.bytebreeze.quickdrop.model.Payment;
 import com.bytebreeze.quickdrop.model.ProductCategory;
 import com.bytebreeze.quickdrop.model.User;
 import com.bytebreeze.quickdrop.repository.ParcelRepository;
+import com.bytebreeze.quickdrop.repository.PaymentRepository;
 import com.bytebreeze.quickdrop.repository.ProductCategoryRepository;
 import com.bytebreeze.quickdrop.repository.UserRepository;
 import com.bytebreeze.quickdrop.util.AuthUtil;
@@ -17,16 +20,18 @@ public class ParcelService {
     private final ProductCategoryRepository productCategoryRepository;
     private final UserRepository userRepository;
     private final ParcelRepository parcelRepository;
+    private final PaymentRepository paymentRepository;
 
-    public ParcelService(ProductCategoryRepository productCategoryRepository, UserRepository userRepository, ParcelRepository parcelRepository) {
+    public ParcelService(ProductCategoryRepository productCategoryRepository, UserRepository userRepository, ParcelRepository parcelRepository, PaymentRepository paymentRepository) {
         this.productCategoryRepository = productCategoryRepository;
         this.userRepository = userRepository;
         this.parcelRepository = parcelRepository;
+        this.paymentRepository = paymentRepository;
     }
 
-    public void bookParcel(ParcelBookingRequestDTO parcelBookingRequestDTO) {
+    public Parcel bookParcel(ParcelBookingRequestDTO parcelBookingRequestDTO) {
         Parcel parcel = mapToParcel(parcelBookingRequestDTO);
-        parcelRepository.save(parcel);
+        return parcelRepository.save(parcel);
     }
 
     public Parcel mapToParcel(ParcelBookingRequestDTO dto) {
@@ -65,5 +70,17 @@ public class ParcelService {
         }
 
         return timePart + randomPart.toString();
+    }
+
+    public void savePayment(Parcel parcel, ParcelBookingRequestDTO parcelBookingRequestDTO) {
+        Payment payment = new Payment();
+        payment.setAmount(parcelBookingRequestDTO.getPrice());
+        payment.setTransactionId(parcelBookingRequestDTO.getTransactionId());
+        payment.setPaymentMethod(parcelBookingRequestDTO.getPaymentMethod());
+        payment.setCurrency("BDT");
+        payment.setParcel(parcel);
+        payment.setUser(parcel.getSender());
+        payment.setPaymentStatus(PaymentStatus.PENDING);
+        paymentRepository.save(payment);
     }
 }

@@ -1,31 +1,32 @@
 package com.bytebreeze.quickdrop.controller.api;
 
+import com.bytebreeze.quickdrop.model.Payment;
+import com.bytebreeze.quickdrop.repository.PaymentRepository;
 import com.bytebreeze.quickdrop.service.SSLCommerzPaymentService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.MultiValueMap;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/sslcommerz")
 public class SSLCommerzPaymentApiController {
 
+    private final PaymentRepository paymentRepository;
     @Value("${sslcommerz.store-passwd}")
     private String storePassword;
 
     SSLCommerzPaymentService sslCommerzPaymentService;
 
-    public SSLCommerzPaymentApiController(SSLCommerzPaymentService sslCommerzPaymentService) {
+    public SSLCommerzPaymentApiController(SSLCommerzPaymentService sslCommerzPaymentService, PaymentRepository paymentRepository) {
         this.sslCommerzPaymentService = sslCommerzPaymentService;
+        this.paymentRepository = paymentRepository;
     }
 
     @PostMapping("/success")
@@ -41,20 +42,17 @@ public class SSLCommerzPaymentApiController {
         String riskLevel = paramMap.get("risk_level");
         String riskTitle = paramMap.get("risk_title");
 
-        System.out.println(paramMap.toString());
-
-        String marchentTransactionId = "";
-        String marchentTransactionAmount = "";
-        String marchentTransactionCurrency = "BDT";
+        // fetch payment information from database
+        Payment payment = paymentRepository.findByTransactionId(transactionId).orElseThrow(() -> new IllegalArgumentException("Invalid transaction ID"));
+        String marchentTransactionId = payment.getTransactionId();
+        String marchentTransactionAmount = payment.getAmount().toString();
+        String marchentTransactionCurrency = payment.getCurrency();
 
 
         // Verify payment
         if(!sslCommerzPaymentService.orderValidate(marchentTransactionId, marchentTransactionAmount, marchentTransactionCurrency, paramMap)) {
-            System.out.println("Payment verification failed");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("status", "error", "message", "Payment verification failed"));
         }
-
-        System.out.println("Payment verification successful");
 
         // Construct response map
         Map<String, Object> response = new HashMap<>();
