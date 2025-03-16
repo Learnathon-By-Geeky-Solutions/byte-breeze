@@ -67,7 +67,7 @@ public class SSLCommerzPaymentService implements PaymentService {
     private String extractRedirectUrl(SSLCommerzPaymentInitResponseDto sslCommerzPaymentInitResponseDto, String paymentMethod) {
         return sslCommerzPaymentInitResponseDto.getDesc()
                 .stream()
-                .filter(desc -> desc.getName().equalsIgnoreCase(paymentMethod))
+                .filter(desc -> desc.getGw().equalsIgnoreCase(paymentMethod))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Payment method not found"))
                 .getRedirectGatewayURL();
