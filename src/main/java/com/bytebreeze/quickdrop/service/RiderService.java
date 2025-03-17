@@ -67,6 +67,11 @@ public class RiderService {
 
        // rider = onboardRiderMapper.toEntity(riderOnboardingDTO);
 
+        //Checking that given NID No. is previously taken or not.?
+        if(riderRepository.findByNationalIdNumber(riderOnboardingDTO.getNationalIdNumber()).isPresent()){
+            throw new AlreadyExistsException("Provided National ID Number already registered");
+        }
+
         rider.setDateOfBirth(riderOnboardingDTO.getDateOfBirth());
         rider.setGender(riderOnboardingDTO.getGender());
         rider.setAddress(riderOnboardingDTO.getAddress());
