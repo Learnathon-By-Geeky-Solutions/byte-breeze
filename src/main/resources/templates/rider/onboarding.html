@@ -123,12 +123,12 @@
                     <div class="card-body">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label for="dob" class="form-label">Date of Birth</label>
+                                <label for="dob" class="form-label">Date of Birth <span class="text-red-500">*</span></label>
                                 <input type="date" class="w-full p-2 border border-gray-300 rounded-md" id="dob"
                                        name="dob" th:field="*{dateOfBirth}" required>
                             </div>
                             <div>
-                                <label for="gender" class="form-label">Gender</label>
+                                <label for="gender" class="form-label">Gender <span class="text-red-500">*</span></label>
                                 <select class="w-full p-2 border border-gray-300 rounded-md" id="gender"
                                         name="gender" th:field="*{gender}" required>
                                     <option value="">Select Gender</option>
@@ -138,22 +138,22 @@
                                 </select>
                             </div>
                             <div class="col-span-2">
-                                <label for="address" class="form-label">Residential Address</label>
+                                <label for="address" class="form-label">Residential Address <span class="text-red-500">*</span></label>
                                 <input type="text" class="w-full p-2 border border-gray-300 rounded-md" id="address"
                                        name="address" th:field="*{address}" required>
                             </div>
                             <div>
-                                <label for="thana" class="form-label">Thana/Upazila</label>
+                                <label for="thana" class="form-label">Thana/Upazila <span class="text-red-500">*</span></label>
                                 <input type="text" class="w-full p-2 border border-gray-300 rounded-md" id="thana"
                                        name="thana" th:field="*{upazila}" required>
                             </div>
                             <div>
-                                <label for="district" class="form-label">District</label>
+                                <label for="district" class="form-label">District <span class="text-red-500">*</span></label>
                                 <input type="text" class="w-full p-2 border border-gray-300 rounded-md"
                                        id="district" name="district" th:field="*{district}" required>
                             </div>
                             <div>
-                                <label for="postalCode" class="form-label">Postal Code</label>
+                                <label for="postalCode" class="form-label">Postal Code <span class="text-red-500">*</span></label>
                                 <input type="text" class="w-full p-2 border border-gray-300 rounded-md"
                                        id="postalCode" name="postalCode" th:field="*{postalCode}" required>
                             </div>
@@ -173,7 +173,7 @@
                     <div class="card-body">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label for="vehicleType" class="form-label">Vehicle Type</label>
+                                <label for="vehicleType" class="form-label">Vehicle Type <span class="text-red-500">*</span></label>
                                 <select class="w-full p-2 border border-gray-300 rounded-md" id="vehicleType"
                                         name="vehicleType" th:field="*{vehicleType}" required>
                                     <option value="">Select Vehicle Type</option>
@@ -185,39 +185,39 @@
                                 </select>
                             </div>
                             <div>
-                                <label for="vehicleModel" class="form-label">Vehicle Make/Model</label>
+                                <label for="vehicleModel" class="form-label">Vehicle Make/Model <span class="text-red-500">*</span></label>
                                 <input type="text" class="w-full p-2 border border-gray-300 rounded-md"
-                                       id="vehicleModel" th:field="*{vehicleModel}" name="vehicleModel">
+                                       id="vehicleModel" th:field="*{vehicleModel}" name="vehicleModel" required>
                             </div>
                             <div>
                                 <label for="registrationNumber" class="form-label">Vehicle Registration
-                                    Number</label>
+                                    Number <span class="text-red-500">*</span></label>
                                 <input type="text" class="w-full p-2 border border-gray-300 rounded-md"
                                        id="registrationNumber" name="registrationNumber"
                                        th:field="*{vehicleRegistrationNumber}" required>
                             </div>
                             <div>
-                                <label for="insuranceProvider" class="form-label">Vehicle Insurance Provider</label>
+                                <label for="insuranceProvider" class="form-label">Vehicle Insurance Provider <span class="text-red-500">*</span></label>
                                 <input type="text" class="w-full p-2 border border-gray-300 rounded-md"
                                        id="insuranceProvider" th:field="*{vehicleInsuranceProvider}"
-                                       name="insuranceProvider">
+                                       name="insuranceProvider" required>
                             </div>
                             <div>
-                                <label for="insuranceExpiry" class="form-label">Insurance Expiry Date</label>
+                                <label for="insuranceExpiry" class="form-label">Insurance Expiry Date <span class="text-red-500">*</span></label>
                                 <input type="date" class="w-full p-2 border border-gray-300 rounded-md"
-                                       id="insuranceExpiry" th:field="*{insuranceExpiryDate}" name="insuranceExpiry">
+                                       id="insuranceExpiry" th:field="*{insuranceExpiryDate}" name="insuranceExpiry" required>
                             </div>
                             <div>
                                 <label for="registrationDoc" class="form-label">Upload Vehicle Registration
-                                    Document</label>
+                                    Document <span class="text-red-500">*</span></label>
                                 <input type="file" class="w-full p-2 border border-gray-300 rounded-md"
                                        id="registrationDoc" th:field="*{vehicleRegistrationDocument}"
-                                       name="registrationDoc">
+                                       name="registrationDoc" required>
                             </div>
                             <div>
-                                <label for="insuranceDoc" class="form-label">Upload Insurance Document</label>
+                                <label for="insuranceDoc" class="form-label">Upload Insurance Document <span class="text-red-500">*</span></label>
                                 <input type="file" class="w-full p-2 border border-gray-300 rounded-md"
-                                       id="insuranceDoc" th:field="*{insuranceDocument}" name="insuranceDoc">
+                                       id="insuranceDoc" th:field="*{insuranceDocument}" name="insuranceDoc" required>
                             </div>
                         </div>
                     </div>
@@ -235,41 +235,41 @@
                     <div class="card-body">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label for="nationalId" class="form-label">National ID Number</label>
+                                <label for="nationalId" class="form-label">National ID Number <span class="text-red-500">*</span></label>
                                 <input type="text" class="w-full p-2 border border-gray-300 rounded-md"
                                        id="nationalId" th:field="*{nationalIdNumber}" name="nationalId" required>
                             </div>
                             <div>
-                                <label for="licenseNumber" class="form-label">Driver’s License Number</label>
+                                <label for="licenseNumber" class="form-label">Driver’s License Number <span class="text-red-500">*</span></label>
                                 <input type="text" class="w-full p-2 border border-gray-300 rounded-md"
-                                       id="licenseNumber" th:field="*{driversLicenseNumber}" name="licenseNumber">
+                                       id="licenseNumber" th:field="*{driversLicenseNumber}" name="licenseNumber" required>
                             </div>
                             <div>
                                 <label for="nationalIdFront" class="form-label">Upload National ID Document
-                                    (Front)</label>
+                                    (Front) <span class="text-red-500">*</span></label>
                                 <input type="file" class="w-full p-2 border border-gray-300 rounded-md"
-                                       id="nationalIdFront" th:field="*{nationalIdFront}" name="nationalIdFront">
+                                       id="nationalIdFront" th:field="*{nationalIdFront}" name="nationalIdFront" required>
                             </div>
                             <div>
                                 <label for="nationalIdBack" class="form-label">Upload National ID Document
-                                    (Back)</label>
+                                    (Back) <span class="text-red-500">*</span></label>
                                 <input type="file" class="w-full p-2 border border-gray-300 rounded-md"
-                                       id="nationalIdBack" th:field="*{nationalIdBack}" name="nationalIdBack">
+                                       id="nationalIdBack" th:field="*{nationalIdBack}" name="nationalIdBack" required>
                             </div>
                             <div>
-                                <label for="licenseFront" class="form-label">Upload Driver’s License (Front)</label>
+                                <label for="licenseFront" class="form-label">Upload Driver’s License (Front) <span class="text-red-500">*</span></label>
                                 <input type="file" class="w-full p-2 border border-gray-300 rounded-md"
-                                       id="licenseFront" th:field="*{driversLicenseFront}" name="licenseFront">
+                                       id="licenseFront" th:field="*{driversLicenseFront}" name="licenseFront" required>
                             </div>
                             <div>
-                                <label for="licenseBack" class="form-label">Upload Driver’s License (Back)</label>
+                                <label for="licenseBack" class="form-label">Upload Driver’s License (Back) <span class="text-red-500">*</span></label>
                                 <input type="file" class="w-full p-2 border border-gray-300 rounded-md"
-                                       id="licenseBack" th:field="*{driversLicenseBack}" name="licenseBack">
+                                       id="licenseBack" th:field="*{driversLicenseBack}" name="licenseBack" required>
                             </div>
                             <div>
-                                <label for="LicenseExpiry" class="form-label">License Expiry Date</label>
+                                <label for="LicenseExpiry" class="form-label">License Expiry Date <span class="text-red-500">*</span></label>
                                 <input type="date" class="w-full p-2 border border-gray-300 rounded-md"
-                                       id="LicenseExpiry" th:field="*{licenseExpiryDate}" name="LicenseExpiry">
+                                       id="LicenseExpiry" th:field="*{licenseExpiryDate}" name="LicenseExpiry" required>
                             </div>
                         </div>
                     </div>
