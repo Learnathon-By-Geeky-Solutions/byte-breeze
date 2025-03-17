@@ -88,6 +88,7 @@ public class SecurityConfig {
                         .key(rememberMeKey)
                         .rememberMeParameter("remember-me")
                         .tokenValiditySeconds(rememberMeTokenValidityInSeconds)
+                        .rememberMeCookieName("user-remember-me")
                 )
                 .logout(logout -> logout
                         .logoutUrl("/user/logout")
@@ -116,6 +117,12 @@ public class SecurityConfig {
                         .loginProcessingUrl("/rider/login")
                         .defaultSuccessUrl("/rider/dashboard")  // Redirect to rider dashboard after successful login
                         .failureUrl("/rider/login?error=true")  // Redirect back to login on failure
+                )
+                .rememberMe((rememberMe)->rememberMe
+                        .key(rememberMeKey)
+                        .rememberMeParameter("remember-me")
+                        .tokenValiditySeconds(rememberMeTokenValidityInSeconds)
+                        .rememberMeCookieName("rider-remember-me")
                 )
                 .logout(logout -> logout
                         .logoutUrl("/rider/logout")
