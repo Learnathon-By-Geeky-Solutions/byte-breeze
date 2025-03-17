@@ -43,7 +43,7 @@ public class SSLCommerzPaymentService implements PaymentService {
 
     private String successUrl = "/sslcommerz/success";
     private String failureUrl = "/sslcommerz/failure";
-    private String errorUrl = "/sslcommerz/error";
+    private String errorUrl = "/sslcommerz/cancel";
 
     @Value("${sslcommerz.base-url}")
     private String baseUrl;

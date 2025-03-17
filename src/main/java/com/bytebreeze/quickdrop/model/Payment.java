@@ -27,7 +27,7 @@ public class Payment {
     @ManyToOne(cascade = CascadeType.ALL)
     private User user;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Parcel parcel;
 
     private PaymentStatus paymentStatus;
