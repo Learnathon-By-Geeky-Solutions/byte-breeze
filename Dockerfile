@@ -1,20 +1,23 @@
-# Use OpenJDK as the base image
+# Stage 1: Build the application using the Gradle wrapper
+FROM gradle:7.6.0-jdk17-alpine AS builder
+WORKDIR /home/gradle/project
+# Copy all project files into the builder container
+COPY . .
+# Make the Gradle wrapper executable and run the build
+RUN chmod +x gradlew && ./gradlew build -x test --no-daemon
+
+# Stage 2: Create the runtime image
 FROM eclipse-temurin:17-jdk-alpine
-
-# Set the working directory inside the container
 WORKDIR /app
+# Copy the built JAR file from the builder stage into the runtime image
+COPY --from=builder /home/gradle/project/build/libs/*.jar quickdrop.jar
 
-# Copy the built JAR file into the container
-COPY build/libs/quickdrop-0.0.1-SNAPSHOT.jar quickdrop.jar
+# Set an environment variable for uploads and create the uploads directory
+ENV UPLOAD_PATH=/app/uploads
+RUN mkdir -p $UPLOAD_PATH
 
-# Expose the application port (must match server.port in application.properties)
+# Expose the application port (should match server.port in your Spring Boot configuration)
 EXPOSE 8080
-
-# Define environment variables (can be overridden in docker-compose or run command)
-#ENV PORT=8080
-#ENV DB_URL=jdbc:postgresql://localhost:5432/quickdrop
-#ENV DB_USERNAME=your_db_user
-#ENV DB_PASSWORD=your_db_password
 
 # Run the application
 CMD ["java", "-jar", "quickdrop.jar"]
