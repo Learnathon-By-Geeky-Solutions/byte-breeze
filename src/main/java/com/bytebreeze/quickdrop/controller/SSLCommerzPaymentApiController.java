@@ -1,4 +1,4 @@
-package com.bytebreeze.quickdrop.controller.api;
+package com.bytebreeze.quickdrop.controller;
 
 import com.bytebreeze.quickdrop.enums.PaymentStatus;
 import com.bytebreeze.quickdrop.model.Payment;
