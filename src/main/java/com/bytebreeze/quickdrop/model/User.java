@@ -3,15 +3,14 @@ package com.bytebreeze.quickdrop.model;
 import com.bytebreeze.quickdrop.enums.EmailVerified;
 import com.bytebreeze.quickdrop.enums.Role;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.util.Set;
+import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-import java.time.LocalDateTime;
-import java.util.Set;
-import java.util.UUID;
 
 @Entity
 @Table(name = "users")
@@ -20,44 +19,39 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private UUID id;
 
-    @Column(nullable = false)
-    private String fullName;
+  @Column(nullable = false)
+  private String fullName;
 
-    @Column(unique = true, nullable = false)
-    private String email;
+  @Column(unique = true, nullable = false)
+  private String email;
 
-    @Column(nullable = false)
-    private String password;
+  @Column(nullable = false)
+  private String password;
 
-    @Column
-    private String phoneNumber;
+  @Column private String phoneNumber;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = true)
-    private EmailVerified emailVerified;
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = true)
+  private EmailVerified emailVerified;
 
-    @Column(nullable = true)
-    private String profilePicture;
+  @Column(nullable = true)
+  private String profilePicture;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(
-            name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id")
-    )
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role")
-    private Set<Role> roles;
+  @ElementCollection(fetch = FetchType.EAGER)
+  @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+  @Enumerated(EnumType.STRING)
+  @Column(name = "role")
+  private Set<Role> roles;
 
-    @CreationTimestamp
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+  @CreationTimestamp
+  @Column(nullable = false, updatable = false)
+  private LocalDateTime createdAt;
 
-    @UpdateTimestamp
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;
-
+  @UpdateTimestamp
+  @Column(nullable = false)
+  private LocalDateTime updatedAt;
 }
