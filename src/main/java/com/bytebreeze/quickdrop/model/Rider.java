@@ -3,11 +3,15 @@ import com.bytebreeze.quickdrop.enums.Gender;
 import com.bytebreeze.quickdrop.enums.VehicleType;
 import com.bytebreeze.quickdrop.enums.VerificationStatus;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
-@Data
+@NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "riders")
 @PrimaryKeyJoinColumn(name = "id")

@@ -3,7 +3,9 @@ package com.bytebreeze.quickdrop.model;
 import com.bytebreeze.quickdrop.enums.EmailVerified;
 import com.bytebreeze.quickdrop.enums.Role;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -14,7 +16,9 @@ import java.util.UUID;
 @Entity
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.JOINED)
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

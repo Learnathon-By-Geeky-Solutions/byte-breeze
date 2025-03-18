@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{master-layout-user}">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Parcel</title>
+    <style>
+        label.selected {
+            border-color: #6366F1 !important; /* Indigo 500 */
+            background-color: #E0E7FF;        /* Indigo 100 */
+        }
+    </style>
+</head>
+<body>
+<!-- Content Fragment -->
+<div layout:fragment="content" class="container mx-auto p-6">
+    <!-- Main Form Heading -->
+    <div class="mb-6">
+        <h1 class="text-3xl font-bold text-gray-800">Book Parcel</h1>
+    </div>
+
+    <div class="bg-white p-6 shadow rounded-lg">
+        <div class="mb-6 text-center">
+            <h2 class="text-3xl font-bold text-gray-800 border-b-4 border-indigo-600 pb-2 inline-block">
+                Book Parcel
+            </h2>
+            <p class="mt-2 text-gray-500">Please fill in the details below to book your parcel.</p>
+        </div>
+
+        <form th:action="@{/user/book-parcel}" th:object="${parcelBookingRequestDTO}" method="post" class="space-y-6">
+
+            <!-- Parcel Information Section (Collapsible) -->
+            <details open class="mb-6">
+                <summary class="text-lg font-semibold text-gray-800 border-b pb-2 mb-4 cursor-pointer">Parcel Information</summary>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Product Category Dropdown -->
+                    <div>
+                        <label for="categoryId" class="block text-sm font-medium text-gray-700">
+                            Product Category <span class="text-red-500">*</span>
+                        </label>
+                        <select id="categoryId" th:field="*{categoryId}" required
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                            <option value="" disabled selected>Select a category</option>
+                            <option th:each="category : ${productCategories}"
+                                    th:value="${category.id}"
+                                    th:text="${category.category}">
+                            </option>
+                        </select>
+                        <div th:replace="~{fragments/field-error-fragment :: fieldError('categoryId')}"></div>
+                    </div>
+
+                    <!-- Description -->
+                    <div>
+                        <label for="description" class="block text-sm font-medium text-gray-700">
+                            Description
+                        </label>
+                        <textarea id="description" th:field="*{description}"
+                                  class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                        <div th:replace="~{fragments/field-error-fragment :: fieldError('description')}"></div>
+                    </div>
+
+                    <!-- Weight -->
+                    <div>
+                        <label for="weight" class="block text-sm font-medium text-gray-700">
+                            Weight (in kg) <span class="text-red-500">*</span>
+                        </label>
+                        <input type="number" step="any" id="weight" th:field="*{weight}" required
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                        <div th:replace="~{fragments/field-error-fragment :: fieldError('weight')}"></div>
+                    </div>
+
+                    <!-- Size -->
+                    <div>
+                        <label for="size" class="block text-sm font-medium text-gray-700">
+                            Size (in m<sup>2</sup>) <span class="text-red-500">*</span>
+                        </label>
+                        <input type="number" id="size" th:field="*{size}" required
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                        <div th:replace="~{fragments/field-error-fragment :: fieldError('size')}"></div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- Receiver Information Section (Collapsible) -->
+            <details open class="mb-6">
+                <summary class="text-lg font-semibold text-gray-800 border-b pb-2 mb-4 cursor-pointer">Receiver Information</summary>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Receiver Name -->
+                    <div>
+                        <label for="receiverName" class="block text-sm font-medium text-gray-700">
+                            Receiver Name <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="receiverName" th:field="*{receiverName}" required
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                        <div th:replace="~{fragments/field-error-fragment :: fieldError('receiverName')}"></div>
+                    </div>
+
+                    <!-- Receiver Phone -->
+                    <div>
+                        <label for="receiverPhone" class="block text-sm font-medium text-gray-700">
+                            Receiver Phone <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="receiverPhone" th:field="*{receiverPhone}" required
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                        <div th:replace="~{fragments/field-error-fragment :: fieldError('receiverPhone')}"></div>
+                    </div>
+
+                    <!-- Receiver Email -->
+                    <div>
+                        <label for="receiverEmail" class="block text-sm font-medium text-gray-700">
+                            Receiver Email
+                        </label>
+                        <input type="email" id="receiverEmail" th:field="*{receiverEmail}"
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                        <div th:replace="~{fragments/field-error-fragment :: fieldError('receiverEmail')}"></div>
+                    </div>
+
+                    <!-- Receiver Address -->
+                    <div>
+                        <label for="receiverAddress" class="block text-sm font-medium text-gray-700">
+                            Receiver Address <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="receiverAddress" th:field="*{receiverAddress}" required
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                        <div th:replace="~{fragments/field-error-fragment :: fieldError('receiverAddress')}"></div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- Billing Section (Collapsible) -->
+            <details open class="mb-6">
+                <summary class="text-lg font-semibold text-gray-800 border-b pb-2 mb-4 cursor-pointer">Billing</summary>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Price -->
+                    <div>
+                        <label for="price" class="block text-sm font-medium text-gray-700">
+                            Price <span class="text-red-500">*</span>
+                        </label>
+                        <input type="number" step="any" id="price" th:field="*{price}" required
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                        <div th:replace="~{fragments/field-error-fragment :: fieldError('price')}"></div>
+                    </div>
+
+                    <!-- Distance -->
+                    <div>
+                        <label for="distance" class="block text-sm font-medium text-gray-700">
+                            Distance <span class="text-red-500">*</span>
+                        </label>
+                        <input type="number" step="any" id="distance" th:field="*{distance}" required
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                        <div th:replace="~{fragments/field-error-fragment :: fieldError('distance')}"></div>
+                    </div>
+                </div>
+
+                <!-- Payment Type Selection -->
+                <div class="mt-6">
+                    <label class="block text-lg font-semibold text-gray-700">
+                        Select Payment Method <span class="text-red-500">*</span>
+                    </label>
+                    <div class="grid grid-cols-3 gap-4 mt-4">
+                        <!-- Bkash Payment -->
+                        <label class="relative border rounded-lg shadow-sm cursor-pointer p-4 hover:border-indigo-500 transition">
+                            <input type="radio" name="paymentMethod" th:field="*{paymentMethod}" value="bkash" class="hidden" required />
+                            <img src="/images/bkash_payment.png" alt="Standard Delivery" class="h-16 mx-auto">
+                        </label>
+
+                        <!-- Rocket Payment -->
+                        <label class="relative border rounded-lg shadow-sm cursor-pointer p-4 hover:border-indigo-500 transition">
+                            <input type="radio" name="paymentMethod" th:field="*{paymentMethod}" value="dbblmobilebanking" class="hidden" required />
+                            <img src="/images/rocket_payment.png" alt="Express Delivery" class="h-16 mx-auto">
+                        </label>
+
+                        <!-- VISA Payment -->
+                        <label class="relative border rounded-lg shadow-sm cursor-pointer p-4 hover:border-indigo-500 transition">
+                            <input type="radio" name="paymentMethod" th:field="*{paymentMethod}" value="visacard" class="hidden" required />
+                            <img src="/images/visa_payment.png" alt="Same Day Delivery" class="h-16 mx-auto my-auto">
+                        </label>
+                    </div>
+                    <div th:replace="~{fragments/field-error-fragment :: fieldError('paymentMethod')}"></div>
+                </div>
+            </details>
+
+
+            <!-- Submit Button -->
+            <div>
+                <button type="submit"
+                        class="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700">
+                    Pay and Book Parcel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Extra Scripts Fragment -->
+<div layout:fragment="extraScripts">
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Select all radio buttons with the name 'paymentMethod'
+            const radios = document.querySelectorAll('input[name="paymentMethod"]');
+
+            radios.forEach(function(radio) {
+                radio.addEventListener("change", function() {
+                    // Remove the 'selected' class from all labels
+                    radios.forEach(function(r) {
+                        const parentLabel = r.closest("label");
+                        if (parentLabel) {
+                            parentLabel.classList.remove("selected");
+                        }
+                    });
+                    // Add the 'selected' class to the parent label of the checked radio
+                    if (radio.checked) {
+                        const selectedLabel = radio.closest("label");
+                        if (selectedLabel) {
+                            selectedLabel.classList.add("selected");
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</div>
+</body>
+</html>

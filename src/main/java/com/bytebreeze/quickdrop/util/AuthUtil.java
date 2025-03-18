@@ -1,8 +1,11 @@
 package com.bytebreeze.quickdrop.util;
 
+import com.bytebreeze.quickdrop.model.User;
+import com.bytebreeze.quickdrop.repository.UserRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collections;
