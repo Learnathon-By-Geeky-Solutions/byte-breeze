@@ -31,6 +31,9 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.postgresql:postgresql'
 
+	// Flyway for database migration
+	implementation 'org.flywaydb:flyway-core'
+
 	// Lombok for boilerplate code generation
 	compileOnly 'org.projectlombok:lombok:1.18.30'
 	annotationProcessor 'org.projectlombok:lombok:1.18.30'
