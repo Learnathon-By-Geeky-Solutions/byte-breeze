@@ -134,4 +134,7 @@ public class RiderController {
 			return "redirect:/rider/onboarding/" + riderId;
 		}
 	}
+
+
+
 }
