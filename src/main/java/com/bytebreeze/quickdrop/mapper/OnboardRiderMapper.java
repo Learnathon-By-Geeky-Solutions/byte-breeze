@@ -7,5 +7,5 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface OnboardRiderMapper {
 
-  Rider toEntity(RiderOnboardingDTO riderOnboardingDTO);
+	Rider toEntity(RiderOnboardingDTO riderOnboardingDTO);
 }

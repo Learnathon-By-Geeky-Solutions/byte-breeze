@@ -13,21 +13,21 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class Payment {
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private UUID id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private UUID id;
 
-  private String transactionId;
-  private BigDecimal amount;
-  private String currency;
-  private String paymentMethod;
-  private String bankTransactionId;
+	private String transactionId;
+	private BigDecimal amount;
+	private String currency;
+	private String paymentMethod;
+	private String bankTransactionId;
 
-  @ManyToOne(cascade = CascadeType.ALL)
-  private User user;
+	@ManyToOne(cascade = CascadeType.ALL)
+	private User user;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  private Parcel parcel;
+	@OneToOne(cascade = CascadeType.ALL)
+	private Parcel parcel;
 
-  private PaymentStatus paymentStatus;
+	private PaymentStatus paymentStatus;
 }

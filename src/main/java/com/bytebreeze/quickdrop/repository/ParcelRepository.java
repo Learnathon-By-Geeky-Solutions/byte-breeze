@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ParcelRepository extends JpaRepository<Parcel, UUID> {
-  // You can add custom queries here if needed
+	// You can add custom queries here if needed
 }

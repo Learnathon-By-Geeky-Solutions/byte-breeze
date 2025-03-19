@@ -9,5 +9,5 @@ import org.springframework.stereotype.Component;
 @Component
 public interface RegisterRiderMapper {
 
-  Rider toEntity(RiderRegistrationRequestDTO riderRegistrationRequestDTO);
+	Rider toEntity(RiderRegistrationRequestDTO riderRegistrationRequestDTO);
 }

@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProductCategoryRepository extends JpaRepository<ProductCategory, UUID> {
-  // You can add custom queries here if needed
+	// You can add custom queries here if needed
 }

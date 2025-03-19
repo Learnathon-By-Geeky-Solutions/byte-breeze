@@ -11,36 +11,35 @@ import java.net.URLConnection;
 
 public class SSLCommerzUtil {
 
-  //    public static SSLCommerzInitResponse extractInitResponse(String response) throws IOException
-  // {
-  //        ObjectMapper mapper = new ObjectMapper();
-  //        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-  //        SSLCommerzInitResponse sslInitResponse = mapper.readValue(response,
-  // SSLCommerzInitResponse.class);
-  //        return sslInitResponse;
-  //    }
+	//    public static SSLCommerzInitResponse extractInitResponse(String response) throws IOException
+	// {
+	//        ObjectMapper mapper = new ObjectMapper();
+	//        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+	//        SSLCommerzInitResponse sslInitResponse = mapper.readValue(response,
+	// SSLCommerzInitResponse.class);
+	//        return sslInitResponse;
+	//    }
 
-  public static SSLCommerzValidatorResponse extractValidatorResponse(String response)
-      throws IOException {
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    SSLCommerzValidatorResponse sslValidatorResponse =
-        mapper.readValue(response, SSLCommerzValidatorResponse.class);
-    return sslValidatorResponse;
-  }
+	public static SSLCommerzValidatorResponse extractValidatorResponse(String response) throws IOException {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		SSLCommerzValidatorResponse sslValidatorResponse =
+				mapper.readValue(response, SSLCommerzValidatorResponse.class);
+		return sslValidatorResponse;
+	}
 
-  public static String getByOpeningJavaUrlConnection(String stringUrl) throws IOException {
-    String output = "";
-    URL url = new URL(stringUrl);
-    URLConnection conn = url.openConnection();
-    conn.setConnectTimeout(5000);
-    conn.setReadTimeout(5000);
-    BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-    String outputLine;
-    while ((outputLine = br.readLine()) != null) {
-      output = output + outputLine;
-    }
-    br.close();
-    return output;
-  }
+	public static String getByOpeningJavaUrlConnection(String stringUrl) throws IOException {
+		String output = "";
+		URL url = new URL(stringUrl);
+		URLConnection conn = url.openConnection();
+		conn.setConnectTimeout(5000);
+		conn.setReadTimeout(5000);
+		BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		String outputLine;
+		while ((outputLine = br.readLine()) != null) {
+			output = output + outputLine;
+		}
+		br.close();
+		return output;
+	}
 }

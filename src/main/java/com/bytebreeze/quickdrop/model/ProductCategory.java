@@ -15,18 +15,18 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Setter
 @NoArgsConstructor
 public class ProductCategory {
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private UUID id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private UUID id;
 
-  @Column(unique = true, nullable = false)
-  private String category;
+	@Column(unique = true, nullable = false)
+	private String category;
 
-  @CreationTimestamp
-  @Column(nullable = false, updatable = false)
-  private LocalDateTime createdAt;
+	@CreationTimestamp
+	@Column(nullable = false, updatable = false)
+	private LocalDateTime createdAt;
 
-  @UpdateTimestamp
-  @Column(nullable = false)
-  private LocalDateTime updatedAt;
+	@UpdateTimestamp
+	@Column(nullable = false)
+	private LocalDateTime updatedAt;
 }

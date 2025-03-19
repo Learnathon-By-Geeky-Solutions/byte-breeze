@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PaymentRepository extends JpaRepository<Payment, UUID> {
-  Optional<Payment> findByTransactionId(String transactionId);
+	Optional<Payment> findByTransactionId(String transactionId);
 }

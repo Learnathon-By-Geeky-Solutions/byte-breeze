@@ -17,87 +17,86 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequestMapping("/user")
 public class UserController {
-  private final UserService userService;
-  private static final String DASHBOARD_PROFILE_SETTINGS_PAGE = "dashboard/account";
-  private final ProductCategoryRepository productCategoryRepository;
-  private final ParcelService parcelService;
-  private final SSLCommerzPaymentService sslCommerzPaymentService;
+	private final UserService userService;
+	private static final String DASHBOARD_PROFILE_SETTINGS_PAGE = "dashboard/account";
+	private final ProductCategoryRepository productCategoryRepository;
+	private final ParcelService parcelService;
+	private final SSLCommerzPaymentService sslCommerzPaymentService;
 
-  public UserController(
-      UserService userService,
-      ProductCategoryRepository productCategoryRepository,
-      ParcelService parcelService,
-      SSLCommerzPaymentService sslCommerzPaymentService) {
-    this.userService = userService;
-    this.productCategoryRepository = productCategoryRepository;
-    this.parcelService = parcelService;
-    this.sslCommerzPaymentService = sslCommerzPaymentService;
-  }
+	public UserController(
+			UserService userService,
+			ProductCategoryRepository productCategoryRepository,
+			ParcelService parcelService,
+			SSLCommerzPaymentService sslCommerzPaymentService) {
+		this.userService = userService;
+		this.productCategoryRepository = productCategoryRepository;
+		this.parcelService = parcelService;
+		this.sslCommerzPaymentService = sslCommerzPaymentService;
+	}
 
-  @GetMapping("/dashboard")
-  public String userDashboard() {
-    return "dashboard/home";
-  }
+	@GetMapping("/dashboard")
+	public String userDashboard() {
+		return "dashboard/home";
+	}
 
-  @GetMapping("/profile-settings")
-  public String basicProfileSettings(Model model) {
-    model.addAttribute("userProfileUpdateDto", userService.userProfileUpdateGet());
-    return DASHBOARD_PROFILE_SETTINGS_PAGE;
-  }
+	@GetMapping("/profile-settings")
+	public String basicProfileSettings(Model model) {
+		model.addAttribute("userProfileUpdateDto", userService.userProfileUpdateGet());
+		return DASHBOARD_PROFILE_SETTINGS_PAGE;
+	}
 
-  @PostMapping("/profile-settings")
-  public String updateAccountSettings(
-      @Valid @ModelAttribute("userProfileUpdateDto") UserProfileUpdateDto dto,
-      BindingResult bindingResult,
-      RedirectAttributes redirectAttributes,
-      Model model) {
+	@PostMapping("/profile-settings")
+	public String updateAccountSettings(
+			@Valid @ModelAttribute("userProfileUpdateDto") UserProfileUpdateDto dto,
+			BindingResult bindingResult,
+			RedirectAttributes redirectAttributes,
+			Model model) {
 
-    if (bindingResult.hasErrors()) {
-      return DASHBOARD_PROFILE_SETTINGS_PAGE;
-    }
+		if (bindingResult.hasErrors()) {
+			return DASHBOARD_PROFILE_SETTINGS_PAGE;
+		}
 
-    try {
-      userService.updateUserProfile(dto);
-    } catch (Exception e) {
-      model.addAttribute(
-          "updateError", "An error occurred while updating your profile. Please try again.");
-      return DASHBOARD_PROFILE_SETTINGS_PAGE;
-    }
+		try {
+			userService.updateUserProfile(dto);
+		} catch (Exception e) {
+			model.addAttribute("updateError", "An error occurred while updating your profile. Please try again.");
+			return DASHBOARD_PROFILE_SETTINGS_PAGE;
+		}
 
-    redirectAttributes.addFlashAttribute("successMessage", "Profile updated successfully!");
-    return "redirect:/user/profile-settings?success";
-  }
+		redirectAttributes.addFlashAttribute("successMessage", "Profile updated successfully!");
+		return "redirect:/user/profile-settings?success";
+	}
 
-  @GetMapping("/book-parcel")
-  public String bookParcel(Model model) {
-    model.addAttribute("productCategories", productCategoryRepository.findAll());
-    model.addAttribute("title", "Book Parcel");
-    model.addAttribute("parcelBookingRequestDTO", new ParcelBookingRequestDTO());
-    return "dashboard/book-parcel";
-  }
+	@GetMapping("/book-parcel")
+	public String bookParcel(Model model) {
+		model.addAttribute("productCategories", productCategoryRepository.findAll());
+		model.addAttribute("title", "Book Parcel");
+		model.addAttribute("parcelBookingRequestDTO", new ParcelBookingRequestDTO());
+		return "dashboard/book-parcel";
+	}
 
-  @PostMapping("/book-parcel")
-  public String handleParcelBooking(
-      @ModelAttribute @Valid ParcelBookingRequestDTO parcelBookingRequestDTO,
-      BindingResult bindingResult,
-      Model model) {
-    if (bindingResult.hasErrors()) {
-      model.addAttribute("productCategories", productCategoryRepository.findAll());
-      model.addAttribute("title", "Book Parcel");
-      return "dashboard/book-parcel";
-    }
+	@PostMapping("/book-parcel")
+	public String handleParcelBooking(
+			@ModelAttribute @Valid ParcelBookingRequestDTO parcelBookingRequestDTO,
+			BindingResult bindingResult,
+			Model model) {
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("productCategories", productCategoryRepository.findAll());
+			model.addAttribute("title", "Book Parcel");
+			return "dashboard/book-parcel";
+		}
 
-    // save the parcel booking information
-    parcelBookingRequestDTO.setTransactionId(parcelService.generateTransactionId());
-    Parcel parcel = parcelService.bookParcel(parcelBookingRequestDTO);
+		// save the parcel booking information
+		parcelBookingRequestDTO.setTransactionId(parcelService.generateTransactionId());
+		Parcel parcel = parcelService.bookParcel(parcelBookingRequestDTO);
 
-    // save the payment information
-    parcelService.savePayment(parcel, parcelBookingRequestDTO);
+		// save the payment information
+		parcelService.savePayment(parcel, parcelBookingRequestDTO);
 
-    // fetch payment gateway url
-    String paymentOperationUrl =
-        sslCommerzPaymentService.getPaymentUrl(parcelBookingRequestDTO, parcel.getSender());
+		// fetch payment gateway url
+		String paymentOperationUrl =
+				sslCommerzPaymentService.getPaymentUrl(parcelBookingRequestDTO, parcel.getSender());
 
-    return "redirect:" + paymentOperationUrl;
-  }
+		return "redirect:" + paymentOperationUrl;
+	}
 }

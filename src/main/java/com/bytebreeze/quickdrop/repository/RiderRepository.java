@@ -8,9 +8,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RiderRepository extends JpaRepository<Rider, UUID> {
-  Optional<Rider> findByEmail(String email);
+	Optional<Rider> findByEmail(String email);
 
-  Optional<Rider> findById(UUID id);
+	Optional<Rider> findById(UUID id);
 
-  Optional<Rider> findByNationalIdNumber(String nationalIdNumber);
+	Optional<Rider> findByNationalIdNumber(String nationalIdNumber);
 }
