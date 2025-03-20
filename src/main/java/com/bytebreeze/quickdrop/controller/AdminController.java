@@ -98,6 +98,20 @@ public class AdminController {
 	}
 
 
+	@PostMapping("/rider/reject")
+	public String rejectRider(@RequestParam("riderId") UUID riderId,RedirectAttributes redirectAttributes) {
+
+		try{
+			riderService.updateRiderStatus(riderId, VerificationStatus.REJECTED);
+
+			redirectAttributes.addFlashAttribute("message", "Rider rejected successfully");
+		}catch(Exception e) {
+			redirectAttributes.addFlashAttribute("error", "Failed to reject rider");
+
+		}
+		return "redirect:/admin/riders/pending";
+
+	}
 
 
 
