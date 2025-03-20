@@ -62,4 +62,18 @@ public class AdminController {
 		redirectAttributes.addFlashAttribute("successMessage", "Profile updated successfully!");
 		return "redirect:/admin/profile-settings?success";
 	}
+
+
+	@GetMapping("/riders/pending")
+	public String approvalPendingRiders(Model model) {
+
+
+		return "admin/pending-riders";
+	}
+
+
+
+
+
+
 }
