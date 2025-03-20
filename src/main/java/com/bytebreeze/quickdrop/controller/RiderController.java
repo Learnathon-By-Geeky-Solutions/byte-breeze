@@ -139,5 +139,10 @@ public class RiderController {
 	}
 
 
+	@PostMapping("/status")
+	public String updateStatus(@RequestParam Boolean status) {
+		riderService.updateRiderStatus(status);
+		return "redirect:/rider/dashboard";
+	}
 
 }
