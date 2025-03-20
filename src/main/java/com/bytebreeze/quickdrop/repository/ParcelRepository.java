@@ -10,8 +10,11 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ParcelRepository extends JpaRepository<Parcel, UUID> {
-	@Query("SELECT p FROM Parcel p WHERE p.sender.id = :userId AND p.status = :status")
-	List<Parcel> findBySenderAndStatus(UUID userId, ParcelStatus status);
+	@Query("SELECT p FROM Parcel p WHERE p.sender.id = :senderId AND p.status = :status")
+	List<Parcel> findBySenderAndStatus(UUID senderId, ParcelStatus status);
 
 	boolean existsByTrackingId(String trackingId);
+
+	@Query("SELECT p FROM Parcel p WHERE p.sender.id = :senderId")
+	List<Parcel> getAllBySender(UUID senderId);
 }

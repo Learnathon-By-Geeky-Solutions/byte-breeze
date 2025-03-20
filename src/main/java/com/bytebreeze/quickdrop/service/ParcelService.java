@@ -108,4 +108,11 @@ public class ParcelService {
 		} while (parcelRepository.existsByTrackingId(trackingId));
 		return trackingId;
 	}
+
+	public List<Parcel> getParcelList() {
+		User sender = userRepository
+				.findByEmail(AuthUtil.getAuthenticatedUsername())
+				.orElseThrow(() -> new IllegalArgumentException("Invalid sender"));
+		return parcelRepository.getAllBySender(sender.getId());
+	}
 }

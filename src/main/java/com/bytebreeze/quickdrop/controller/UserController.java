@@ -102,4 +102,11 @@ public class UserController {
 
 		return "redirect:" + paymentOperationUrl;
 	}
+
+	@GetMapping("/parcel-history")
+	public String getParcelHistory(Model model) {
+		List<Parcel> parcelHistory = parcelService.getParcelList();
+		model.addAttribute("parcelHistory", parcelHistory);
+		return "dashboard/parcel-history";
+	}
 }
