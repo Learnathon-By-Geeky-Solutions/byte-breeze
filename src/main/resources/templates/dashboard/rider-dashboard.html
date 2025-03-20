@@ -41,6 +41,28 @@
         </div>
 
 
+        <!------------------------------------------------------------>
+        <h2 class="text-2xl font-bold text-gray-800">Welcome,
+            <span th:text="${riderDashboardResponseDTO.fullName}"></span>
+        </h2>
+
+        <p class="text-gray-700">Verification Status:
+            <span th:text="${riderDashboardResponseDTO.verificationStatus}"
+                  th:classappend="${riderDashboardResponseDTO.verificationStatus == 'VERIFIED'} ? 'text-green-600' : 'text-red-600'">
+        </span>
+        </p>
+
+        <p class="text-gray-700">Average Rating:
+            <span th:text="${riderDashboardResponseDTO.riderAvgRating}"></span>
+        </p>
+
+        <p class="text-gray-700">Balance:
+            <span th:text="${riderDashboardResponseDTO.riderBalance} + ' BDT'"></span>
+        </p>
+
+
+        <!------------------------------------------->
+
 
         <div class="flex items-center space-x-4">
             <span class="text-lg font-semibold text-gray-700">Delivery Status:</span>
