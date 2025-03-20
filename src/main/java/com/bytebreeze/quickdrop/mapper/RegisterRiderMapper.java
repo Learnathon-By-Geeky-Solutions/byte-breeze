@@ -5,7 +5,7 @@ import com.bytebreeze.quickdrop.model.Rider;
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
 
-@Mapper(componentModel = "spring")
+@Mapper
 @Component
 public interface RegisterRiderMapper {
 
