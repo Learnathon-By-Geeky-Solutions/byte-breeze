@@ -3,19 +3,17 @@ package com.bytebreeze.quickdrop.controller;
 import com.bytebreeze.quickdrop.dto.UserProfileUpdateDto;
 import com.bytebreeze.quickdrop.dto.response.RiderApprovalByAdminResponseDTO;
 import com.bytebreeze.quickdrop.enums.VerificationStatus;
-import com.bytebreeze.quickdrop.model.Rider;
 import com.bytebreeze.quickdrop.service.RiderService;
 import com.bytebreeze.quickdrop.service.UserService;
 import com.bytebreeze.quickdrop.util.AuthUtil;
 import jakarta.validation.Valid;
+import java.util.List;
+import java.util.UUID;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.List;
-import java.util.UUID;
 
 @Controller
 @RequestMapping("/admin")
@@ -69,13 +67,10 @@ public class AdminController {
 		return "redirect:/admin/profile-settings?success";
 	}
 
-
 	@GetMapping("/riders/pending")
 	public String approvalPendingRiders(Model model) {
 
-		List<RiderApprovalByAdminResponseDTO> pendingRiders =  riderService.getPendingRiders();
-
-
+		List<RiderApprovalByAdminResponseDTO> pendingRiders = riderService.getPendingRiders();
 
 		model.addAttribute("riders", pendingRiders);
 
@@ -83,38 +78,28 @@ public class AdminController {
 	}
 
 	@PostMapping("/rider/approve")
-	public String approveRider(@RequestParam("riderId") UUID riderId,RedirectAttributes redirectAttributes) {
+	public String approveRider(@RequestParam("riderId") UUID riderId, RedirectAttributes redirectAttributes) {
 
-		try{
+		try {
 			riderService.updateRiderStatus(riderId, VerificationStatus.VERIFIED);
 
 			redirectAttributes.addFlashAttribute("message", "Rider approved successfully");
-		}catch(Exception e) {
+		} catch (Exception e) {
 			redirectAttributes.addFlashAttribute("error", "Failed to approve rider");
-
 		}
 		return "redirect:/admin/riders/pending";
-
 	}
 
-
 	@PostMapping("/rider/reject")
-	public String rejectRider(@RequestParam("riderId") UUID riderId,RedirectAttributes redirectAttributes) {
+	public String rejectRider(@RequestParam("riderId") UUID riderId, RedirectAttributes redirectAttributes) {
 
-		try{
+		try {
 			riderService.updateRiderStatus(riderId, VerificationStatus.REJECTED);
 
 			redirectAttributes.addFlashAttribute("message", "Rider rejected successfully");
-		}catch(Exception e) {
+		} catch (Exception e) {
 			redirectAttributes.addFlashAttribute("error", "Failed to reject rider");
-
 		}
 		return "redirect:/admin/riders/pending";
-
 	}
-
-
-
-
-
 }

@@ -28,7 +28,9 @@ public class RiderController {
 	}
 
 	@GetMapping("/dashboard")
-	public String riderDashboard() {
+	public String riderDashboard(Model model) {
+		model.addAttribute("riderDashboardResponseDTO", riderService.riderDashboardResponse());
+
 		return "dashboard/rider-dashboard";
 	}
 
@@ -133,5 +135,11 @@ public class RiderController {
 
 			return "redirect:/rider/onboarding/" + riderId;
 		}
+	}
+
+	@PostMapping("/status")
+	public String updateStatus(@RequestParam Boolean status) {
+		riderService.updateRiderStatus(status);
+		return "redirect:/rider/dashboard";
 	}
 }

@@ -84,7 +84,7 @@ public class Rider extends User {
 	private VerificationStatus verificationStatus = VerificationStatus.PENDING;
 
 	@Column(nullable = true)
-	private Boolean wantToDelivery = false;
+	private Boolean isAvailable = false;
 
 	@Column(nullable = true)
 	private double riderAvgRating = 0.0;
