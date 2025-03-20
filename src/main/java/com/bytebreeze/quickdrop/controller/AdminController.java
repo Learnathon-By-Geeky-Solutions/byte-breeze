@@ -1,6 +1,9 @@
 package com.bytebreeze.quickdrop.controller;
 
 import com.bytebreeze.quickdrop.dto.UserProfileUpdateDto;
+import com.bytebreeze.quickdrop.dto.response.RiderApprovalByAdminResponseDTO;
+import com.bytebreeze.quickdrop.model.Rider;
+import com.bytebreeze.quickdrop.service.RiderService;
 import com.bytebreeze.quickdrop.service.UserService;
 import com.bytebreeze.quickdrop.util.AuthUtil;
 import jakarta.validation.Valid;
@@ -13,15 +16,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
 	private static final String DASHBOARD_PROFILE_SETTINGS_PAGE = "dashboard/admin-account";
 
 	private final UserService userService;
+	private final RiderService riderService;
 
-	public AdminController(UserService userService) {
+	public AdminController(UserService userService, RiderService riderService) {
 		this.userService = userService;
+		this.riderService = riderService;
 	}
 
 	@GetMapping("/login")
@@ -67,6 +74,11 @@ public class AdminController {
 	@GetMapping("/riders/pending")
 	public String approvalPendingRiders(Model model) {
 
+		List<RiderApprovalByAdminResponseDTO> pendingRiders =  riderService.getPendingRiders();
+
+
+
+		model.addAttribute("riders", pendingRiders);
 
 		return "admin/pending-riders";
 	}
