@@ -2,6 +2,7 @@ package com.bytebreeze.quickdrop.service;
 
 import com.bytebreeze.quickdrop.dto.RiderOnboardingDTO;
 import com.bytebreeze.quickdrop.dto.RiderRegistrationRequestDTO;
+import com.bytebreeze.quickdrop.dto.response.RiderApprovalByAdminResponseDTO;
 import com.bytebreeze.quickdrop.enums.Role;
 import com.bytebreeze.quickdrop.enums.VerificationStatus;
 // import com.bytebreeze.quickdrop.mapper.OnboardRiderMapper;
@@ -13,7 +14,10 @@ import com.bytebreeze.quickdrop.repository.RiderRepository;
 import com.bytebreeze.quickdrop.repository.UserRepository;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -97,5 +101,15 @@ public class RiderService {
 		rider.setVerificationStatus(VerificationStatus.PENDING);
 
 		return riderRepository.save(rider);
+	}
+
+	public List<RiderApprovalByAdminResponseDTO> getPendingRiders(){
+
+		List<Rider> pendingRiders = riderRepository.findByVerificationStatus(VerificationStatus.PENDING);
+
+		return pendingRiders.stream()
+				.map(rider -> new RiderApprovalByAdminResponseDTO(rider.getId(), rider.getFullName(),
+						rider.getEmail(), rider.getPhoneNumber()))
+				.collect(Collectors.toList());
 	}
 }
