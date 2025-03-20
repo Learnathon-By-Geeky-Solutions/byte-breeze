@@ -30,7 +30,7 @@
         <!-- Iterate over parcels -->
         <div th:each="parcel : ${bookedParcels}" class="bg-white shadow-lg rounded-lg border hover:shadow-xl hover:-translate-y-1 transition-all duration-200">
             <!-- Card Header: Parcel ID -->
-            <div class="bg-gray-500 text-white font-semibold text-lg p-4 rounded-t-lg" th:text="'Parcel#'+${parcel.id}">Tracking Number</div>
+            <div class="bg-gray-500 text-white font-semibold text-lg p-4 rounded-t-lg" th:text="'Parcel#'+${parcel.trackingId}">Tracking Number</div>
 
             <!-- Card Body: Parcel Details -->
             <div class="p-4 bg-gray-50">
