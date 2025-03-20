@@ -84,6 +84,9 @@ public class Parcel {
 	@Column(name = "updated_at")
 	private LocalDateTime updatedAt;
 
+	@Column(unique = true, length = 6)
+	private String trackingId;
+
 	@PrePersist
 	protected void onCreate() {
 		if (this.status == null) {

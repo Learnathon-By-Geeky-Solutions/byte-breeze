@@ -15,6 +15,7 @@ import com.bytebreeze.quickdrop.util.AuthUtil;
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -60,6 +61,7 @@ public class ParcelService {
 		parcel.setReceiverAddress(dto.getReceiverAddress());
 		parcel.setPrice(dto.getPrice());
 		parcel.setDistance(dto.getDistance());
+		parcel.setTrackingId(this.generateUniqueTrackingId());
 
 		return parcel;
 	}
@@ -96,5 +98,14 @@ public class ParcelService {
 				.findByEmail(AuthUtil.getAuthenticatedUsername())
 				.orElseThrow(() -> new IllegalArgumentException("Invalid sender"));
 		return parcelRepository.findBySenderAndStatus(sender.getId(), ParcelStatus.BOOKED);
+	}
+
+	public String generateUniqueTrackingId() {
+		String trackingId;
+		Random random = new Random();
+		do {
+			trackingId = String.format("%06d", random.nextInt(900000) + 100000);
+		} while (parcelRepository.existsByTrackingId(trackingId));
+		return trackingId;
 	}
 }
