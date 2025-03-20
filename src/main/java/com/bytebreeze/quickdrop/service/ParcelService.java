@@ -1,6 +1,7 @@
 package com.bytebreeze.quickdrop.service;
 
 import com.bytebreeze.quickdrop.dto.request.ParcelBookingRequestDTO;
+import com.bytebreeze.quickdrop.enums.ParcelStatus;
 import com.bytebreeze.quickdrop.enums.PaymentStatus;
 import com.bytebreeze.quickdrop.model.Parcel;
 import com.bytebreeze.quickdrop.model.Payment;
@@ -12,7 +13,9 @@ import com.bytebreeze.quickdrop.repository.ProductCategoryRepository;
 import com.bytebreeze.quickdrop.repository.UserRepository;
 import com.bytebreeze.quickdrop.util.AuthUtil;
 import java.security.SecureRandom;
+import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -58,6 +61,7 @@ public class ParcelService {
 		parcel.setReceiverAddress(dto.getReceiverAddress());
 		parcel.setPrice(dto.getPrice());
 		parcel.setDistance(dto.getDistance());
+		parcel.setTrackingId(this.generateUniqueTrackingId());
 
 		return parcel;
 	}
@@ -87,5 +91,28 @@ public class ParcelService {
 		payment.setUser(parcel.getSender());
 		payment.setPaymentStatus(PaymentStatus.PENDING);
 		paymentRepository.save(payment);
+	}
+
+	public List<Parcel> getBookedButNotDeliveredParcels() {
+		User sender = userRepository
+				.findByEmail(AuthUtil.getAuthenticatedUsername())
+				.orElseThrow(() -> new IllegalArgumentException("Invalid sender"));
+		return parcelRepository.findBySenderAndStatus(sender.getId(), ParcelStatus.BOOKED);
+	}
+
+	public String generateUniqueTrackingId() {
+		String trackingId;
+		Random random = new Random();
+		do {
+			trackingId = String.format("%06d", random.nextInt(900000) + 100000);
+		} while (parcelRepository.existsByTrackingId(trackingId));
+		return trackingId;
+	}
+
+	public List<Parcel> getParcelList() {
+		User sender = userRepository
+				.findByEmail(AuthUtil.getAuthenticatedUsername())
+				.orElseThrow(() -> new IllegalArgumentException("Invalid sender"));
+		return parcelRepository.getAllBySender(sender.getId());
 	}
 }

@@ -8,6 +8,7 @@ import com.bytebreeze.quickdrop.service.ParcelService;
 import com.bytebreeze.quickdrop.service.SSLCommerzPaymentService;
 import com.bytebreeze.quickdrop.service.UserService;
 import jakarta.validation.Valid;
+import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -35,7 +36,9 @@ public class UserController {
 	}
 
 	@GetMapping("/dashboard")
-	public String userDashboard() {
+	public String userDashboard(Model model) {
+		List<Parcel> bookedParcels = parcelService.getBookedButNotDeliveredParcels();
+		model.addAttribute("bookedParcels", bookedParcels);
 		return "dashboard/home";
 	}
 
@@ -98,5 +101,12 @@ public class UserController {
 				sslCommerzPaymentService.getPaymentUrl(parcelBookingRequestDTO, parcel.getSender());
 
 		return "redirect:" + paymentOperationUrl;
+	}
+
+	@GetMapping("/parcel-history")
+	public String getParcelHistory(Model model) {
+		List<Parcel> parcelHistory = parcelService.getParcelList();
+		model.addAttribute("parcelHistory", parcelHistory);
+		return "dashboard/parcel-history";
 	}
 }

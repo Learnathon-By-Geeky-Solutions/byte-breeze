@@ -1,7 +1,9 @@
 package com.bytebreeze.quickdrop.service;
 
+import com.bytebreeze.quickdrop.dto.RiderDashboardResponseDTO;
 import com.bytebreeze.quickdrop.dto.RiderOnboardingDTO;
 import com.bytebreeze.quickdrop.dto.RiderRegistrationRequestDTO;
+import com.bytebreeze.quickdrop.dto.response.RiderApprovalByAdminResponseDTO;
 import com.bytebreeze.quickdrop.enums.Role;
 import com.bytebreeze.quickdrop.enums.VerificationStatus;
 // import com.bytebreeze.quickdrop.mapper.OnboardRiderMapper;
@@ -11,9 +13,13 @@ import com.bytebreeze.quickdrop.mapper.RegisterRiderMapper;
 import com.bytebreeze.quickdrop.model.Rider;
 import com.bytebreeze.quickdrop.repository.RiderRepository;
 import com.bytebreeze.quickdrop.repository.UserRepository;
+import com.bytebreeze.quickdrop.util.AuthUtil;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -36,6 +42,26 @@ public class RiderService {
 
 	public Rider findByRiderId(UUID id) {
 		return riderRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found"));
+	}
+
+	public Rider getAuthenticatedRider() {
+		String authenticatedRiderEmail = AuthUtil.getAuthenticatedUsername();
+		Optional<Rider> rider = riderRepository.findByEmail(authenticatedRiderEmail);
+		return rider.orElseThrow(() -> new UserNotFoundException("User not Authenticated"));
+	}
+
+	public RiderDashboardResponseDTO riderDashboardResponse() {
+
+		Rider rider = getAuthenticatedRider();
+		RiderDashboardResponseDTO responseDTO = new RiderDashboardResponseDTO();
+
+		responseDTO.setFullName(rider.getFullName());
+		responseDTO.setVerificationStatus(rider.getVerificationStatus());
+		responseDTO.setIsAvailable(rider.getIsAvailable());
+		responseDTO.setRiderAvgRating(rider.getRiderAvgRating());
+		responseDTO.setRiderBalance(rider.getRiderBalance());
+
+		return responseDTO;
 	}
 
 	public Rider registerRider(RiderRegistrationRequestDTO dto) {
@@ -97,5 +123,31 @@ public class RiderService {
 		rider.setVerificationStatus(VerificationStatus.PENDING);
 
 		return riderRepository.save(rider);
+	}
+
+	public List<RiderApprovalByAdminResponseDTO> getPendingRiders() {
+
+		List<Rider> pendingRiders = riderRepository.findByVerificationStatus(VerificationStatus.PENDING);
+
+		return pendingRiders.stream()
+				.map(rider -> new RiderApprovalByAdminResponseDTO(
+						rider.getId(), rider.getFullName(), rider.getEmail(), rider.getPhoneNumber()))
+				.collect(Collectors.toList());
+	}
+
+	public void updateRiderStatus(UUID riderId, VerificationStatus verificationStatus) {
+
+		Rider rider = findByRiderId(riderId);
+		rider.setVerificationStatus(verificationStatus);
+		riderRepository.save(rider);
+	}
+
+	public void updateRiderStatus(Boolean status) {
+
+		Rider rider = getAuthenticatedRider();
+
+		rider.setIsAvailable(status);
+
+		riderRepository.save(rider);
 	}
 }

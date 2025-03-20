@@ -4,6 +4,7 @@ import com.bytebreeze.quickdrop.dto.UserProfileUpdateDto;
 import com.bytebreeze.quickdrop.dto.UserRegistrationRequestDTO;
 import com.bytebreeze.quickdrop.enums.Role;
 import com.bytebreeze.quickdrop.exception.custom.AlreadyExistsException;
+import com.bytebreeze.quickdrop.exception.custom.UserNotFoundException;
 import com.bytebreeze.quickdrop.model.User;
 import com.bytebreeze.quickdrop.repository.UserRepository;
 import com.bytebreeze.quickdrop.util.AuthUtil;
@@ -50,7 +51,7 @@ public class UserService {
 	public User getAuthenticatedUser() {
 		String authenticatedUserEmail = AuthUtil.getAuthenticatedUsername();
 		Optional<User> userOptional = userRepository.findByEmail(authenticatedUserEmail);
-		return userOptional.orElseThrow(() -> new RuntimeException("User not found"));
+		return userOptional.orElseThrow(() -> new UserNotFoundException("User not found"));
 	}
 
 	public UserProfileUpdateDto userProfileUpdateGet() {
