@@ -2,6 +2,7 @@ package com.bytebreeze.quickdrop.controller;
 
 import com.bytebreeze.quickdrop.dto.UserProfileUpdateDto;
 import com.bytebreeze.quickdrop.dto.response.RiderApprovalByAdminResponseDTO;
+import com.bytebreeze.quickdrop.enums.VerificationStatus;
 import com.bytebreeze.quickdrop.model.Rider;
 import com.bytebreeze.quickdrop.service.RiderService;
 import com.bytebreeze.quickdrop.service.UserService;
@@ -10,13 +11,11 @@ import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/admin")
@@ -82,6 +81,22 @@ public class AdminController {
 
 		return "admin/pending-riders";
 	}
+
+	@PostMapping("/rider/approve")
+	public String approveRider(@RequestParam("riderId") UUID riderId,RedirectAttributes redirectAttributes) {
+
+		try{
+			riderService.updateRiderStatus(riderId, VerificationStatus.VERIFIED);
+
+			redirectAttributes.addFlashAttribute("message", "Rider approved successfully");
+		}catch(Exception e) {
+			redirectAttributes.addFlashAttribute("error", "Failed to approve rider");
+
+		}
+		return "redirect:/admin/riders/pending";
+
+	}
+
 
 
 
