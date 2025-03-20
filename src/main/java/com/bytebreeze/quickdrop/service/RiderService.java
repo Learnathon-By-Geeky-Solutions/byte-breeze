@@ -112,4 +112,13 @@ public class RiderService {
 						rider.getEmail(), rider.getPhoneNumber()))
 				.collect(Collectors.toList());
 	}
+
+	public void updateRiderStatus(UUID riderId, VerificationStatus verificationStatus) {
+
+		Rider rider = findByRiderId(riderId);
+		rider.setVerificationStatus(verificationStatus);
+		riderRepository.save(rider);
+	}
+
+
 }
