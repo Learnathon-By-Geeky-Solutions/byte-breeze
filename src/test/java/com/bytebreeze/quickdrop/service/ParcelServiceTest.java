@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import com.bytebreeze.quickdrop.dto.request.ParcelBookingRequestDTO;
+import com.bytebreeze.quickdrop.enums.ParcelStatus;
 import com.bytebreeze.quickdrop.enums.PaymentStatus;
 import com.bytebreeze.quickdrop.model.Parcel;
 import com.bytebreeze.quickdrop.model.Payment;
@@ -16,6 +17,8 @@ import com.bytebreeze.quickdrop.repository.ProductCategoryRepository;
 import com.bytebreeze.quickdrop.repository.UserRepository;
 import com.bytebreeze.quickdrop.util.AuthUtil;
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -46,7 +49,6 @@ public class ParcelServiceTest {
 
 	@Test
 	void testMapToParcel_Success() {
-		// Arrange
 		ParcelBookingRequestDTO dto = new ParcelBookingRequestDTO();
 		UUID categoryId = UUID.fromString("00000000-0000-0000-0000-000000000001");
 		dto.setCategoryId(categoryId);
@@ -68,17 +70,14 @@ public class ParcelServiceTest {
 		User sender = new User();
 		sender.setEmail("sender@example.com");
 
-		// Mock static method AuthUtil.getAuthenticatedUsername()
 		try (MockedStatic<AuthUtil> authUtilMock = mockStatic(AuthUtil.class)) {
 			authUtilMock.when(AuthUtil::getAuthenticatedUsername).thenReturn("sender@example.com");
 
 			when(productCategoryRepository.findById(dto.getCategoryId())).thenReturn(Optional.of(category));
 			when(userRepository.findByEmail("sender@example.com")).thenReturn(Optional.of(sender));
 
-			// Act
 			Parcel parcel = parcelService.mapToParcel(dto);
 
-			// Assert
 			assertNotNull(parcel);
 			assertEquals(category, parcel.getCategory());
 			assertEquals("Test Parcel", parcel.getDescription());
@@ -91,12 +90,13 @@ public class ParcelServiceTest {
 			assertEquals("123 Street, City", parcel.getReceiverAddress());
 			assertEquals(BigDecimal.valueOf(100.0), parcel.getPrice());
 			assertEquals(10.0, parcel.getDistance());
+			assertNotNull(parcel.getTrackingId());
+			assertTrue(parcel.getTrackingId().matches("\\d{6}"));
 		}
 	}
 
 	@Test
 	void testMapToParcel_InvalidCategory() {
-		// Arrange
 		ParcelBookingRequestDTO dto = new ParcelBookingRequestDTO();
 		UUID categoryId = UUID.fromString("00000000-0000-0000-0000-000000000002");
 		dto.setCategoryId(categoryId);
@@ -106,7 +106,6 @@ public class ParcelServiceTest {
 
 			when(productCategoryRepository.findById(dto.getCategoryId())).thenReturn(Optional.empty());
 
-			// Act & Assert
 			IllegalArgumentException exception =
 					assertThrows(IllegalArgumentException.class, () -> parcelService.mapToParcel(dto));
 			assertEquals("Invalid category ID", exception.getMessage());
@@ -115,7 +114,6 @@ public class ParcelServiceTest {
 
 	@Test
 	void testMapToParcel_InvalidSender() {
-		// Arrange
 		ParcelBookingRequestDTO dto = new ParcelBookingRequestDTO();
 		UUID categoryId = UUID.fromString("00000000-0000-0000-0000-000000000003");
 		dto.setCategoryId(categoryId);
@@ -129,7 +127,6 @@ public class ParcelServiceTest {
 			when(productCategoryRepository.findById(dto.getCategoryId())).thenReturn(Optional.of(category));
 			when(userRepository.findByEmail("sender@example.com")).thenReturn(Optional.empty());
 
-			// Act & Assert
 			IllegalArgumentException exception =
 					assertThrows(IllegalArgumentException.class, () -> parcelService.mapToParcel(dto));
 			assertEquals("Invalid sender", exception.getMessage());
@@ -138,7 +135,6 @@ public class ParcelServiceTest {
 
 	@Test
 	void testBookParcel() {
-		// Arrange
 		ParcelBookingRequestDTO dto = new ParcelBookingRequestDTO();
 		UUID categoryId = UUID.fromString("00000000-0000-0000-0000-000000000004");
 		dto.setCategoryId(categoryId);
@@ -165,37 +161,30 @@ public class ParcelServiceTest {
 
 			when(productCategoryRepository.findById(dto.getCategoryId())).thenReturn(Optional.of(category));
 			when(userRepository.findByEmail("sender@example.com")).thenReturn(Optional.of(sender));
-			// Simulate saving by returning the same parcel passed to save
 			when(parcelRepository.save(any(Parcel.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-			// Act
 			Parcel savedParcel = parcelService.bookParcel(dto);
 
-			// Assert
 			assertNotNull(savedParcel);
 			assertEquals("Test Parcel", savedParcel.getDescription());
 			assertEquals(category, savedParcel.getCategory());
 			assertEquals(sender, savedParcel.getSender());
 			assertEquals(BigDecimal.valueOf(100.0), savedParcel.getPrice());
-			// Additional assertions can be added as needed
+			verify(parcelRepository, times(1)).save(any(Parcel.class));
 		}
 	}
 
 	@Test
 	void testGenerateTransactionId() {
-		// Act
 		String transactionId = parcelService.generateTransactionId();
 
-		// Assert
 		assertNotNull(transactionId);
 		assertEquals(30, transactionId.length());
-		// Verify that the transaction ID is alphanumeric
 		assertTrue(transactionId.matches("[0-9A-Za-z]{30}"));
 	}
 
 	@Test
 	void testSavePayment() {
-		// Arrange
 		Parcel parcel = new Parcel();
 		User sender = new User();
 		sender.setEmail("sender@example.com");
@@ -206,10 +195,8 @@ public class ParcelServiceTest {
 		dto.setTransactionId("TRANSACTION123");
 		dto.setPaymentMethod("CreditCard");
 
-		// Act
 		parcelService.savePayment(parcel, dto);
 
-		// Assert
 		ArgumentCaptor<Payment> paymentCaptor = ArgumentCaptor.forClass(Payment.class);
 		verify(paymentRepository, times(1)).save(paymentCaptor.capture());
 		Payment capturedPayment = paymentCaptor.getValue();
@@ -221,5 +208,113 @@ public class ParcelServiceTest {
 		assertEquals(parcel, capturedPayment.getParcel());
 		assertEquals(sender, capturedPayment.getUser());
 		assertEquals(PaymentStatus.PENDING, capturedPayment.getPaymentStatus());
+	}
+
+	@Test
+	void testGetBookedButNotDeliveredParcels_Success() {
+		User sender = new User();
+		sender.setId(UUID.fromString("00000000-0000-0000-0000-000000000001"));
+		sender.setEmail("sender@example.com");
+
+		Parcel parcel1 = new Parcel();
+		parcel1.setSender(sender);
+		parcel1.setStatus(ParcelStatus.BOOKED);
+
+		List<Parcel> bookedParcels = Arrays.asList(parcel1);
+
+		try (MockedStatic<AuthUtil> authUtilMock = mockStatic(AuthUtil.class)) {
+			authUtilMock.when(AuthUtil::getAuthenticatedUsername).thenReturn("sender@example.com");
+
+			when(userRepository.findByEmail("sender@example.com")).thenReturn(Optional.of(sender));
+			when(parcelRepository.findBySenderAndStatus(sender.getId(), ParcelStatus.BOOKED))
+					.thenReturn(bookedParcels);
+
+			List<Parcel> result = parcelService.getBookedButNotDeliveredParcels();
+
+			assertNotNull(result);
+			assertEquals(1, result.size());
+			assertEquals(parcel1, result.get(0));
+			verify(parcelRepository, times(1)).findBySenderAndStatus(sender.getId(), ParcelStatus.BOOKED);
+		}
+	}
+
+	@Test
+	void testGetBookedButNotDeliveredParcels_InvalidSender() {
+		try (MockedStatic<AuthUtil> authUtilMock = mockStatic(AuthUtil.class)) {
+			authUtilMock.when(AuthUtil::getAuthenticatedUsername).thenReturn("sender@example.com");
+
+			when(userRepository.findByEmail("sender@example.com")).thenReturn(Optional.empty());
+
+			IllegalArgumentException exception =
+					assertThrows(IllegalArgumentException.class, () -> parcelService.getBookedButNotDeliveredParcels());
+			assertEquals("Invalid sender", exception.getMessage());
+			verify(parcelRepository, never()).findBySenderAndStatus(any(UUID.class), any(ParcelStatus.class));
+		}
+	}
+
+	@Test
+	void testGenerateUniqueTrackingId_UniqueOnFirstTry() {
+		when(parcelRepository.existsByTrackingId(anyString())).thenReturn(false);
+
+		String trackingId = parcelService.generateUniqueTrackingId();
+
+		assertNotNull(trackingId);
+		assertEquals(6, trackingId.length());
+		assertTrue(trackingId.matches("\\d{6}"));
+		assertTrue(Integer.parseInt(trackingId) >= 100000 && Integer.parseInt(trackingId) <= 999999);
+		verify(parcelRepository, times(1)).existsByTrackingId(trackingId);
+	}
+
+	@Test
+	void testGenerateUniqueTrackingId_CollisionThenUnique() {
+		when(parcelRepository.existsByTrackingId(anyString())).thenReturn(true).thenReturn(false);
+
+		String trackingId = parcelService.generateUniqueTrackingId();
+
+		assertNotNull(trackingId);
+		assertEquals(6, trackingId.length());
+		assertTrue(trackingId.matches("\\d{6}"));
+		assertTrue(Integer.parseInt(trackingId) >= 100000 && Integer.parseInt(trackingId) <= 999999);
+		verify(parcelRepository, times(2)).existsByTrackingId(anyString());
+	}
+
+	@Test
+	void testGetParcelList_Success() {
+		User sender = new User();
+		sender.setId(UUID.fromString("00000000-0000-0000-0000-000000000001"));
+		sender.setEmail("sender@example.com");
+
+		Parcel parcel1 = new Parcel();
+		parcel1.setSender(sender);
+
+		List<Parcel> parcelList = Arrays.asList(parcel1);
+
+		try (MockedStatic<AuthUtil> authUtilMock = mockStatic(AuthUtil.class)) {
+			authUtilMock.when(AuthUtil::getAuthenticatedUsername).thenReturn("sender@example.com");
+
+			when(userRepository.findByEmail("sender@example.com")).thenReturn(Optional.of(sender));
+			when(parcelRepository.getAllBySender(sender.getId())).thenReturn(parcelList);
+
+			List<Parcel> result = parcelService.getParcelList();
+
+			assertNotNull(result);
+			assertEquals(1, result.size());
+			assertEquals(parcel1, result.get(0));
+			verify(parcelRepository, times(1)).getAllBySender(sender.getId());
+		}
+	}
+
+	@Test
+	void testGetParcelList_InvalidSender() {
+		try (MockedStatic<AuthUtil> authUtilMock = mockStatic(AuthUtil.class)) {
+			authUtilMock.when(AuthUtil::getAuthenticatedUsername).thenReturn("sender@example.com");
+
+			when(userRepository.findByEmail("sender@example.com")).thenReturn(Optional.empty());
+
+			IllegalArgumentException exception =
+					assertThrows(IllegalArgumentException.class, () -> parcelService.getParcelList());
+			assertEquals("Invalid sender", exception.getMessage());
+			verify(parcelRepository, never()).getAllBySender(any(UUID.class));
+		}
 	}
 }
