@@ -3,21 +3,16 @@ package com.bytebreeze.quickdrop.dto;
 import com.bytebreeze.quickdrop.enums.VerificationStatus;
 import lombok.Data;
 
-
 @Data
 public class RiderDashboardResponseDTO {
 
+	private String fullName;
 
+	private VerificationStatus verificationStatus;
 
-    private String fullName;
+	private Boolean isAvailable;
 
-    private VerificationStatus verificationStatus;
+	private double riderAvgRating;
 
-    private Boolean isAvailable;
-
-    private double riderAvgRating;
-
-    private double riderBalance;
-
-
+	private double riderBalance;
 }

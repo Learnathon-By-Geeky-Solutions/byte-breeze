@@ -1,6 +1,5 @@
 package com.bytebreeze.quickdrop.controller;
 
-import com.bytebreeze.quickdrop.dto.RiderDashboardResponseDTO;
 import com.bytebreeze.quickdrop.dto.RiderOnboardingDTO;
 import com.bytebreeze.quickdrop.dto.RiderRegistrationRequestDTO;
 import com.bytebreeze.quickdrop.model.Rider;
@@ -30,9 +29,9 @@ public class RiderController {
 
 	@GetMapping("/dashboard")
 	public String riderDashboard(Model model) {
-		model.addAttribute("riderDashboardResponseDTO",riderService.riderDashboardResponse());
+		model.addAttribute("riderDashboardResponseDTO", riderService.riderDashboardResponse());
 
-        return "dashboard/rider-dashboard";
+		return "dashboard/rider-dashboard";
 	}
 
 	@GetMapping("/register")
@@ -138,11 +137,9 @@ public class RiderController {
 		}
 	}
 
-
 	@PostMapping("/status")
 	public String updateStatus(@RequestParam Boolean status) {
 		riderService.updateRiderStatus(status);
 		return "redirect:/rider/dashboard";
 	}
-
 }
