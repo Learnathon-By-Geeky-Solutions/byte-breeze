@@ -1,5 +1,6 @@
 package com.bytebreeze.quickdrop.service;
 
+import com.bytebreeze.quickdrop.dto.RiderDashboardResponseDTO;
 import com.bytebreeze.quickdrop.dto.RiderOnboardingDTO;
 import com.bytebreeze.quickdrop.dto.RiderRegistrationRequestDTO;
 import com.bytebreeze.quickdrop.enums.Role;
@@ -13,7 +14,10 @@ import com.bytebreeze.quickdrop.repository.RiderRepository;
 import com.bytebreeze.quickdrop.repository.UserRepository;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.UUID;
+
+import com.bytebreeze.quickdrop.util.AuthUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -37,6 +41,19 @@ public class RiderService {
 	public Rider findByRiderId(UUID id) {
 		return riderRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found"));
 	}
+
+
+
+	public Rider getAuthenticatedRider(){
+		String authenticatedRiderEmail = AuthUtil.getAuthenticatedUsername();
+		Optional<Rider> rider = riderRepository.findByEmail(authenticatedRiderEmail);
+		return rider.orElseThrow(() -> new UserNotFoundException("User not Authenticated"));
+
+	}
+
+
+
+
 
 	public Rider registerRider(RiderRegistrationRequestDTO dto) {
 
@@ -98,4 +115,8 @@ public class RiderService {
 
 		return riderRepository.save(rider);
 	}
+
+
+
+
 }
