@@ -10,5 +10,4 @@ class QuickdropApplicationTests {
 	void contextLoads() {
 		// todo
 	}
-
 }

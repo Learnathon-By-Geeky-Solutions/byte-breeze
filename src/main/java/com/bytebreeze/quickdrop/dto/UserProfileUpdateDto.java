@@ -5,12 +5,12 @@ import lombok.Data;
 
 @Data
 public class UserProfileUpdateDto {
-    @NotEmpty(message = "Name must not be empty.")
-    private String fullName;
+	@NotEmpty(message = "Name must not be empty.")
+	private String fullName;
 
-    private String password;
+	private String password;
 
-    private String phoneNumber;
+	private String phoneNumber;
 
-    private String profileImageUrl;
+	private String profileImageUrl;
 }
