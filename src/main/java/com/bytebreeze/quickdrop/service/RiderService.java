@@ -51,7 +51,19 @@ public class RiderService {
 
 	}
 
+	public RiderDashboardResponseDTO riderDashboardResponse(){
 
+		Rider rider = getAuthenticatedRider();
+		RiderDashboardResponseDTO responseDTO = new RiderDashboardResponseDTO();
+
+		responseDTO.setFullName(rider.getFullName());
+		responseDTO.setVerificationStatus(rider.getVerificationStatus());
+		responseDTO.setIsAvailable(rider.getIsAvailable());
+		responseDTO.setRiderAvgRating(rider.getRiderAvgRating());
+		responseDTO.setRiderBalance(rider.getRiderBalance());
+
+		return responseDTO;
+	}
 
 
 
@@ -116,7 +128,15 @@ public class RiderService {
 		return riderRepository.save(rider);
 	}
 
+	public void updateRiderStatus(Boolean status){
 
+		Rider rider = getAuthenticatedRider();
+
+
+		rider.setIsAvailable(status);
+
+		riderRepository.save(rider);
+	}
 
 
 }
