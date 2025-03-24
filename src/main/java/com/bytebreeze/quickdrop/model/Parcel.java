@@ -90,7 +90,7 @@ public class Parcel {
 	@PrePersist
 	protected void onCreate() {
 		if (this.status == null) {
-			this.status = ParcelStatus.BOOKED;
+			this.status = ParcelStatus.UNPAID;
 		}
 		this.createdAt = LocalDateTime.now();
 	}
