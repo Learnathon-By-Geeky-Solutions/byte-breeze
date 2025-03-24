@@ -3,7 +3,7 @@ name: CI with SonarQube Analysis
 on:
   push:
     branches:
-      - main # Adjust to your default branch
+      - main
   pull_request:
     branches:
       - main
@@ -16,14 +16,18 @@ jobs:
       # Checkout the code
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Fetch full history for SonarQube branch analysis
+          fetch-depth: 0
 
-      # Set up JDK (match your project’s Java version, e.g., 17)
+      # Set up JDK
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
+
+      # Ensure gradlew is executable
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
 
       # Cache Gradle dependencies
       - name: Cache Gradle packages
@@ -41,5 +45,5 @@ jobs:
       - name: SonarQube Analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # For PR decoration
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./gradlew sonarqube --info
