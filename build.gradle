@@ -58,9 +58,22 @@ dependencies {
 	testImplementation 'com.h2database:h2:2.3.232'
 }
 
+sonarqube {
+	properties {
+		property "sonar.projectKey", "your_project_key"
+		property "sonar.organization", "Learnathon"
+		property "sonar.host.url", "https://sonarcloud.io"
+		property "sonar.token", System.getenv("SONARCLOUD_TOKEN")
+		property "sonar.sources", "src/main/java"
+		property "sonar.tests", "src/test/java"
+		property "sonar.java.binaries", "build/classes/java/main"
+		property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
+	}
+}
+
 tasks.named('test') {
 	useJUnitPlatform()
-	finalizedBy tasks.named('jacocoTestReport') // Ensure test task runs before jacocoTestReport
+	finalizedBy tasks.named('jacocoTestReport')
 }
 
 spotless {
@@ -75,13 +88,13 @@ spotless {
 }
 
 jacoco {
-	toolVersion = "0.8.10" // Ensure latest version
+	toolVersion = "0.8.10"
 }
 
 jacocoTestReport {
-	dependsOn tasks.named('test') // Ensure it runs after tests
+	dependsOn tasks.named('test')
 	reports {
-		xml.required = true  // Enable XML for SonarQube
+		xml.required = true
 		html.required = true
 	}
 }
