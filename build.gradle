@@ -1,8 +1,10 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.4.2'
-	id 'io.spring.dependency-management' version '1.1.7'
+	id 'org.springframework.boot' version '3.4.3' // Updated to the latest version
+	id 'io.spring.dependency-management' version '1.1.7' // Updated to the latest version
 	id 'com.diffplug.spotless' version '6.25.0'
+	id "org.sonarqube" version "6.0.1.5171"
+	id 'jacoco' // Ensure JaCoCo plugin is applied
 }
 
 group = 'com.bytebreeze'
@@ -51,10 +53,14 @@ dependencies {
 
 	// for working with filenames and file paths, file extension
 	implementation 'commons-io:commons-io:2.13.0'
+
+	// H2 database dependencies for testing
+	testImplementation 'com.h2database:h2:2.3.232'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+	finalizedBy tasks.named('jacocoTestReport') // Ensure test task runs before jacocoTestReport
 }
 
 spotless {
@@ -68,3 +74,14 @@ spotless {
 	}
 }
 
+jacoco {
+	toolVersion = "0.8.10" // Ensure latest version
+}
+
+jacocoTestReport {
+	dependsOn tasks.named('test') // Ensure it runs after tests
+	reports {
+		xml.required = true  // Enable XML for SonarQube
+		html.required = true
+	}
+}
