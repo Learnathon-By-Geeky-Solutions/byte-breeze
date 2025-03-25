@@ -69,7 +69,7 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain userSecurityFilterChain(HttpSecurity http) throws Exception {
-		http.securityMatcher("/user/**", "/auth/**", "/user/logout", "/", "/css/**", "/js/**", "/images/**")
+		http.securityMatcher("/user/**", "/auth/**", "/user/logout", "/")
 				.authorizeHttpRequests(authorize -> authorize
 						.requestMatchers("/auth/login")
 						.permitAll()
