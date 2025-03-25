@@ -1,6 +1,8 @@
 package com.bytebreeze.quickdrop.controller;
 
+import com.bytebreeze.quickdrop.enums.ParcelStatus;
 import com.bytebreeze.quickdrop.enums.PaymentStatus;
+import com.bytebreeze.quickdrop.model.Parcel;
 import com.bytebreeze.quickdrop.model.Payment;
 import com.bytebreeze.quickdrop.repository.ParcelRepository;
 import com.bytebreeze.quickdrop.repository.PaymentRepository;
@@ -60,6 +62,11 @@ public class SSLCommerzPaymentApiController {
 		// Update payment status
 		payment.setPaymentStatus(PaymentStatus.SUCCESS);
 		paymentRepository.save(payment);
+
+		// upate parcel status
+		Parcel parcel = payment.getParcel();
+		parcel.setStatus(ParcelStatus.BOOKED);
+		parcelRepository.save(parcel);
 
 		redirectAttributes.addFlashAttribute("success", "Parcel booked successfully. Relax and wait for the delivery.");
 		return "redirect:/user/dashboard";
