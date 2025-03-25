@@ -83,7 +83,53 @@
                 </div>
             </details>
 
-            <!-- Receiver Information Section (Collapsible) -->
+            <!-- Pickup Address Section (New Collapsible Section) -->
+            <details open class="mb-6">
+                <summary class="text-lg font-semibold text-gray-800 border-b pb-2 mb-4 cursor-pointer">Pickup Address</summary>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Pickup Division -->
+                    <div>
+                        <label for="pickupDivision" class="block text-sm font-medium text-gray-700">
+                            Division <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="pickupDivision" th:field="*{pickupDivision}" required
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                        <div th:replace="~{fragments/field-error-fragment :: fieldError('pickupDivision')}"></div>
+                    </div>
+
+                    <!-- Pickup District -->
+                    <div>
+                        <label for="pickupDistrict" class="block text-sm font-medium text-gray-700">
+                            District <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="pickupDistrict" th:field="*{pickupDistrict}" required
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                        <div th:replace="~{fragments/field-error-fragment :: fieldError('pickupDistrict')}"></div>
+                    </div>
+
+                    <!-- Pickup Upazila -->
+                    <div>
+                        <label for="pickupUpazila" class="block text-sm font-medium text-gray-700">
+                            Upazila <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="pickupUpazila" th:field="*{pickupUpazila}" required
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                        <div th:replace="~{fragments/field-error-fragment :: fieldError('pickupUpazila')}"></div>
+                    </div>
+
+                    <!-- Pickup Village -->
+                    <div>
+                        <label for="pickupVillage" class="block text-sm font-medium text-gray-700">
+                            Village <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="pickupVillage" th:field="*{pickupVillage}" required
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                        <div th:replace="~{fragments/field-error-fragment :: fieldError('pickupVillage')}"></div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- Receiver Information Section (Updated Collapsible) -->
             <details open class="mb-6">
                 <summary class="text-lg font-semibold text-gray-800 border-b pb-2 mb-4 cursor-pointer">Receiver Information</summary>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -117,14 +163,44 @@
                         <div th:replace="~{fragments/field-error-fragment :: fieldError('receiverEmail')}"></div>
                     </div>
 
-                    <!-- Receiver Address -->
+                    <!-- Receiver Division -->
                     <div>
-                        <label for="receiverAddress" class="block text-sm font-medium text-gray-700">
-                            Receiver Address <span class="text-red-500">*</span>
+                        <label for="receiverDivision" class="block text-sm font-medium text-gray-700">
+                            Division <span class="text-red-500">*</span>
                         </label>
-                        <input type="text" id="receiverAddress" th:field="*{receiverAddress}" required
+                        <input type="text" id="receiverDivision" th:field="*{receiverDivision}" required
                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
-                        <div th:replace="~{fragments/field-error-fragment :: fieldError('receiverAddress')}"></div>
+                        <div th:replace="~{fragments/field-error-fragment :: fieldError('receiverDivision')}"></div>
+                    </div>
+
+                    <!-- Receiver District -->
+                    <div>
+                        <label for="receiverDistrict" class="block text-sm font-medium text-gray-700">
+                            District <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="receiverDistrict" th:field="*{receiverDistrict}" required
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                        <div th:replace="~{fragments/field-error-fragment :: fieldError('receiverDistrict')}"></div>
+                    </div>
+
+                    <!-- Receiver Upazila -->
+                    <div>
+                        <label for="receiverUpazila" class="block text-sm font-medium text-gray-700">
+                            Upazila <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="receiverUpazila" th:field="*{receiverUpazila}" required
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                        <div th:replace="~{fragments/field-error-fragment :: fieldError('receiverUpazila')}"></div>
+                    </div>
+
+                    <!-- Receiver Village -->
+                    <div>
+                        <label for="receiverVillage" class="block text-sm font-medium text-gray-700">
+                            Village <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="receiverVillage" th:field="*{receiverVillage}" required
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                        <div th:replace="~{fragments/field-error-fragment :: fieldError('receiverVillage')}"></div>
                     </div>
                 </div>
             </details>
@@ -181,7 +257,6 @@
                     <div th:replace="~{fragments/field-error-fragment :: fieldError('paymentMethod')}"></div>
                 </div>
             </details>
-
 
             <!-- Submit Button -->
             <div>
