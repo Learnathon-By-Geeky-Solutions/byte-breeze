@@ -6,9 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Book Parcel</title>
-    <!-- DataTables CSS (optional: use your own if you have it locally) -->
-    <link rel="stylesheet"
-          href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" th:href="@{/css/jquery.dataTables.min.css}">
 </head>
 <body>
 <!-- Content Fragment -->
@@ -44,9 +42,9 @@
 <!-- Extra Scripts Fragment -->
 <div layout:fragment="extraScripts">
     <!-- jQuery (required by DataTables) -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
     <!-- DataTables JS -->
-    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script th:src="@{/js/jquery.dataTables.min.js}"></script>
     <script>
         $(document).ready(function() {
             $('#parcelHistory').DataTable({
