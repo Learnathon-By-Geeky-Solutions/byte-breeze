@@ -31,6 +31,15 @@ public class Parcel {
 	@Column(nullable = false)
 	private Double size;
 
+	@Column(name = "pickup_district")
+	private String pickupDistrict;
+
+	@Column(name = "pickup_upzila")
+	private String pickupUpzila;
+
+	@Column(name = "pickup_village")
+	private String pickupVillage;
+
 	@Column(name = "receiver_name", nullable = false)
 	private String receiverName;
 
@@ -40,8 +49,17 @@ public class Parcel {
 	@Column(name = "receiver_email")
 	private String receiverEmail;
 
-	@Column(name = "receiver_address", nullable = false)
+	@Column(name = "receiver_address")
 	private String receiverAddress;
+
+	@Column(name = "receiver_district")
+	private String receiverDistrict;
+
+	@Column(name = "receiver_upzila")
+	private String receiverUpzila;
+
+	@Column(name = "receiver_village")
+	private String receiverVillage;
 
 	@Column(name = "receiver_otp")
 	private String receiverOtp;
