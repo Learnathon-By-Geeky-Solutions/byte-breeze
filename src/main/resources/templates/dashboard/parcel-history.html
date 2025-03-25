@@ -31,7 +31,7 @@
                     <strong th:text="${parcel.receiverName}">John Doe</strong><br>
                     <span th:text="${parcel.receiverPhone}">1234567890</span><br>
                     <span th:text="${parcel.receiverEmail}">john@example.com</span><br>
-                    <span th:text="${parcel.receiverAddress}">123 Main St</span>
+                    <span th:text="|${parcel.receiverVillage}, ${parcel.receiverUpazila}, ${parcel.receiverDistrict}, ${parcel.receiverDivision}|">123 Main St</span>
                 </div>
             </td>
             <td th:text="${parcel.rider != null ? parcel.rider.fullName : 'Not Assigned'}">Rider Name</td>
