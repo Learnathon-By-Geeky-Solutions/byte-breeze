@@ -24,6 +24,18 @@ public class ParcelBookingRequestDTO {
 	@Positive(message = "Weight must be a positive number.")
 	private Double size;
 
+	@NotBlank(message = "Pickup division is required.")
+	private String pickupDivision;
+
+	@NotBlank(message = "Pickup district is required.")
+	private String pickupDistrict;
+
+	@NotBlank(message = "Pickup upazila is required.")
+	private String pickupUpazila;
+
+	@NotBlank(message = "Pickup village is required.")
+	private String pickupVillage;
+
 	@NotBlank(message = "Receiver name is required.")
 	@Size(max = 100, message = "Receiver name cannot exceed 100 characters.")
 	private String receiverName;
@@ -35,9 +47,21 @@ public class ParcelBookingRequestDTO {
 	@Email(message = "Invalid email address.")
 	private String receiverEmail;
 
-	@NotBlank(message = "Receiver address is required.")
-	@Size(max = 255, message = "Receiver address cannot exceed 255 characters.")
+	//	@NotBlank(message = "Receiver address is required.")
+	//	@Size(max = 255, message = "Receiver address cannot exceed 255 characters.")
 	private String receiverAddress;
+
+	@NotBlank(message = "Receiver's division is required.")
+	private String receiverDivision;
+
+	@NotBlank(message = "Receiver's district is required.")
+	private String receiverDistrict;
+
+	@NotBlank(message = "Receiver's upazila is required.")
+	private String receiverUpazila;
+
+	@NotBlank(message = "Receiver's village is required.")
+	private String receiverVillage;
 
 	@NotNull(message = "Price is required.")
 	@DecimalMin(value = "0.0", inclusive = false, message = "Price must be greater than zero.")

@@ -55,9 +55,17 @@ public class ParcelService {
 		parcel.setWeight(dto.getWeight());
 		parcel.setSize(dto.getSize());
 		parcel.setSender(sender);
+		parcel.setPickupDivision(dto.getPickupDivision());
+		parcel.setPickupDistrict(dto.getPickupDistrict());
+		parcel.setPickupUpazila(dto.getPickupUpazila());
+		parcel.setPickupVillage(dto.getPickupVillage());
 		parcel.setReceiverName(dto.getReceiverName());
 		parcel.setReceiverPhone(dto.getReceiverPhone());
 		parcel.setReceiverEmail(dto.getReceiverEmail());
+		parcel.setReceiverDivision(dto.getReceiverDivision());
+		parcel.setReceiverDistrict(dto.getReceiverDistrict());
+		parcel.setReceiverUpazila(dto.getReceiverUpazila());
+		parcel.setReceiverVillage(dto.getReceiverVillage());
 		parcel.setReceiverAddress(dto.getReceiverAddress());
 		parcel.setPrice(dto.getPrice());
 		parcel.setDistance(dto.getDistance());
