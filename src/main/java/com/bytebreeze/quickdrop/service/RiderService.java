@@ -170,12 +170,14 @@ public class RiderService {
 
 		List<Parcel> currentAvailableParcels = parcelRepository.findByStatusAndRiderIsNull(ParcelStatus.BOOKED);
 
+
+		//Logging level
 		if (currentAvailableParcels.isEmpty()) {
 			log.warn("No available parcels found with status: BOOKED");
 			// Handle empty case (e.g., return early or throw exception)
 		} else {
 			log.info("Found {} available parcels with status: BOOKED", currentAvailableParcels.size());
-			// Process parcels...
+
 		}
 
 
