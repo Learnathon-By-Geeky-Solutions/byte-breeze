@@ -5,14 +5,20 @@
     <nav class="mt-6">
         <ul class="space-y-2">
             <li>
-                <a href="/user/dashboard" class="block px-6 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded">
+                <a href="/rider/dashboard" class="block px-6 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded">
                     Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a th:href="@{/rider/available-parcels}" class="block px-6 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded">
+                    Current Parcel Request
                 </a>
             </li>
 
 
             <li>
-                <a th:href="@{/user/profile-settings}" class="block px-6 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded">
+                <a th:href="@{/rider/profile-settings}" class="block px-6 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded">
                     Profile Settings
                 </a>
             </li>
