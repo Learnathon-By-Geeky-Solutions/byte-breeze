@@ -87,6 +87,10 @@ public class Rider extends User {
 	private Boolean isAvailable = false;
 
 	@Column(nullable = true)
+	private Boolean isAssigned = false;
+
+
+	@Column(nullable = true)
 	private double riderAvgRating = 0.0;
 
 	@Column(nullable = true)
