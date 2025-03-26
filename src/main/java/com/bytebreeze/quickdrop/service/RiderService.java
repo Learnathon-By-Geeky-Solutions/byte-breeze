@@ -4,35 +4,51 @@ import com.bytebreeze.quickdrop.dto.RiderDashboardResponseDTO;
 import com.bytebreeze.quickdrop.dto.RiderOnboardingDTO;
 import com.bytebreeze.quickdrop.dto.RiderRegistrationRequestDTO;
 import com.bytebreeze.quickdrop.dto.response.RiderApprovalByAdminResponseDTO;
+import com.bytebreeze.quickdrop.dto.response.RiderViewCurrentParcelsResponseDTO;
+import com.bytebreeze.quickdrop.enums.ParcelStatus;
 import com.bytebreeze.quickdrop.enums.Role;
 import com.bytebreeze.quickdrop.enums.VerificationStatus;
 // import com.bytebreeze.quickdrop.mapper.OnboardRiderMapper;
 import com.bytebreeze.quickdrop.exception.custom.AlreadyExistsException;
+import com.bytebreeze.quickdrop.exception.custom.ParcelAlreadyAssignedException;
+import com.bytebreeze.quickdrop.exception.custom.ParcelNotFoundException;
 import com.bytebreeze.quickdrop.exception.custom.UserNotFoundException;
 import com.bytebreeze.quickdrop.mapper.RegisterRiderMapper;
+import com.bytebreeze.quickdrop.model.Parcel;
 import com.bytebreeze.quickdrop.model.Rider;
+import com.bytebreeze.quickdrop.model.User;
+import com.bytebreeze.quickdrop.repository.ParcelRepository;
 import com.bytebreeze.quickdrop.repository.RiderRepository;
 import com.bytebreeze.quickdrop.repository.UserRepository;
 import com.bytebreeze.quickdrop.util.AuthUtil;
+
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import lombok.extern.slf4j.XSlf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class RiderService {
 
 	private final RiderRepository riderRepository;
+	private final ParcelRepository parcelRepository;
+	private final UserRepository userRepository;
+
 	// private final OnboardRiderMapper onboardRiderMapper;
 	private final FileStorageService fileStorageService;
 
-	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final RegisterRiderMapper registerRiderMapper;
 
@@ -151,5 +167,38 @@ public class RiderService {
 
 		riderRepository.save(rider);
 	}
+
+	public List<RiderViewCurrentParcelsResponseDTO> CurrentParcelsForRider(){
+
+		List<Parcel> currentAvailableParcels = parcelRepository.findByStatusAndRiderIsNull(ParcelStatus.BOOKED);
+
+		if (currentAvailableParcels.isEmpty()) {
+			log.warn("No available parcels found with status: BOOKED");
+			// Handle empty case (e.g., return early or throw exception)
+		} else {
+			log.info("Found {} available parcels with status: BOOKED", currentAvailableParcels.size());
+			// Process parcels...
+		}
+
+
+
+		return currentAvailableParcels.stream().map(parcel -> {
+			RiderViewCurrentParcelsResponseDTO dto = new RiderViewCurrentParcelsResponseDTO();
+			dto.setId(parcel.getId());
+			dto.setTrackingId(parcel.getTrackingId());
+			//dto.setCategory(parcel.getCategory().getCategory().toString()); // Assuming ProductCategory has getName()
+			dto.setPickupDistrict(parcel.getPickupDistrict());
+			dto.setPickupUpazila(parcel.getPickupUpazila());
+			dto.setPickupVillage(parcel.getPickupVillage());
+			dto.setReceiverDistrict(parcel.getReceiverDistrict());
+			dto.setReceiverUpazila(parcel.getReceiverUpazila());
+			dto.setReceiverVillage(parcel.getReceiverVillage());
+			dto.setPrice(parcel.getPrice());
+
+			return dto;
+		}).collect(Collectors.toList());
+	}
+
+
 
 }
