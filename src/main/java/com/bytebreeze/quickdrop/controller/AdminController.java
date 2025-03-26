@@ -81,7 +81,7 @@ public class AdminController {
 	public String approveRider(@RequestParam("riderId") UUID riderId, RedirectAttributes redirectAttributes) {
 
 		try {
-			riderService.updateRiderStatus(riderId, VerificationStatus.VERIFIED);
+			riderService.updateRiderVerificationStatus(riderId, VerificationStatus.VERIFIED);
 
 			redirectAttributes.addFlashAttribute("message", "Rider approved successfully");
 		} catch (Exception e) {
@@ -94,7 +94,7 @@ public class AdminController {
 	public String rejectRider(@RequestParam("riderId") UUID riderId, RedirectAttributes redirectAttributes) {
 
 		try {
-			riderService.updateRiderStatus(riderId, VerificationStatus.REJECTED);
+			riderService.updateRiderVerificationStatus(riderId, VerificationStatus.REJECTED);
 
 			redirectAttributes.addFlashAttribute("message", "Rider rejected successfully");
 		} catch (Exception e) {
