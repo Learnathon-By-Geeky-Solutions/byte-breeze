@@ -135,12 +135,13 @@ public class RiderService {
 				.collect(Collectors.toList());
 	}
 
-	public void updateRiderStatus(UUID riderId, VerificationStatus verificationStatus) {
+	public void updateRiderVerificationStatus(UUID riderId, VerificationStatus verificationStatus) {
 
 		Rider rider = findByRiderId(riderId);
 		rider.setVerificationStatus(verificationStatus);
 		riderRepository.save(rider);
 	}
+
 
 	public void updateRiderStatus(Boolean status) {
 
@@ -150,4 +151,5 @@ public class RiderService {
 
 		riderRepository.save(rider);
 	}
+
 }
