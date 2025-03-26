@@ -8,10 +8,8 @@ import com.bytebreeze.quickdrop.dto.response.RiderViewCurrentParcelsResponseDTO;
 import com.bytebreeze.quickdrop.enums.ParcelStatus;
 import com.bytebreeze.quickdrop.enums.Role;
 import com.bytebreeze.quickdrop.enums.VerificationStatus;
-// import com.bytebreeze.quickdrop.mapper.OnboardRiderMapper;
 import com.bytebreeze.quickdrop.exception.custom.AlreadyExistsException;
-import com.bytebreeze.quickdrop.exception.custom.ParcelAlreadyAssignedException;
-import com.bytebreeze.quickdrop.exception.custom.ParcelNotFoundException;
+
 import com.bytebreeze.quickdrop.exception.custom.UserNotFoundException;
 import com.bytebreeze.quickdrop.mapper.RegisterRiderMapper;
 import com.bytebreeze.quickdrop.model.Parcel;
