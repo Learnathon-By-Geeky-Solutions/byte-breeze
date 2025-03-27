@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -146,16 +145,12 @@ public class RiderController {
 	}
 
 	@GetMapping("/available-parcels")
-	public String showCurrentParcelsRequest(Model model){
-
+	public String showCurrentParcelsRequest(Model model) {
 
 		List<RiderViewCurrentParcelsResponseDTO> currentParcels = riderService.CurrentParcelsForRider();
 
-		model.addAttribute("parcels",currentParcels);
+		model.addAttribute("parcels", currentParcels);
 
 		return "rider/view-current-parcels";
 	}
-
-
-
 }

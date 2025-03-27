@@ -19,5 +19,4 @@ public interface ParcelRepository extends JpaRepository<Parcel, UUID> {
 	List<Parcel> getAllBySender(UUID senderId);
 
 	List<Parcel> findByStatusAndRiderIsNull(ParcelStatus status);
-
 }

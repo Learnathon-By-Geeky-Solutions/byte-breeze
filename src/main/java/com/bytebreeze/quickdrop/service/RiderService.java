@@ -9,29 +9,22 @@ import com.bytebreeze.quickdrop.enums.ParcelStatus;
 import com.bytebreeze.quickdrop.enums.Role;
 import com.bytebreeze.quickdrop.enums.VerificationStatus;
 import com.bytebreeze.quickdrop.exception.custom.AlreadyExistsException;
-
 import com.bytebreeze.quickdrop.exception.custom.UserNotFoundException;
 import com.bytebreeze.quickdrop.mapper.RegisterRiderMapper;
 import com.bytebreeze.quickdrop.model.Parcel;
 import com.bytebreeze.quickdrop.model.Rider;
-import com.bytebreeze.quickdrop.model.User;
 import com.bytebreeze.quickdrop.repository.ParcelRepository;
 import com.bytebreeze.quickdrop.repository.RiderRepository;
 import com.bytebreeze.quickdrop.repository.UserRepository;
 import com.bytebreeze.quickdrop.util.AuthUtil;
-
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import lombok.extern.slf4j.XSlf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -156,7 +149,6 @@ public class RiderService {
 		riderRepository.save(rider);
 	}
 
-
 	public void updateRiderStatus(Boolean status) {
 
 		Rider rider = getAuthenticatedRider();
@@ -166,39 +158,35 @@ public class RiderService {
 		riderRepository.save(rider);
 	}
 
-	public List<RiderViewCurrentParcelsResponseDTO> CurrentParcelsForRider(){
+	public List<RiderViewCurrentParcelsResponseDTO> CurrentParcelsForRider() {
 
 		List<Parcel> currentAvailableParcels = parcelRepository.findByStatusAndRiderIsNull(ParcelStatus.BOOKED);
 
-
-		//Logging level
+		// Logging level
 		if (currentAvailableParcels.isEmpty()) {
 			log.warn("No available parcels found with status: BOOKED");
 			// Handle empty case (e.g., return early or throw exception)
 		} else {
 			log.info("Found {} available parcels with status: BOOKED", currentAvailableParcels.size());
-
 		}
 
+		return currentAvailableParcels.stream()
+				.map(parcel -> {
+					RiderViewCurrentParcelsResponseDTO dto = new RiderViewCurrentParcelsResponseDTO();
+					dto.setId(parcel.getId());
+					dto.setTrackingId(parcel.getTrackingId());
+					// dto.setCategory(parcel.getCategory().getCategory().toString()); // Assuming ProductCategory has
+					// getName()
+					dto.setPickupDistrict(parcel.getPickupDistrict());
+					dto.setPickupUpazila(parcel.getPickupUpazila());
+					dto.setPickupVillage(parcel.getPickupVillage());
+					dto.setReceiverDistrict(parcel.getReceiverDistrict());
+					dto.setReceiverUpazila(parcel.getReceiverUpazila());
+					dto.setReceiverVillage(parcel.getReceiverVillage());
+					dto.setPrice(parcel.getPrice());
 
-
-		return currentAvailableParcels.stream().map(parcel -> {
-			RiderViewCurrentParcelsResponseDTO dto = new RiderViewCurrentParcelsResponseDTO();
-			dto.setId(parcel.getId());
-			dto.setTrackingId(parcel.getTrackingId());
-			//dto.setCategory(parcel.getCategory().getCategory().toString()); // Assuming ProductCategory has getName()
-			dto.setPickupDistrict(parcel.getPickupDistrict());
-			dto.setPickupUpazila(parcel.getPickupUpazila());
-			dto.setPickupVillage(parcel.getPickupVillage());
-			dto.setReceiverDistrict(parcel.getReceiverDistrict());
-			dto.setReceiverUpazila(parcel.getReceiverUpazila());
-			dto.setReceiverVillage(parcel.getReceiverVillage());
-			dto.setPrice(parcel.getPrice());
-
-			return dto;
-		}).collect(Collectors.toList());
+					return dto;
+				})
+				.collect(Collectors.toList());
 	}
-
-
-
 }
