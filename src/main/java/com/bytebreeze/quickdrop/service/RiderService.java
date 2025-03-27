@@ -4,6 +4,7 @@ import com.bytebreeze.quickdrop.dto.RiderDashboardResponseDTO;
 import com.bytebreeze.quickdrop.dto.RiderOnboardingDTO;
 import com.bytebreeze.quickdrop.dto.RiderRegistrationRequestDTO;
 import com.bytebreeze.quickdrop.dto.response.RiderApprovalByAdminResponseDTO;
+import com.bytebreeze.quickdrop.dto.response.RiderDetailsResponseDto;
 import com.bytebreeze.quickdrop.dto.response.RiderViewCurrentParcelsResponseDTO;
 import com.bytebreeze.quickdrop.enums.ParcelStatus;
 import com.bytebreeze.quickdrop.enums.Role;
@@ -188,5 +189,46 @@ public class RiderService {
 					return dto;
 				})
 				.collect(Collectors.toList());
+	}
+
+	public RiderDetailsResponseDto getRiderDetails(UUID riderId) {
+		Rider rider = riderRepository.findById(riderId).orElseThrow(() -> new UserNotFoundException("Rider not found"));
+		return mapToDto(rider);
+	}
+
+	public RiderDetailsResponseDto mapToDto(Rider rider) {
+		RiderDetailsResponseDto dto = new RiderDetailsResponseDto();
+		dto.setId(rider.getId());
+		dto.setFullName(rider.getFullName());
+		dto.setEmail(rider.getEmail());
+		dto.setPhoneNumber(rider.getPhoneNumber());
+		dto.setProfilePicture(rider.getProfilePicture());
+		dto.setDateOfBirth(rider.getDateOfBirth());
+		dto.setGender(rider.getGender());
+		dto.setAddress(rider.getAddress());
+		dto.setUpazila(rider.getUpazila());
+		dto.setDistrict(rider.getDistrict());
+		dto.setPostalCode(rider.getPostalCode());
+		dto.setVehicleType(rider.getVehicleType());
+		dto.setVehicleModel(rider.getVehicleModel());
+		dto.setVehicleRegistrationNumber(rider.getVehicleRegistrationNumber());
+		dto.setVehicleInsuranceProvider(rider.getVehicleInsuranceProvider());
+		dto.setInsuranceExpiryDate(rider.getInsuranceExpiryDate());
+		dto.setVehicleRegistrationDocumentPath(rider.getVehicleRegistrationDocumentPath());
+		dto.setInsuranceDocumentPath(rider.getInsuranceDocumentPath());
+		dto.setNationalIdNumber(rider.getNationalIdNumber());
+		dto.setNationalIdFrontPath(rider.getNationalIdFrontPath());
+		dto.setNationalIdBackPath(rider.getNationalIdBackPath());
+		dto.setDriversLicenseNumber(rider.getDriversLicenseNumber());
+		dto.setLicenseExpiryDate(rider.getLicenseExpiryDate());
+		dto.setDriversLicenseFrontPath(rider.getDriversLicenseFrontPath());
+		dto.setDriversLicenseBackPath(rider.getDriversLicenseBackPath());
+		dto.setVerificationStatus(rider.getVerificationStatus());
+		dto.setIsAvailable(rider.getIsAvailable());
+		dto.setIsAssigned(rider.getIsAssigned());
+		dto.setRiderAvgRating(rider.getRiderAvgRating());
+		dto.setTotalRating(rider.getTotalRating());
+		dto.setRiderBalance(rider.getRiderBalance());
+		return dto;
 	}
 }
