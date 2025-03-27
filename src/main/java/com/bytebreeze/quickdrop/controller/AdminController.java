@@ -2,6 +2,7 @@ package com.bytebreeze.quickdrop.controller;
 
 import com.bytebreeze.quickdrop.dto.UserProfileUpdateDto;
 import com.bytebreeze.quickdrop.dto.response.RiderApprovalByAdminResponseDTO;
+import com.bytebreeze.quickdrop.dto.response.RiderDetailsResponseDto;
 import com.bytebreeze.quickdrop.enums.VerificationStatus;
 import com.bytebreeze.quickdrop.service.RiderService;
 import com.bytebreeze.quickdrop.service.UserService;
@@ -101,5 +102,12 @@ public class AdminController {
 			redirectAttributes.addFlashAttribute("error", "Failed to reject rider");
 		}
 		return "redirect:/admin/riders/pending";
+	}
+
+	@GetMapping("/rider/view/{id}")
+	public String viewRiderDetails(@PathVariable("id") UUID riderId, Model model) {
+		RiderDetailsResponseDto rider = riderService.getRiderDetails(riderId);
+		model.addAttribute("rider", rider);
+		return "admin/view-rider-details";
 	}
 }
