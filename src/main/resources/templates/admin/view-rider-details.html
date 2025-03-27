@@ -1,10 +1,98 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{master-layout-admin}">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Rider Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
+<!-- Content Fragment -->
+<div layout:fragment="content" class="flex justify-center items-center min-h-screen bg-gray-100 p-6">
+    <div class="container mx-auto px-6 py-8">
+        <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
+            <h1 class="text-3xl font-bold text-center mb-6">Rider Details</h1>
 
+            <!-- Grid with Table-like Borders -->
+            <div class="grid grid-cols-2 gap-4 text-gray-700 border border-gray-300 rounded-lg">
+                <p class="border-b border-gray-300 p-2"><strong>Name:</strong> <span th:text="${rider.fullName}"></span></p>
+                <p class="border-b border-gray-300 p-2"><strong>Email:</strong> <span th:text="${rider.email}"></span></p>
+                <p class="border-b border-gray-300 p-2"><strong>Phone:</strong> <span th:text="${rider.phoneNumber}"></span></p>
+                <p class="border-b border-gray-300 p-2"><strong>Date of Birth:</strong> <span th:text="${rider.dateOfBirth}"></span></p>
+                <p class="border-b border-gray-300 p-2"><strong>Gender:</strong> <span th:text="${rider.gender}"></span></p>
+                <p class="border-b border-gray-300 p-2"><strong>Address:</strong> <span th:text="${rider.address}"></span></p>
+                <p class="border-b border-gray-300 p-2"><strong>District:</strong> <span th:text="${rider.district}"></span></p>
+                <p class="border-b border-gray-300 p-2"><strong>Postal Code:</strong> <span th:text="${rider.postalCode}"></span></p>
+                <p class="border-b border-gray-300 p-2"><strong>Vehicle Type:</strong> <span th:text="${rider.vehicleType}"></span></p>
+                <p class="border-b border-gray-300 p-2"><strong>Vehicle Model:</strong> <span th:text="${rider.vehicleModel}"></span></p>
+                <p class="border-b border-gray-300 p-2"><strong>Registration Number:</strong> <span th:text="${rider.vehicleRegistrationNumber}"></span></p>
+                <p class="border-b border-gray-300 p-2"><strong>License Number:</strong> <span th:text="${rider.driversLicenseNumber}"></span></p>
+                <p class="p-2"><strong>License Expiry:</strong> <span th:text="${rider.licenseExpiryDate}"></span></p>
+                <p class="p-2"><strong>Verification Status:</strong> <span th:text="${rider.verificationStatus}"></span></p>
+            </div>
+
+            <!-- Viewable Documents Section -->
+            <div class="mt-6">
+                <h2 class="text-xl font-semibold text-center mb-4">Documents</h2>
+                <ul class="list-none space-y-2 text-center">
+                    <li th:if="${rider.vehicleRegistrationDocumentPath}">
+                        <a th:href="${rider.vehicleRegistrationDocumentPath}" target="_blank" class="text-blue-500 hover:underline">View Vehicle Registration</a>
+                    </li>
+                    <li th:if="${rider.insuranceDocumentPath}">
+                        <a th:href="${rider.insuranceDocumentPath}" target="_blank" class="text-blue-500 hover:underline">View Insurance Document</a>
+                    </li>
+                    <li th:if="${rider.nationalIdFrontPath}">
+                        <a th:href="${rider.nationalIdFrontPath}" target="_blank" class="text-blue-500 hover:underline">View National ID (Front)</a>
+                    </li>
+                    <li th:if="${rider.nationalIdBackPath}">
+                        <a th:href="${rider.nationalIdBackPath}" target="_blank" class="text-blue-500 hover:underline">View National ID (Back)</a>
+                    </li>
+                    <li th:if="${rider.driversLicenseFrontPath}">
+                        <a th:href="${rider.driversLicenseFrontPath}" target="_blank" class="text-blue-500 hover:underline">View Driver's License (Front)</a>
+                    </li>
+                    <li th:if="${rider.driversLicenseBackPath}">
+                        <a th:href="${rider.driversLicenseBackPath}" target="_blank" class="text-blue-500 hover:underline">View Driver's License (Back)</a>
+                    </li>
+                </ul>
+                <div class="mx-auto">
+                    <!-- Approve Button -->
+                    <form th:action="@{/admin/rider/approve}" method="post" class="inline"
+                          onsubmit="return confirmApprove()">
+                        <input type="hidden" name="riderId" th:value="${rider.id}">
+                        <button type="submit"
+                                class="inline-flex items-center px-3 py-1.5 bg-green-500 text-white rounded hover:bg-green-600">
+                            <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor"
+                                 viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M5 13l4 4L19 7" />
+                            </svg>
+                            Approve
+                        </button>
+                    </form>
+
+                    <!-- Reject Button -->
+                    <form th:action="@{/admin/rider/reject}" method="post" class="inline"
+                          onsubmit="return confirmReject()">
+                        <input type="hidden" name="riderId" th:value="${rider.id}">
+                        <button type="submit"
+                                class="inline-flex items-center px-3 py-1.5 bg-red-500 text-white rounded hover:bg-red-600">
+                            <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor"
+                                 viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            Reject
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Extra Scripts Fragment -->
+<div layout:fragment="extraScripts"></div>
 </body>
 </html>
