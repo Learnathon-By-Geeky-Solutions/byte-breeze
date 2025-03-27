@@ -154,7 +154,6 @@ public class RiderController {
 		return "rider/view-current-parcels";
 	}
 
-
 	@PostMapping("/Accept/{parcelId}")
 	public String acceptParcel(
 			@PathVariable UUID parcelId,
@@ -162,11 +161,14 @@ public class RiderController {
 
 		try {
 			riderService.acceptParcelDelivery(parcelId);
-			redirectAttributes.addFlashAttribute("message", "Parcel accepted successfully!");
+			redirectAttributes.addFlashAttribute("success", "Parcel accepted successfully!");
 		} catch (Exception e) {
 			redirectAttributes.addFlashAttribute("error", "Failed to accept parcel: " + e.getMessage());
 		}
 
 		return "redirect:/rider/available-parcels";
 	}
+
+
+
 }
