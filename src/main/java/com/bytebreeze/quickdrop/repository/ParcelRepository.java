@@ -17,4 +17,7 @@ public interface ParcelRepository extends JpaRepository<Parcel, UUID> {
 
 	@Query("SELECT p FROM Parcel p WHERE p.sender.id = :senderId")
 	List<Parcel> getAllBySender(UUID senderId);
+
+	List<Parcel> findByStatusAndRiderIsNull(ParcelStatus status);
+
 }

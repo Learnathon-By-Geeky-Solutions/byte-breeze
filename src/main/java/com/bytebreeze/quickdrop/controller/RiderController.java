@@ -2,6 +2,7 @@ package com.bytebreeze.quickdrop.controller;
 
 import com.bytebreeze.quickdrop.dto.RiderOnboardingDTO;
 import com.bytebreeze.quickdrop.dto.RiderRegistrationRequestDTO;
+import com.bytebreeze.quickdrop.dto.response.RiderViewCurrentParcelsResponseDTO;
 import com.bytebreeze.quickdrop.model.Rider;
 import com.bytebreeze.quickdrop.service.RiderService;
 import jakarta.validation.Valid;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -142,4 +144,18 @@ public class RiderController {
 		riderService.updateRiderStatus(status);
 		return "redirect:/rider/dashboard";
 	}
+
+	@GetMapping("/available-parcels")
+	public String showCurrentParcelsRequest(Model model){
+
+
+		List<RiderViewCurrentParcelsResponseDTO> currentParcels = riderService.CurrentParcelsForRider();
+
+		model.addAttribute("parcels",currentParcels);
+
+		return "rider/view-current-parcels";
+	}
+
+
+
 }
