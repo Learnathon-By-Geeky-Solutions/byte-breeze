@@ -9,6 +9,8 @@ import com.bytebreeze.quickdrop.enums.ParcelStatus;
 import com.bytebreeze.quickdrop.enums.Role;
 import com.bytebreeze.quickdrop.enums.VerificationStatus;
 import com.bytebreeze.quickdrop.exception.custom.AlreadyExistsException;
+import com.bytebreeze.quickdrop.exception.custom.ParcelAlreadyAssignedException;
+import com.bytebreeze.quickdrop.exception.custom.ParcelNotFoundException;
 import com.bytebreeze.quickdrop.exception.custom.UserNotFoundException;
 import com.bytebreeze.quickdrop.mapper.RegisterRiderMapper;
 import com.bytebreeze.quickdrop.model.Parcel;
@@ -17,12 +19,16 @@ import com.bytebreeze.quickdrop.repository.ParcelRepository;
 import com.bytebreeze.quickdrop.repository.RiderRepository;
 import com.bytebreeze.quickdrop.repository.UserRepository;
 import com.bytebreeze.quickdrop.util.AuthUtil;
+
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -189,4 +195,28 @@ public class RiderService {
 				})
 				.collect(Collectors.toList());
 	}
+
+	@Transactional
+	public void acceptParcelDelivery(UUID parcelId){
+
+		Rider rider = getAuthenticatedRider();
+		Parcel parcel = parcelRepository.findById(parcelId)
+				.orElseThrow(() -> new ParcelNotFoundException("Parcel not found with ID: " + parcelId));
+
+		if (parcel.getRider() != null) {
+			throw new AlreadyExistsException("Parcel already assigned to another rider");
+		}
+
+		if(rider.getIsAssigned()){
+			throw new ParcelAlreadyAssignedException("You have already assigned to a parcel");
+		}
+		rider.setIsAssigned(true);
+
+		parcel.setRider(rider);
+		parcel.setStatus(ParcelStatus.ASSIGNED);
+		parcel.setAssignedAt(LocalDateTime.now());
+		parcelRepository.save(parcel);
+
+	}
+
 }
