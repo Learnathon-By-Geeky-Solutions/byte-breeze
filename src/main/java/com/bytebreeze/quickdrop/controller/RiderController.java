@@ -144,7 +144,7 @@ public class RiderController {
 		return "redirect:/rider/dashboard";
 	}
 
-	@GetMapping("/available-parcels")
+	@GetMapping("/current-parcels")
 	public String showCurrentParcelsRequest(Model model) {
 
 		List<RiderViewCurrentParcelsResponseDTO> currentParcels = riderService.CurrentParcelsForRider();
