@@ -219,4 +219,12 @@ public class RiderService {
 
 	}
 
+
+	public Parcel getAssignedParcelByRider(Rider rider) {
+
+		Optional<Parcel> parcel = parcelRepository.findByStatusAndRider(ParcelStatus.BOOKED, rider);
+
+	return parcel.orElseThrow(() -> new ParcelNotFoundException("Parcel not found with the assigned RiderId : " + rider.getId()));
+	}
+
 }
