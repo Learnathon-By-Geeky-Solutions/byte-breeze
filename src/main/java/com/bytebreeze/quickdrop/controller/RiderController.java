@@ -147,10 +147,10 @@ public class RiderController {
 	@GetMapping("/current-parcels")
 	public String showCurrentParcelsRequest(Model model) {
 
+
+		
 		List<RiderViewCurrentParcelsResponseDTO> currentParcels = riderService.CurrentParcelsForRider();
-
 		model.addAttribute("parcels", currentParcels);
-
 		return "rider/view-current-parcels";
 	}
 
@@ -166,7 +166,7 @@ public class RiderController {
 			redirectAttributes.addFlashAttribute("error", "Failed to accept parcel: " + e.getMessage());
 		}
 
-		return "redirect:/rider/available-parcels";
+		return "redirect:/rider/current-parcels";
 	}
 
 
