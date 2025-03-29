@@ -24,7 +24,7 @@ public interface ParcelRepository extends JpaRepository<Parcel, UUID> {
 
 	List<Parcel> findByStatusAndRiderIsNull(ParcelStatus status);
 
-	Optional<Parcel> findByStatusAndRider(ParcelStatus status, User rider);
+	List<Parcel> findByStatusAndRider(ParcelStatus status, User rider);
 
 
 }
