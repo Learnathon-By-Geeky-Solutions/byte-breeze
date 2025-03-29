@@ -16,6 +16,9 @@ import java.security.SecureRandom;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.UUID;
+
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -123,4 +126,18 @@ public class ParcelService {
 				.orElseThrow(() -> new IllegalArgumentException("Invalid sender"));
 		return parcelRepository.getAllBySender(sender.getId());
 	}
+
+	public Parcel getParcelById(UUID id) {
+		return parcelRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Parcel not found"));
+	}
+
+	@Transactional
+	public void updateParcelStatus(UUID id, ParcelStatus status) {
+		Parcel parcel = getParcelById(id);
+		parcel.setStatus(status);
+		parcelRepository.save(parcel);
+	}
+
+
 }
