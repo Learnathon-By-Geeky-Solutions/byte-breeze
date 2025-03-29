@@ -4,6 +4,7 @@ import com.bytebreeze.quickdrop.dto.RiderDashboardResponseDTO;
 import com.bytebreeze.quickdrop.dto.RiderOnboardingDTO;
 import com.bytebreeze.quickdrop.dto.RiderRegistrationRequestDTO;
 import com.bytebreeze.quickdrop.dto.response.RiderApprovalByAdminResponseDTO;
+import com.bytebreeze.quickdrop.dto.response.RiderDetailsResponseDto;
 import com.bytebreeze.quickdrop.dto.response.RiderViewCurrentParcelsResponseDTO;
 import com.bytebreeze.quickdrop.enums.ParcelStatus;
 import com.bytebreeze.quickdrop.enums.Role;
@@ -19,7 +20,7 @@ import com.bytebreeze.quickdrop.repository.ParcelRepository;
 import com.bytebreeze.quickdrop.repository.RiderRepository;
 import com.bytebreeze.quickdrop.repository.UserRepository;
 import com.bytebreeze.quickdrop.util.AuthUtil;
-
+import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashSet;
@@ -27,8 +28,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -197,17 +196,18 @@ public class RiderService {
 	}
 
 	@Transactional
-	public void acceptParcelDelivery(UUID parcelId){
+	public void acceptParcelDelivery(UUID parcelId) {
 
 		Rider rider = getAuthenticatedRider();
-		Parcel parcel = parcelRepository.findById(parcelId)
+		Parcel parcel = parcelRepository
+				.findById(parcelId)
 				.orElseThrow(() -> new ParcelNotFoundException("Parcel not found with ID: " + parcelId));
 
 		if (parcel.getRider() != null) {
 			throw new AlreadyExistsException("Parcel already assigned to another rider");
 		}
 
-		if(rider.getIsAssigned()){
+		if (rider.getIsAssigned()) {
 			throw new ParcelAlreadyAssignedException("You have already assigned to a parcel");
 		}
 		rider.setIsAssigned(true);
@@ -216,16 +216,57 @@ public class RiderService {
 		parcel.setStatus(ParcelStatus.ASSIGNED);
 		parcel.setAssignedAt(LocalDateTime.now());
 		parcelRepository.save(parcel);
-
 	}
-
 
 	public List<Parcel> getAssignedParcelByRider(Rider rider) {
 
 		List<Parcel> parcels = parcelRepository.findByStatusAndRider(ParcelStatus.ASSIGNED, rider);
 
-		log.info("Found {} available assigned parcels with status: Assigned and rider email {}", parcels.size(), rider.getEmail());
+		log.info(
+				"Found {} available assigned parcels with status: Assigned and rider email {}",
+				parcels.size(),
+				rider.getEmail());
 		return parcels;
 	}
 
+	public RiderDetailsResponseDto getRiderDetails(UUID riderId) {
+		Rider rider = riderRepository.findById(riderId).orElseThrow(() -> new UserNotFoundException("Rider not found"));
+		return mapToDto(rider);
+	}
+
+	public RiderDetailsResponseDto mapToDto(Rider rider) {
+		RiderDetailsResponseDto dto = new RiderDetailsResponseDto();
+		dto.setId(rider.getId());
+		dto.setFullName(rider.getFullName());
+		dto.setEmail(rider.getEmail());
+		dto.setPhoneNumber(rider.getPhoneNumber());
+		dto.setProfilePicture(rider.getProfilePicture());
+		dto.setDateOfBirth(rider.getDateOfBirth());
+		dto.setGender(rider.getGender());
+		dto.setAddress(rider.getAddress());
+		dto.setUpazila(rider.getUpazila());
+		dto.setDistrict(rider.getDistrict());
+		dto.setPostalCode(rider.getPostalCode());
+		dto.setVehicleType(rider.getVehicleType());
+		dto.setVehicleModel(rider.getVehicleModel());
+		dto.setVehicleRegistrationNumber(rider.getVehicleRegistrationNumber());
+		dto.setVehicleInsuranceProvider(rider.getVehicleInsuranceProvider());
+		dto.setInsuranceExpiryDate(rider.getInsuranceExpiryDate());
+		dto.setVehicleRegistrationDocumentPath(rider.getVehicleRegistrationDocumentPath());
+		dto.setInsuranceDocumentPath(rider.getInsuranceDocumentPath());
+		dto.setNationalIdNumber(rider.getNationalIdNumber());
+		dto.setNationalIdFrontPath(rider.getNationalIdFrontPath());
+		dto.setNationalIdBackPath(rider.getNationalIdBackPath());
+		dto.setDriversLicenseNumber(rider.getDriversLicenseNumber());
+		dto.setLicenseExpiryDate(rider.getLicenseExpiryDate());
+		dto.setDriversLicenseFrontPath(rider.getDriversLicenseFrontPath());
+		dto.setDriversLicenseBackPath(rider.getDriversLicenseBackPath());
+		dto.setVerificationStatus(rider.getVerificationStatus());
+		dto.setIsAvailable(rider.getIsAvailable());
+		dto.setIsAssigned(rider.getIsAssigned());
+		dto.setRiderAvgRating(rider.getRiderAvgRating());
+		dto.setTotalRating(rider.getTotalRating());
+		dto.setRiderBalance(rider.getRiderBalance());
+		return dto;
+	}
 }
