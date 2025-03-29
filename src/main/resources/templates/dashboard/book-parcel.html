@@ -30,7 +30,6 @@
         </div>
 
         <form th:action="@{/user/book-parcel}" th:object="${parcelBookingRequestDTO}" method="post" class="space-y-6">
-
             <!-- Parcel Information Section (Collapsible) -->
             <details open class="mb-6">
                 <summary class="text-lg font-semibold text-gray-800 border-b pb-2 mb-4 cursor-pointer">Parcel Information</summary>
@@ -214,8 +213,8 @@
                         <label for="price" class="block text-sm font-medium text-gray-700">
                             Price <span class="text-red-500">*</span>
                         </label>
-                        <input type="number" step="any" id="price" th:field="*{price}" required
-                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                        <input type="number" step="any" id="price" th:field="*{price}" required readonly
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100" />
                         <div th:replace="~{fragments/field-error-fragment :: fieldError('price')}"></div>
                     </div>
 
@@ -262,7 +261,7 @@
             <div>
                 <button type="submit"
                         class="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700">
-                    Pay and Book Parcel
+                    Pay <span id="submitPrice">300</span>TK and Book Parcel
                 </button>
             </div>
         </form>
@@ -270,22 +269,22 @@
 </div>
 
 <!-- Extra Scripts Fragment -->
+<!-- Extra Scripts Fragment -->
 <div layout:fragment="extraScripts">
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Select all radio buttons with the name 'paymentMethod'
+            // Payment method selection logic
             const radios = document.querySelectorAll('input[name="paymentMethod"]');
-
             radios.forEach(function(radio) {
                 radio.addEventListener("change", function() {
-                    // Remove the 'selected' class from all labels
                     radios.forEach(function(r) {
                         const parentLabel = r.closest("label");
                         if (parentLabel) {
                             parentLabel.classList.remove("selected");
                         }
                     });
-                    // Add the 'selected' class to the parent label of the checked radio
                     if (radio.checked) {
                         const selectedLabel = radio.closest("label");
                         if (selectedLabel) {
@@ -294,6 +293,57 @@
                     }
                 });
             });
+
+            // Fetch shipping cost dynamically based on size and weight
+            const sizeInput = document.getElementById("size");
+            const weightInput = document.getElementById("weight");
+            const priceInput = document.getElementById("price");
+            const submitPrice = document.getElementById("submitPrice");
+
+            // Get CSRF token and header from meta tags (Spring Security default)
+            const csrfToken = document.querySelector("meta[name='_csrf']").getAttribute("content");
+            const csrfHeader = document.querySelector("meta[name='_csrf_header']").getAttribute("content");
+
+            function updateShippingCost() {
+                const size = sizeInput.value;
+                const weight = weightInput.value;
+
+                if (size && weight) {
+                    fetch("/parcel/shipping-cost", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            [csrfHeader]: csrfToken // Add CSRF token to headers
+                        },
+                        body: JSON.stringify({
+                            size: size,
+                            weight: weight
+                        }),
+                        credentials: "include" // Include cookies for session authentication
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! Status: ${response.status}, Message: ${response.statusText}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            const cost = data; // Assuming response is a number like 400
+                            priceInput.value = cost;
+                            submitPrice.textContent = cost; // Update button text
+                        })
+                        .catch(error => {
+                            console.error("Error fetching shipping cost:", error);
+                            priceInput.value = "";
+                            submitPrice.textContent = "300"; // Fallback value
+                            alert("Failed to fetch shipping cost. Please try again or contact support.");
+                        });
+                }
+            }
+
+            // Add event listeners to size and weight inputs
+            sizeInput.addEventListener("input", updateShippingCost);
+            weightInput.addEventListener("input", updateShippingCost);
         });
     </script>
 </div>
