@@ -220,11 +220,12 @@ public class RiderService {
 	}
 
 
-	public Parcel getAssignedParcelByRider(Rider rider) {
+	public List<Parcel> getAssignedParcelByRider(Rider rider) {
 
-		Optional<Parcel> parcel = parcelRepository.findByStatusAndRider(ParcelStatus.BOOKED, rider);
+		List<Parcel> parcels = parcelRepository.findByStatusAndRider(ParcelStatus.ASSIGNED, rider);
 
-	return parcel.orElseThrow(() -> new ParcelNotFoundException("Parcel not found with the assigned RiderId : " + rider.getId()));
+		log.info("Found {} available assigned parcels with status: Assigned and rider email {}", parcels.size(), rider.getEmail());
+		return parcels;
 	}
 
 }
