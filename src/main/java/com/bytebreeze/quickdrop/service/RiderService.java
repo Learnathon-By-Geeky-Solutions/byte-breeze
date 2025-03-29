@@ -10,6 +10,8 @@ import com.bytebreeze.quickdrop.enums.ParcelStatus;
 import com.bytebreeze.quickdrop.enums.Role;
 import com.bytebreeze.quickdrop.enums.VerificationStatus;
 import com.bytebreeze.quickdrop.exception.custom.AlreadyExistsException;
+import com.bytebreeze.quickdrop.exception.custom.ParcelAlreadyAssignedException;
+import com.bytebreeze.quickdrop.exception.custom.ParcelNotFoundException;
 import com.bytebreeze.quickdrop.exception.custom.UserNotFoundException;
 import com.bytebreeze.quickdrop.mapper.RegisterRiderMapper;
 import com.bytebreeze.quickdrop.model.Parcel;
@@ -18,6 +20,8 @@ import com.bytebreeze.quickdrop.repository.ParcelRepository;
 import com.bytebreeze.quickdrop.repository.RiderRepository;
 import com.bytebreeze.quickdrop.repository.UserRepository;
 import com.bytebreeze.quickdrop.util.AuthUtil;
+import jakarta.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -189,6 +193,40 @@ public class RiderService {
 					return dto;
 				})
 				.collect(Collectors.toList());
+	}
+
+	@Transactional
+	public void acceptParcelDelivery(UUID parcelId) {
+
+		Rider rider = getAuthenticatedRider();
+		Parcel parcel = parcelRepository
+				.findById(parcelId)
+				.orElseThrow(() -> new ParcelNotFoundException("Parcel not found with ID: " + parcelId));
+
+		if (parcel.getRider() != null) {
+			throw new AlreadyExistsException("Parcel already assigned to another rider");
+		}
+
+		if (rider.getIsAssigned()) {
+			throw new ParcelAlreadyAssignedException("You have already assigned to a parcel");
+		}
+		rider.setIsAssigned(true);
+
+		parcel.setRider(rider);
+		parcel.setStatus(ParcelStatus.ASSIGNED);
+		parcel.setAssignedAt(LocalDateTime.now());
+		parcelRepository.save(parcel);
+	}
+
+	public List<Parcel> getAssignedParcelByRider(Rider rider) {
+
+		List<Parcel> parcels = parcelRepository.findByStatusAndRider(ParcelStatus.ASSIGNED, rider);
+
+		log.info(
+				"Found {} available assigned parcels with status: Assigned and rider email {}",
+				parcels.size(),
+				rider.getEmail());
+		return parcels;
 	}
 
 	public RiderDetailsResponseDto getRiderDetails(UUID riderId) {

@@ -3,6 +3,7 @@ package com.bytebreeze.quickdrop.controller;
 import com.bytebreeze.quickdrop.dto.RiderOnboardingDTO;
 import com.bytebreeze.quickdrop.dto.RiderRegistrationRequestDTO;
 import com.bytebreeze.quickdrop.dto.response.RiderViewCurrentParcelsResponseDTO;
+import com.bytebreeze.quickdrop.model.Parcel;
 import com.bytebreeze.quickdrop.model.Rider;
 import com.bytebreeze.quickdrop.service.RiderService;
 import jakarta.validation.Valid;
@@ -10,12 +11,14 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+@Slf4j
 @Controller
 @RequestMapping("/rider")
 @RequiredArgsConstructor
@@ -144,13 +147,45 @@ public class RiderController {
 		return "redirect:/rider/dashboard";
 	}
 
-	@GetMapping("/available-parcels")
+	@GetMapping("/current-parcels")
 	public String showCurrentParcelsRequest(Model model) {
 
-		List<RiderViewCurrentParcelsResponseDTO> currentParcels = riderService.CurrentParcelsForRider();
+		Rider rider = riderService.getAuthenticatedRider();
+		if (rider.getIsAssigned()) {
 
-		model.addAttribute("parcels", currentParcels);
+			try {
 
-		return "rider/view-current-parcels";
+				List<Parcel> parcels = riderService.getAssignedParcelByRider(rider);
+				if (parcels != null) {
+					// log.info("Get assigned parcel by rider: {}", parcels.getCategory());
+					model.addAttribute("parcels", parcels);
+				} else {
+					model.addAttribute("error", "No parcel assigned despite rider being marked as assigned");
+				}
+
+			} catch (Exception e) {
+				model.addAttribute("error", "Failed to load parcel : " + e.getMessage());
+			}
+			return "rider/view-assigned-parcels";
+		} else {
+
+			List<RiderViewCurrentParcelsResponseDTO> currentParcels = riderService.CurrentParcelsForRider();
+			model.addAttribute("parcels", currentParcels);
+
+			return "rider/view-current-parcels";
+		}
+	}
+
+	@PostMapping("/Accept/{parcelId}")
+	public String acceptParcel(@PathVariable UUID parcelId, RedirectAttributes redirectAttributes) {
+
+		try {
+			riderService.acceptParcelDelivery(parcelId);
+			redirectAttributes.addFlashAttribute("success", "Parcel accepted successfully!");
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("error", "Failed to accept parcel: " + e.getMessage());
+		}
+
+		return "redirect:/rider/current-parcels";
 	}
 }
