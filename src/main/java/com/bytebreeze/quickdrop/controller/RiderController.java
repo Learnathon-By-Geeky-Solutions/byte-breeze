@@ -6,6 +6,7 @@ import com.bytebreeze.quickdrop.dto.response.RiderViewCurrentParcelsResponseDTO;
 import com.bytebreeze.quickdrop.enums.ParcelStatus;
 import com.bytebreeze.quickdrop.model.Parcel;
 import com.bytebreeze.quickdrop.model.Rider;
+import com.bytebreeze.quickdrop.service.ParcelService;
 import com.bytebreeze.quickdrop.service.RiderService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -26,6 +27,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class RiderController {
 
 	private final RiderService riderService;
+	private final ParcelService parcelService;
 
 	@GetMapping("/login")
 	public String riderLogin(Model model) {
@@ -197,7 +199,7 @@ public class RiderController {
 											 Model model) {
 
 		try {
-			//parcelService.updateParcelStatus(id, status);
+			parcelService.updateParcelStatus(id, status);
 			redirectAttributes.addFlashAttribute("success", "Parcel status updated successfully!");
 		} catch (Exception e) {
 			redirectAttributes.addFlashAttribute("error", "Failed to update status.");
