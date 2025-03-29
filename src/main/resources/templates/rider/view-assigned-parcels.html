@@ -18,7 +18,6 @@
 
     <!-- Main content -->
     <main class="flex-1 p-6">
-
         <!-- Messages -->
         <div th:if="${success}" class="mb-4 p-2 bg-green-100 text-green-700 rounded">
             <span th:text="${success}"></span>
@@ -28,25 +27,27 @@
         </div>
 
 
+
+
         <!-- Page Header -->
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold text-gray-800">Assigned Parcel</h1>
-<!--            <p class="text-sm text-gray-600" th:text="'Showing ' + ${parcels.size()} + ' available parcels'"></p>-->
+            <h1 class="text-2xl font-bold text-gray-800">Assigned Parcels</h1>
+            <p class="text-sm text-gray-600" th:text="'Showing ' + ${parcels.size()} + ' available parcels'"></p>
         </div>
 
-<!--        &lt;!&ndash; Empty State &ndash;&gt;-->
-<!--        <div th:if="${parcel.isEmpty()}" class="bg-white rounded-lg shadow p-8 text-center">-->
-<!--            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">-->
-<!--                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />-->
-<!--            </svg>-->
-<!--            <h3 class="mt-4 text-lg font-medium text-gray-900">No parcels available</h3>-->
-<!--            <p class="mt-1 text-sm text-gray-500">There are currently no parcels you are assigned.</p>-->
-<!--        </div>-->
+        <!-- Empty State -->
+        <div th:if="${parcels.isEmpty()}" class="bg-white rounded-lg shadow p-8 text-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+            </svg>
+            <h3 class="mt-4 text-lg font-medium text-gray-900">No Assigned parcels available</h3>
+            <p class="mt-1 text-sm text-gray-500">There are currently no parcels assigned to you.</p>
+        </div>
 
         <!-- Parcel Cards Grid -->
-<!--        <div th:unless="${parcel.isEmpty()}" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">-->
+        <div th:unless="${parcels.isEmpty()}" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Parcel Card -->
-<!--            <div th:each="parcel : ${parcels}" class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 hover:shadow-lg transition-shadow duration-300">-->
+            <div th:each="parcel : ${parcels}" class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 hover:shadow-lg transition-shadow duration-300">
                 <!-- Card Header -->
                 <div class="bg-blue-600 px-4 py-3">
                     <h3 class="text-lg font-semibold text-white">
@@ -87,52 +88,15 @@
                 <div class="bg-gray-50 px-4 py-3 text-right">
                     <button th:data-id="${parcel.id}"
                             class="accept-btn px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200">
-                        Accept Delivery
+                        Update delivery Status
                     </button>
                 </div>
-<!--            </div>-->
-<!--        </div>-->
+            </div>
+        </div>
+
+
+
     </main>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Add click event to all accept buttons
-        document.querySelectorAll('.accept-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const parcelId = this.getAttribute('data-id');
-
-                swal({
-                    title: "Confirm Acceptance",
-                    text: "Are you sure you want to accept this delivery?",
-                    icon: "warning",
-                    buttons: ["Cancel", "Accept"],
-                    dangerMode: true,
-                })
-                    .then((willAccept) => {
-                        if (willAccept) {
-                            // Create a form dynamically
-                            const form = document.createElement('form');
-                            form.method = 'POST';
-                            form.action = `/rider/Accept/${parcelId}`;
-
-                            // Add CSRF token if needed (for Spring Security)
-                            const csrfToken = document.querySelector('meta[name="_csrf"]')?.content;
-                            if (csrfToken) {
-                                const csrfInput = document.createElement('input');
-                                csrfInput.type = 'hidden';
-                                csrfInput.name = '_csrf';
-                                csrfInput.value = csrfToken;
-                                form.appendChild(csrfInput);
-                            }
-
-                            document.body.appendChild(form);
-                            form.submit();
-                        }
-                    });
-            });
-        });
-    });
-</script>
 </body>
 </html>
