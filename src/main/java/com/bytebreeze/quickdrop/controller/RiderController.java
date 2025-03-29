@@ -13,12 +13,14 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+@Slf4j
 @Controller
 @RequestMapping("/rider")
 @RequiredArgsConstructor
@@ -155,8 +157,16 @@ public class RiderController {
         if (rider.getIsAssigned()) {
 
             try {
-                Parcel parcel = riderService.getAssignedParcelByRider(rider);
-                model.addAttribute("parcel", parcel);
+
+                List<Parcel> parcels = riderService.getAssignedParcelByRider(rider);
+                if (parcels != null) {
+                    //log.info("Get assigned parcel by rider: {}", parcels.getCategory());
+                    model.addAttribute("parcels", parcels);
+                } else {
+                    model.addAttribute("error", "No parcel assigned despite rider being marked as assigned");
+                }
+
+
             } catch (Exception e) {
                 model.addAttribute("error", "Failed to load parcel : " + e.getMessage());
 
