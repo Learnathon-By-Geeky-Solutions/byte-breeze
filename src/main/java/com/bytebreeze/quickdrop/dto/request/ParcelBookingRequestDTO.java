@@ -41,7 +41,9 @@ public class ParcelBookingRequestDTO {
 	private String receiverName;
 
 	@NotBlank(message = "Receiver phone is required.")
-	@Pattern(regexp = "^(\\+\\d{1,3}[- ]?)?\\d{10}$", message = "Invalid phone number.")
+	@Pattern(
+			regexp = "^(\\+880[- ]?)?01[3-9]\\d{8}$",
+			message = "Invalid phone number. Use format: 01741543475 or +8801741543475")
 	private String receiverPhone;
 
 	@Email(message = "Invalid email address.")
