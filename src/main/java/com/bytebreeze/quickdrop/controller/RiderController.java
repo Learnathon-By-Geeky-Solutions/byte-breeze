@@ -3,6 +3,7 @@ package com.bytebreeze.quickdrop.controller;
 import com.bytebreeze.quickdrop.dto.RiderOnboardingDTO;
 import com.bytebreeze.quickdrop.dto.RiderRegistrationRequestDTO;
 import com.bytebreeze.quickdrop.dto.response.RiderViewCurrentParcelsResponseDTO;
+import com.bytebreeze.quickdrop.enums.ParcelStatus;
 import com.bytebreeze.quickdrop.model.Parcel;
 import com.bytebreeze.quickdrop.model.Rider;
 import com.bytebreeze.quickdrop.service.RiderService;
@@ -188,4 +189,23 @@ public class RiderController {
 
 		return "redirect:/rider/current-parcels";
 	}
+
+	@PostMapping ("parcels/{id}/update-status")
+	public String updateAssignedParcelStatus(@PathVariable UUID id,
+											 @RequestParam ParcelStatus status,
+											 RedirectAttributes redirectAttributes,
+											 Model model) {
+
+		try {
+			//parcelService.updateParcelStatus(id, status);
+			redirectAttributes.addFlashAttribute("success", "Parcel status updated successfully!");
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("error", "Failed to update status.");
+		}
+
+		return "redirect:/rider/current-parcels";
+
+	}
+
+
 }
