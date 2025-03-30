@@ -1,5 +1,6 @@
 package com.bytebreeze.quickdrop.service;
 
+import com.bytebreeze.quickdrop.dto.request.CalculateShippingCostRequestDto;
 import com.bytebreeze.quickdrop.dto.request.ParcelBookingRequestDTO;
 import com.bytebreeze.quickdrop.enums.ParcelStatus;
 import com.bytebreeze.quickdrop.enums.PaymentStatus;
@@ -202,5 +203,18 @@ public class ParcelService {
 	}
 
 
+
+	public double calculateShippingCost(CalculateShippingCostRequestDto calculateShippingCostRequestDto) {
+		// definining factor - we will make it dynamic in future
+		double sizeFactor = 0.2;
+		double weightFactor = 0.4;
+		double deliveryCharge = 100;
+
+		double cost = sizeFactor * calculateShippingCostRequestDto.getSize();
+		cost += weightFactor * calculateShippingCostRequestDto.getWeight();
+		cost += deliveryCharge;
+
+		return cost;
+	}
 
 }
