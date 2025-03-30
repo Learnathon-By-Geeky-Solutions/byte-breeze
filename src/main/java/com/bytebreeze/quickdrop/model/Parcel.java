@@ -76,7 +76,7 @@ public class Parcel {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "rider_id")
-	private User rider;
+	private Rider rider;
 
 	@Column(name = "rider_otp")
 	private String riderOtp;
