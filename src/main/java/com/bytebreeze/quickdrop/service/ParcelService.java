@@ -147,7 +147,7 @@ public class ParcelService {
 
 		// Check if status is changing to DELIVERED
 		if (status == ParcelStatus.DELIVERED) {
-			//handleDeliveryCompletion(parcel);
+			handleDeliveryCompletion(parcel);
 		} else {
 			if (status == ParcelStatus.PICKED_UP) {
 				parcel.setPickupTime(LocalDateTime.now()); // Record pickup time if applicable
@@ -173,6 +173,32 @@ public class ParcelService {
 			default:
 				return false;
 		}
+	}
+
+	private void handleDeliveryCompletion(Parcel parcel) {
+
+		// Record delivery time
+		LocalDateTime deliveryTime = LocalDateTime.now();
+		parcel.setDeliveryTime(deliveryTime);
+		parcel.setDeliveredAt(deliveryTime);
+
+		// Add earnings to rider's balance
+		Rider rider = parcel.getRider();
+		if (rider instanceof Rider) {
+			double currentBalance = rider.getRiderBalance();
+			double parcelEarnings = parcel.getPrice().doubleValue(); // Convert BigDecimal to double
+			rider.setRiderBalance(currentBalance + parcelEarnings);
+			rider.setIsAssigned(false);
+			riderRepository.save(rider); // Save updated rider
+		} else if (rider == null) {
+			throw new IllegalStateException("No rider assigned to parcel with ID: " + parcel.getId());
+		} else {
+			throw new IllegalStateException("Assigned rider is not a Rider instance for parcel ID: " + parcel.getId());
+		}
+
+		// Industry-standard best practices
+		System.out.println("Parcel " + parcel.getTrackingId() + " delivered at " + deliveryTime +
+				". Earnings $" + parcel.getPrice() + " added to rider " + rider.getId());
 	}
 
 
