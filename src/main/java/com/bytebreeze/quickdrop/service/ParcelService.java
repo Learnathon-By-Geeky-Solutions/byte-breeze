@@ -3,16 +3,11 @@ package com.bytebreeze.quickdrop.service;
 import com.bytebreeze.quickdrop.dto.request.ParcelBookingRequestDTO;
 import com.bytebreeze.quickdrop.enums.ParcelStatus;
 import com.bytebreeze.quickdrop.enums.PaymentStatus;
-import com.bytebreeze.quickdrop.model.Parcel;
-import com.bytebreeze.quickdrop.model.Payment;
-import com.bytebreeze.quickdrop.model.ProductCategory;
-import com.bytebreeze.quickdrop.model.User;
-import com.bytebreeze.quickdrop.repository.ParcelRepository;
-import com.bytebreeze.quickdrop.repository.PaymentRepository;
-import com.bytebreeze.quickdrop.repository.ProductCategoryRepository;
-import com.bytebreeze.quickdrop.repository.UserRepository;
+import com.bytebreeze.quickdrop.model.*;
+import com.bytebreeze.quickdrop.repository.*;
 import com.bytebreeze.quickdrop.util.AuthUtil;
 import java.security.SecureRandom;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -21,21 +16,25 @@ import java.util.UUID;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import static com.bytebreeze.quickdrop.enums.ParcelStatus.*;
+
 @Service
 public class ParcelService {
 	private final ProductCategoryRepository productCategoryRepository;
 	private final UserRepository userRepository;
+	private final RiderRepository riderRepository;
 	private final ParcelRepository parcelRepository;
 	private final PaymentRepository paymentRepository;
 
 	public ParcelService(
-			ProductCategoryRepository productCategoryRepository,
-			UserRepository userRepository,
-			ParcelRepository parcelRepository,
-			PaymentRepository paymentRepository) {
+            ProductCategoryRepository productCategoryRepository,
+            UserRepository userRepository, RiderRepository riderRepository,
+            ParcelRepository parcelRepository,
+            PaymentRepository paymentRepository) {
 		this.productCategoryRepository = productCategoryRepository;
 		this.userRepository = userRepository;
-		this.parcelRepository = parcelRepository;
+        this.riderRepository = riderRepository;
+        this.parcelRepository = parcelRepository;
 		this.paymentRepository = paymentRepository;
 	}
 
@@ -135,9 +134,26 @@ public class ParcelService {
 	@Transactional
 	public void updateParcelStatus(UUID id, ParcelStatus status) {
 		Parcel parcel = getParcelById(id);
+		ParcelStatus currentStatus = parcel.getStatus();
+
+		// Validate status transition
+//		if (!isValidStatusTransition(currentStatus, status)) {
+//			throw new IllegalStateException("Invalid status transition from " + currentStatus + " to " + status);
+//		}
+
+		// Update common fields
 		parcel.setStatus(status);
+		parcel.setUpdatedAt(LocalDateTime.now());
+
+		// Check if status is changing to DELIVERED
+		if (status == ParcelStatus.DELIVERED) {
+			//handleDeliveryCompletion(parcel);
+		} else {
+			if (status == ParcelStatus.PICKED_UP) {
+				parcel.setPickupTime(LocalDateTime.now()); // Record pickup time if applicable
+			}
+		}
 		parcelRepository.save(parcel);
 	}
-
 
 }
