@@ -4,36 +4,38 @@ import com.bytebreeze.quickdrop.dto.request.CalculateShippingCostRequestDto;
 import com.bytebreeze.quickdrop.dto.request.ParcelBookingRequestDTO;
 import com.bytebreeze.quickdrop.enums.ParcelStatus;
 import com.bytebreeze.quickdrop.enums.PaymentStatus;
-import com.bytebreeze.quickdrop.model.Parcel;
-import com.bytebreeze.quickdrop.model.Payment;
-import com.bytebreeze.quickdrop.model.ProductCategory;
-import com.bytebreeze.quickdrop.model.User;
-import com.bytebreeze.quickdrop.repository.ParcelRepository;
-import com.bytebreeze.quickdrop.repository.PaymentRepository;
-import com.bytebreeze.quickdrop.repository.ProductCategoryRepository;
-import com.bytebreeze.quickdrop.repository.UserRepository;
+import com.bytebreeze.quickdrop.model.*;
+import com.bytebreeze.quickdrop.repository.*;
 import com.bytebreeze.quickdrop.util.AuthUtil;
 import java.security.SecureRandom;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.UUID;
+
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+
+import static com.bytebreeze.quickdrop.enums.ParcelStatus.*;
 
 @Service
 public class ParcelService {
 	private final ProductCategoryRepository productCategoryRepository;
 	private final UserRepository userRepository;
+	private final RiderRepository riderRepository;
 	private final ParcelRepository parcelRepository;
 	private final PaymentRepository paymentRepository;
 
 	public ParcelService(
-			ProductCategoryRepository productCategoryRepository,
-			UserRepository userRepository,
-			ParcelRepository parcelRepository,
-			PaymentRepository paymentRepository) {
+            ProductCategoryRepository productCategoryRepository,
+            UserRepository userRepository, RiderRepository riderRepository,
+            ParcelRepository parcelRepository,
+            PaymentRepository paymentRepository) {
 		this.productCategoryRepository = productCategoryRepository;
 		this.userRepository = userRepository;
-		this.parcelRepository = parcelRepository;
+        this.riderRepository = riderRepository;
+        this.parcelRepository = parcelRepository;
 		this.paymentRepository = paymentRepository;
 	}
 
@@ -125,6 +127,83 @@ public class ParcelService {
 		return parcelRepository.getAllBySender(sender.getId());
 	}
 
+	public Parcel getParcelById(UUID id) {
+		return parcelRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Parcel not found"));
+	}
+
+	@Transactional
+	public void updateParcelStatus(UUID id, ParcelStatus status) {
+		Parcel parcel = getParcelById(id);
+		ParcelStatus currentStatus = parcel.getStatus();
+
+		// Validate status transition
+		if (!isValidStatusTransition(currentStatus, status)) {
+			throw new IllegalStateException("Invalid status transition from " + currentStatus + " to " + status);
+		}
+
+		// Update common fields
+		parcel.setStatus(status);
+		parcel.setUpdatedAt(LocalDateTime.now());
+
+		// Check if status is changing to DELIVERED
+		if (status == ParcelStatus.DELIVERED) {
+			handleDeliveryCompletion(parcel);
+		} else {
+			if (status == ParcelStatus.PICKED_UP) {
+				parcel.setPickupTime(LocalDateTime.now()); // Record pickup time if applicable
+			}
+		}
+		parcelRepository.save(parcel);
+	}
+
+
+	private boolean isValidStatusTransition(ParcelStatus current, ParcelStatus next) {
+		// Define your valid status transitions
+		if (current == next) return false;
+
+		switch (current) {
+			case ASSIGNED:
+				return next == PICKED_UP || next == POSTPONED;
+			case PICKED_UP:
+				return next == IN_TRANSIT || next == DELIVERED || next == POSTPONED;
+			case IN_TRANSIT:
+				return next == DELIVERED || next == POSTPONED;
+			case POSTPONED:
+				return next == PICKED_UP || next == ASSIGNED;
+			default:
+				return false;
+		}
+	}
+
+	private void handleDeliveryCompletion(Parcel parcel) {
+
+		// Record delivery time
+		LocalDateTime deliveryTime = LocalDateTime.now();
+		parcel.setDeliveryTime(deliveryTime);
+		parcel.setDeliveredAt(deliveryTime);
+
+		// Add earnings to rider's balance
+		Rider rider = parcel.getRider();
+		if (rider instanceof Rider) {
+			double currentBalance = rider.getRiderBalance();
+			double parcelEarnings = parcel.getPrice().doubleValue(); // Convert BigDecimal to double
+			rider.setRiderBalance(currentBalance + parcelEarnings);
+			rider.setIsAssigned(false);
+			riderRepository.save(rider); // Save updated rider
+		} else if (rider == null) {
+			throw new IllegalStateException("No rider assigned to parcel with ID: " + parcel.getId());
+		} else {
+			throw new IllegalStateException("Assigned rider is not a Rider instance for parcel ID: " + parcel.getId());
+		}
+
+		// Industry-standard best practices
+		System.out.println("Parcel " + parcel.getTrackingId() + " delivered at " + deliveryTime +
+				". Earnings $" + parcel.getPrice() + " added to rider " + rider.getId());
+	}
+
+
+
 	public double calculateShippingCost(CalculateShippingCostRequestDto calculateShippingCostRequestDto) {
 		// definining factor - we will make it dynamic in future
 		double sizeFactor = 0.2;
@@ -137,4 +216,5 @@ public class ParcelService {
 
 		return cost;
 	}
+
 }
