@@ -2,6 +2,7 @@ package com.bytebreeze.quickdrop.repository;
 
 import com.bytebreeze.quickdrop.enums.ParcelStatus;
 import com.bytebreeze.quickdrop.model.Parcel;
+import com.bytebreeze.quickdrop.model.Rider;
 import com.bytebreeze.quickdrop.model.User;
 import java.util.List;
 import java.util.UUID;
@@ -21,5 +22,6 @@ public interface ParcelRepository extends JpaRepository<Parcel, UUID> {
 
 	List<Parcel> findByStatusAndRiderIsNull(ParcelStatus status);
 
-	List<Parcel> findByStatusAndRider(ParcelStatus status, User rider);
+	List<Parcel> findByStatusInAndRider(List<ParcelStatus> statuses, Rider rider);
+
 }
