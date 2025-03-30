@@ -22,11 +22,7 @@ import com.bytebreeze.quickdrop.repository.UserRepository;
 import com.bytebreeze.quickdrop.util.AuthUtil;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -220,7 +216,13 @@ public class RiderService {
 
 	public List<Parcel> getAssignedParcelByRider(Rider rider) {
 
-		List<Parcel> parcels = parcelRepository.findByStatusAndRider(ParcelStatus.ASSIGNED, rider);
+		List<ParcelStatus> desiredStatuses = Arrays.asList(
+				ParcelStatus.ASSIGNED,
+				ParcelStatus.PICKED_UP,
+				ParcelStatus.IN_TRANSIT
+		);
+
+		List<Parcel> parcels = parcelRepository.findByStatusInAndRider(desiredStatuses, rider);
 
 		log.info(
 				"Found {} available assigned parcels with status: Assigned and rider email {}",
