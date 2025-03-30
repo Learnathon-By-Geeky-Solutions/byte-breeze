@@ -137,9 +137,9 @@ public class ParcelService {
 		ParcelStatus currentStatus = parcel.getStatus();
 
 		// Validate status transition
-//		if (!isValidStatusTransition(currentStatus, status)) {
-//			throw new IllegalStateException("Invalid status transition from " + currentStatus + " to " + status);
-//		}
+		if (!isValidStatusTransition(currentStatus, status)) {
+			throw new IllegalStateException("Invalid status transition from " + currentStatus + " to " + status);
+		}
 
 		// Update common fields
 		parcel.setStatus(status);
@@ -155,5 +155,26 @@ public class ParcelService {
 		}
 		parcelRepository.save(parcel);
 	}
+
+
+	private boolean isValidStatusTransition(ParcelStatus current, ParcelStatus next) {
+		// Define your valid status transitions
+		if (current == next) return false;
+
+		switch (current) {
+			case ASSIGNED:
+				return next == PICKED_UP || next == POSTPONED;
+			case PICKED_UP:
+				return next == IN_TRANSIT || next == DELIVERED || next == POSTPONED;
+			case IN_TRANSIT:
+				return next == DELIVERED || next == POSTPONED;
+			case POSTPONED:
+				return next == PICKED_UP || next == ASSIGNED;
+			default:
+				return false;
+		}
+	}
+
+
 
 }
