@@ -25,18 +25,21 @@ public class ParcelService {
 	private final RiderRepository riderRepository;
 	private final ParcelRepository parcelRepository;
 	private final PaymentRepository paymentRepository;
+	private final RiderService riderService;
 
 	public ParcelService(
 			ProductCategoryRepository productCategoryRepository,
 			UserRepository userRepository,
 			RiderRepository riderRepository,
 			ParcelRepository parcelRepository,
-			PaymentRepository paymentRepository) {
+			PaymentRepository paymentRepository,
+			RiderService riderService) {
 		this.productCategoryRepository = productCategoryRepository;
 		this.userRepository = userRepository;
 		this.riderRepository = riderRepository;
 		this.parcelRepository = parcelRepository;
 		this.paymentRepository = paymentRepository;
+		this.riderService = riderService;
 	}
 
 	public Parcel bookParcel(ParcelBookingRequestDTO parcelBookingRequestDTO) {
@@ -211,5 +214,11 @@ public class ParcelService {
 		cost += deliveryCharge;
 
 		return cost;
+	}
+
+	public List<Parcel> getRelatedParcelListOfCurrentRider() {
+
+		Rider rider = riderService.getAuthenticatedRider();
+		return parcelRepository.findByRider(rider);
 	}
 }
