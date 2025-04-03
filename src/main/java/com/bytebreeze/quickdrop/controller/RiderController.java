@@ -209,4 +209,9 @@ public class RiderController {
 
 		return "redirect:/rider/current-parcels";
 	}
+
+	@GetMapping("/parcels/history")
+	public String showParcelHistory(Model model) {
+		return "rider/view-history";
+	}
 }
