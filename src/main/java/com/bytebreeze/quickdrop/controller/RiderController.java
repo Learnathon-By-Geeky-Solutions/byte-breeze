@@ -158,7 +158,7 @@ public class RiderController {
 
 			try {
 
-                // A parcel is assigned to a rider with ASSIGNED, PICKED-UP, and IN_TRANSIT status
+				// A parcel is assigned to a rider with ASSIGNED, PICKED-UP, and IN_TRANSIT status
 				List<Parcel> parcels = riderService.getAssignedParcelByRider(rider);
 				if (parcels != null) {
 					// log.info("Get assigned parcel by rider: {}", parcels.getCategory());
@@ -193,11 +193,12 @@ public class RiderController {
 		return "redirect:/rider/current-parcels";
 	}
 
-	@PostMapping ("parcels/{parcelId}/update-status")
-	public String updateAssignedParcelStatus(@PathVariable UUID parcelId,
-											 @RequestParam ParcelStatus status,
-											 RedirectAttributes redirectAttributes,
-											 Model model) {
+	@PostMapping("parcels/{parcelId}/update-status")
+	public String updateAssignedParcelStatus(
+			@PathVariable UUID parcelId,
+			@RequestParam ParcelStatus status,
+			RedirectAttributes redirectAttributes,
+			Model model) {
 
 		try {
 			parcelService.updateParcelStatus(parcelId, status);
@@ -207,8 +208,5 @@ public class RiderController {
 		}
 
 		return "redirect:/rider/current-parcels";
-
 	}
-
-
 }

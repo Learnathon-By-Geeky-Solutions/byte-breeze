@@ -1,5 +1,7 @@
 package com.bytebreeze.quickdrop.service;
 
+import static com.bytebreeze.quickdrop.enums.ParcelStatus.*;
+
 import com.bytebreeze.quickdrop.dto.request.CalculateShippingCostRequestDto;
 import com.bytebreeze.quickdrop.dto.request.ParcelBookingRequestDTO;
 import com.bytebreeze.quickdrop.enums.ParcelStatus;
@@ -7,17 +9,14 @@ import com.bytebreeze.quickdrop.enums.PaymentStatus;
 import com.bytebreeze.quickdrop.model.*;
 import com.bytebreeze.quickdrop.repository.*;
 import com.bytebreeze.quickdrop.util.AuthUtil;
+import jakarta.transaction.Transactional;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
-
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-
-import static com.bytebreeze.quickdrop.enums.ParcelStatus.*;
 
 @Service
 public class ParcelService {
@@ -28,14 +27,15 @@ public class ParcelService {
 	private final PaymentRepository paymentRepository;
 
 	public ParcelService(
-            ProductCategoryRepository productCategoryRepository,
-            UserRepository userRepository, RiderRepository riderRepository,
-            ParcelRepository parcelRepository,
-            PaymentRepository paymentRepository) {
+			ProductCategoryRepository productCategoryRepository,
+			UserRepository userRepository,
+			RiderRepository riderRepository,
+			ParcelRepository parcelRepository,
+			PaymentRepository paymentRepository) {
 		this.productCategoryRepository = productCategoryRepository;
 		this.userRepository = userRepository;
-        this.riderRepository = riderRepository;
-        this.parcelRepository = parcelRepository;
+		this.riderRepository = riderRepository;
+		this.parcelRepository = parcelRepository;
 		this.paymentRepository = paymentRepository;
 	}
 
@@ -128,8 +128,7 @@ public class ParcelService {
 	}
 
 	public Parcel getParcelById(UUID id) {
-		return parcelRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Parcel not found"));
+		return parcelRepository.findById(id).orElseThrow(() -> new RuntimeException("Parcel not found"));
 	}
 
 	@Transactional
@@ -156,7 +155,6 @@ public class ParcelService {
 		}
 		parcelRepository.save(parcel);
 	}
-
 
 	private boolean isValidStatusTransition(ParcelStatus current, ParcelStatus next) {
 		// Define your valid status transitions
@@ -198,11 +196,9 @@ public class ParcelService {
 		}
 
 		// Industry-standard best practices
-		System.out.println("Parcel " + parcel.getTrackingId() + " delivered at " + deliveryTime +
-				". Earnings $" + parcel.getPrice() + " added to rider " + rider.getId());
+		System.out.println("Parcel " + parcel.getTrackingId() + " delivered at " + deliveryTime + ". Earnings $"
+				+ parcel.getPrice() + " added to rider " + rider.getId());
 	}
-
-
 
 	public double calculateShippingCost(CalculateShippingCostRequestDto calculateShippingCostRequestDto) {
 		// definining factor - we will make it dynamic in future
@@ -216,5 +212,4 @@ public class ParcelService {
 
 		return cost;
 	}
-
 }
