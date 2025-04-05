@@ -6,6 +6,7 @@ import com.bytebreeze.quickdrop.dto.response.RiderViewCurrentParcelsResponseDTO;
 import com.bytebreeze.quickdrop.enums.ParcelStatus;
 import com.bytebreeze.quickdrop.model.Parcel;
 import com.bytebreeze.quickdrop.model.Rider;
+import com.bytebreeze.quickdrop.repository.ParcelRepository;
 import com.bytebreeze.quickdrop.service.ParcelService;
 import com.bytebreeze.quickdrop.service.RiderService;
 import jakarta.validation.Valid;
@@ -28,6 +29,7 @@ public class RiderController {
 
 	private final RiderService riderService;
 	private final ParcelService parcelService;
+	private final ParcelRepository parcelRepository;
 
 	@GetMapping("/login")
 	public String riderLogin(Model model) {
@@ -158,10 +160,9 @@ public class RiderController {
 
 			try {
 
-                // A parcel is assigned to a rider with ASSIGNED, PICKED-UP, and IN_TRANSIT status
+				// A parcel is assigned to a rider with ASSIGNED, PICKED-UP, and IN_TRANSIT status
 				List<Parcel> parcels = riderService.getAssignedParcelByRider(rider);
 				if (parcels != null) {
-					// log.info("Get assigned parcel by rider: {}", parcels.getCategory());
 					model.addAttribute("parcels", parcels);
 				} else {
 					model.addAttribute("error", "No parcel assigned despite rider being marked as assigned");
@@ -193,11 +194,12 @@ public class RiderController {
 		return "redirect:/rider/current-parcels";
 	}
 
-	@PostMapping ("parcels/{parcelId}/update-status")
-	public String updateAssignedParcelStatus(@PathVariable UUID parcelId,
-											 @RequestParam ParcelStatus status,
-											 RedirectAttributes redirectAttributes,
-											 Model model) {
+	@PostMapping("parcels/{parcelId}/update-status")
+	public String updateAssignedParcelStatus(
+			@PathVariable UUID parcelId,
+			@RequestParam ParcelStatus status,
+			RedirectAttributes redirectAttributes,
+			Model model) {
 
 		try {
 			parcelService.updateParcelStatus(parcelId, status);
@@ -207,8 +209,12 @@ public class RiderController {
 		}
 
 		return "redirect:/rider/current-parcels";
-
 	}
 
-
+	@GetMapping("/parcels/history")
+	public String showParcelHistory(Model model) {
+		List<Parcel> parcelList = parcelService.getRelatedParcelListOfCurrentRider();
+		model.addAttribute("parcels", parcelList);
+		return "rider/view-history";
+	}
 }

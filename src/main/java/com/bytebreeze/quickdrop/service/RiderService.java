@@ -216,11 +216,8 @@ public class RiderService {
 
 	public List<Parcel> getAssignedParcelByRider(Rider rider) {
 
-		List<ParcelStatus> desiredStatuses = Arrays.asList(
-				ParcelStatus.ASSIGNED,
-				ParcelStatus.PICKED_UP,
-				ParcelStatus.IN_TRANSIT
-		);
+		List<ParcelStatus> desiredStatuses =
+				Arrays.asList(ParcelStatus.ASSIGNED, ParcelStatus.PICKED_UP, ParcelStatus.IN_TRANSIT);
 
 		List<Parcel> parcels = parcelRepository.findByStatusInAndRider(desiredStatuses, rider);
 
