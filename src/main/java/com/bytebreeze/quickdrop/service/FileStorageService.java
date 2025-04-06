@@ -61,6 +61,9 @@ public class FileStorageService {
 	}
 
 	private String sanitizeFileName(String fileName) {
+		if (fileName == null) {
+			throw new IllegalArgumentException("Filename cannot be null");
+		}
 		return fileName.replaceAll("[^a-zA-Z0-9\\.\\-]", "_");
 	}
 
