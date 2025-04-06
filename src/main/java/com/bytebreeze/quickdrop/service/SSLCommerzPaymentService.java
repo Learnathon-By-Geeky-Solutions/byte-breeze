@@ -236,6 +236,7 @@ public class SSLCommerzPaymentService implements PaymentService {
 		}
 	}
 
+	@SuppressWarnings("squid:S4790")
 	private String md5(String s) throws UnsupportedEncodingException, NoSuchAlgorithmException {
 		byte[] bytesOfMessage = s.getBytes("UTF-8");
 		MessageDigest md = MessageDigest.getInstance("MD5");
