@@ -61,7 +61,7 @@ public class SecurityConfig {
 						.clearAuthentication(true))
 				.csrf(
 						csrf -> csrf.csrfTokenRepository(
-								CookieCsrfTokenRepository.withHttpOnlyFalse()) // Use cookie-based CSRF token repository
+								new CookieCsrfTokenRepository()) // Use cookie-based CSRF token repository
 						);
 
 		return http.build();
@@ -98,7 +98,7 @@ public class SecurityConfig {
 						.clearAuthentication(true))
 				.csrf(
 						csrf -> csrf.csrfTokenRepository(
-								CookieCsrfTokenRepository.withHttpOnlyFalse()) // Use cookie-based CSRF token repository
+								new CookieCsrfTokenRepository()) // Use cookie-based CSRF token repository
 						);
 		return http.build();
 	}
@@ -133,7 +133,7 @@ public class SecurityConfig {
 						.clearAuthentication(true))
 				.csrf(
 						csrf -> csrf.csrfTokenRepository(
-								CookieCsrfTokenRepository.withHttpOnlyFalse()) // Use cookie-based CSRF token repository
+								new CookieCsrfTokenRepository()) // Use cookie-based CSRF token repository
 						);
 
 		return http.build();
