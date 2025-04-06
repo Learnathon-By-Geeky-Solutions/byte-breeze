@@ -1,6 +1,5 @@
 package com.bytebreeze.quickdrop.controller;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -38,7 +37,6 @@ public class FileController {
 			Resource resource = new UrlResource(filePath.toUri());
 
 			if (!resource.exists() || !resource.isReadable()) {
-				logger.warning("File not found: " + filename);
 				return ResponseEntity.notFound().build();
 			}
 
@@ -52,9 +50,6 @@ public class FileController {
 		} catch (MalformedURLException e) {
 			logger.severe("Malformed file URL: " + e.getMessage());
 			return ResponseEntity.badRequest().build();
-		} catch (IOException e) {
-			logger.severe("I/O error while accessing file: " + e.getMessage());
-			return ResponseEntity.internalServerError().build();
 		}
 	}
 }
