@@ -21,7 +21,7 @@ public class FileStorageService {
 	@Value("${storage.local.path}")
 	private String localUploadPath;
 
-	private static final long MAX_FILE_SIZE = 5 * 1024 * 1024;
+	private static final long MAX_FILE_SIZE = (long) 5 * 1024 * 1024;
 
 	// Allowed file extensions
 	private static final List<String> ALLOWED_EXTENSIONS = Arrays.asList("jpg", "jpeg", "png", "pdf");
