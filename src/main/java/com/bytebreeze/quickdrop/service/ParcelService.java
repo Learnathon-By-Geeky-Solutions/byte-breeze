@@ -14,7 +14,6 @@ import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 
@@ -81,7 +80,7 @@ public class ParcelService {
 	}
 
 	public String generateTransactionId() {
-		SecureRandom RANDOM = new SecureRandom();
+		SecureRandom random = new SecureRandom();
 		final String ALPHANUMERIC = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 		String timePart = Long.toString(System.currentTimeMillis(), 36);
@@ -89,7 +88,7 @@ public class ParcelService {
 		StringBuilder randomPart = new StringBuilder(remainingLength);
 
 		for (int i = 0; i < remainingLength; i++) {
-			randomPart.append(ALPHANUMERIC.charAt(RANDOM.nextInt(ALPHANUMERIC.length())));
+			randomPart.append(ALPHANUMERIC.charAt(random.nextInt(ALPHANUMERIC.length())));
 		}
 
 		return timePart + randomPart.toString();
@@ -116,7 +115,7 @@ public class ParcelService {
 
 	public String generateUniqueTrackingId() {
 		String trackingId;
-		Random random = new Random();
+		SecureRandom random = new SecureRandom();
 		do {
 			trackingId = String.format("%06d", random.nextInt(900000) + 100000);
 		} while (parcelRepository.existsByTrackingId(trackingId));
@@ -197,10 +196,6 @@ public class ParcelService {
 		} else {
 			throw new IllegalStateException("Assigned rider is not a Rider instance for parcel ID: " + parcel.getId());
 		}
-
-		// Industry-standard best practices
-		System.out.println("Parcel " + parcel.getTrackingId() + " delivered at " + deliveryTime + ". Earnings $"
-				+ parcel.getPrice() + " added to rider " + rider.getId());
 	}
 
 	public double calculateShippingCost(CalculateShippingCostRequestDto calculateShippingCostRequestDto) {
