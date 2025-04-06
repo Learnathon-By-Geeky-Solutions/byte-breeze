@@ -21,7 +21,7 @@ public class FileStorageService {
 	@Value("${storage.local.path}")
 	private String localUploadPath;
 
-	private static final long MAX_FILE_SIZE = 5 * 1024 * 1024;
+	private static final long MAX_FILE_SIZE = (long) 5 * 1024 * 1024;
 
 	// Allowed file extensions
 	private static final List<String> ALLOWED_EXTENSIONS = Arrays.asList("jpg", "jpeg", "png", "pdf");
@@ -61,6 +61,9 @@ public class FileStorageService {
 	}
 
 	private String sanitizeFileName(String fileName) {
+		if (fileName == null) {
+			throw new IllegalArgumentException("Filename cannot be null");
+		}
 		return fileName.replaceAll("[^a-zA-Z0-9\\.\\-]", "_");
 	}
 
