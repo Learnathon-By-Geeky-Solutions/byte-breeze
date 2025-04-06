@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ParcelService {
+	private final SecureRandom random = new SecureRandom();
 	private final ProductCategoryRepository productCategoryRepository;
 	private final UserRepository userRepository;
 	private final RiderRepository riderRepository;
@@ -80,7 +81,6 @@ public class ParcelService {
 	}
 
 	public String generateTransactionId() {
-		SecureRandom random = new SecureRandom();
 		final String ALPHANUMERIC = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 		String timePart = Long.toString(System.currentTimeMillis(), 36);
@@ -88,7 +88,7 @@ public class ParcelService {
 		StringBuilder randomPart = new StringBuilder(remainingLength);
 
 		for (int i = 0; i < remainingLength; i++) {
-			randomPart.append(ALPHANUMERIC.charAt(random.nextInt(ALPHANUMERIC.length())));
+			randomPart.append(ALPHANUMERIC.charAt(this.random.nextInt(ALPHANUMERIC.length())));
 		}
 
 		return timePart + randomPart.toString();
@@ -115,9 +115,8 @@ public class ParcelService {
 
 	public String generateUniqueTrackingId() {
 		String trackingId;
-		SecureRandom random = new SecureRandom();
 		do {
-			trackingId = String.format("%06d", random.nextInt(900000) + 100000);
+			trackingId = String.format("%06d", this.random.nextInt(900000) + 100000);
 		} while (parcelRepository.existsByTrackingId(trackingId));
 		return trackingId;
 	}
