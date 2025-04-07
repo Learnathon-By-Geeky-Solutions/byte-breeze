@@ -1,5 +1,6 @@
 package com.bytebreeze.quickdrop.service;
 
+import com.bytebreeze.quickdrop.exception.custom.FileStorageException;
 import com.bytebreeze.quickdrop.exception.custom.FileValidationException;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -48,12 +49,8 @@ public class FileStorageService {
 			throw new FileValidationException("Unsupported file extension: " + extension);
 		}
 
-		String mimeType;
-		try {
-			mimeType = Files.probeContentType(Paths.get(originalFileName));
-		} catch (IOException e) {
-			throw new FileValidationException("Could not determine file type");
-		}
+		// Get MIME type directly from the MultipartFile
+		String mimeType = file.getContentType();
 
 		if (mimeType == null || !ALLOWED_MIME_TYPES.contains(mimeType)) {
 			throw new FileValidationException("Invalid file type: " + mimeType);
@@ -83,7 +80,7 @@ public class FileStorageService {
 
 		} catch (IOException e) {
 
-			throw new RuntimeException("Failed to store file locally", e);
+			throw new FileStorageException("Failed to store file locally", e);
 		}
 	}
 }
