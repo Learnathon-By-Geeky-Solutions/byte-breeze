@@ -38,7 +38,6 @@ public class RiderService {
 	private final ParcelRepository parcelRepository;
 	private final UserRepository userRepository;
 
-	// private final OnboardRiderMapper onboardRiderMapper;
 	private final FileStorageService fileStorageService;
 
 	private final PasswordEncoder passwordEncoder;
@@ -79,11 +78,9 @@ public class RiderService {
 			throw new AlreadyExistsException("Provided email already registered");
 		}
 
-		Rider rider = new Rider();
-
 		dto.setPassword(passwordEncoder.encode(dto.getPassword()));
 
-		rider = registerRiderMapper.toEntity(dto);
+		Rider rider = registerRiderMapper.toEntity(dto);
 		if (rider.getRoles() == null || rider.getRoles().isEmpty()) {
 			rider.setRoles(new HashSet<>(Collections.singletonList(Role.ROLE_RIDER)));
 		}
@@ -93,8 +90,6 @@ public class RiderService {
 	public Rider onboardRider(UUID riderId, RiderOnboardingDTO riderOnboardingDTO) {
 
 		Rider rider = findByRiderId(riderId);
-
-		// rider = onboardRiderMapper.toEntity(riderOnboardingDTO);
 
 		// Checking that given NID No. is previously taken or not.?
 		if (riderRepository
