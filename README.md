@@ -1,5 +1,19 @@
 # byte-breeze
+
 ### Live Link: https://quickdrop-q0q3.onrender.com/
+```
+CUSTOMER PORTAL
+================
+https://quickdrop-q0q3.onrender.com/auth/login
+Email: user2@gmail.com
+Password: @Padma&1953
+
+RIDER PORTAL
+================
+https://quickdrop-q0q3.onrender.com/rider/login
+Email: amirider@gmail.com
+Password: @Amirider&1953
+```
 
 ## Team Members
 - [suvashsumon](https://github.com/suvashsumon) (Team Leader)
