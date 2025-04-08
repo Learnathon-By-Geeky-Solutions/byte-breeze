@@ -32,27 +32,27 @@ public class SSLCommerzPaymentService implements PaymentService {
 	private PaymentRepository paymentRepository;
 
 	@Value("${sslcommerz.store-id}")
-	private String storeId;
+	String storeId;
 
 	@Value("${sslcommerz.store-passwd}")
-	private String storePasswd;
+	String storePasswd;
 
 	@Value("${sslcommerz.init-url}")
-	private String paymentInitializationUrl;
+	String paymentInitializationUrl;
 
 	private String successUrl = "/sslcommerz/success";
 	private String failureUrl = "/sslcommerz/failure";
 	private String errorUrl = "/sslcommerz/cancel";
 
 	@Value("${sslcommerz.base-url}")
-	private String baseUrl;
+	String baseUrl;
 
 	private String[] keyList;
-	private String generateHash;
-	private String error;
+	String generateHash;
+	String error;
 
 	@Value("${sslcommerz.validation-url}")
-	private String sslczURL;
+	String sslczURL;
 
 	private String validationURL = "/validator/api/validationserverAPI.php";
 
@@ -193,7 +193,7 @@ public class SSLCommerzPaymentService implements PaymentService {
 		}
 	}
 
-	private Boolean ipnHashVerify(final Map<String, String> requestParameters)
+	Boolean ipnHashVerify(final Map<String, String> requestParameters)
 			throws UnsupportedEncodingException, NoSuchAlgorithmException {
 
 		// Check For verify_sign and verify_key parameters
@@ -237,7 +237,7 @@ public class SSLCommerzPaymentService implements PaymentService {
 	}
 
 	@SuppressWarnings("squid:S4790")
-	private String md5(String s) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+	String md5(String s) throws UnsupportedEncodingException, NoSuchAlgorithmException {
 		byte[] bytesOfMessage = s.getBytes("UTF-8");
 		MessageDigest md = MessageDigest.getInstance("MD5");
 		byte[] theDigest = md.digest(bytesOfMessage);
