@@ -113,7 +113,7 @@ class SSLCommerzPaymentServiceTest {
 	}
 
 	@Test
-	void testOrderValidate_Success() throws IOException, NoSuchAlgorithmException, UnsupportedEncodingException {
+	void testOrderValidate_Success() throws IOException, NoSuchAlgorithmException {
 		Map<String, String> requestParameters = new HashMap<>();
 		requestParameters.put("verify_key", "val_id,tran_id,currency_amount,currency_type");
 		requestParameters.put("val_id", "val123");
@@ -159,7 +159,7 @@ class SSLCommerzPaymentServiceTest {
 
 	@Test
 	void testOrderValidate_HashVerificationFailure()
-			throws IOException, NoSuchAlgorithmException, UnsupportedEncodingException {
+			throws IOException, NoSuchAlgorithmException {
 		Map<String, String> requestParameters = new HashMap<>();
 		requestParameters.put("verify_sign", "wrongHash");
 		requestParameters.put("verify_key", "val_id");
@@ -172,7 +172,7 @@ class SSLCommerzPaymentServiceTest {
 	}
 
 	@Test
-	void testOrderValidate_AmountMismatch() throws IOException, NoSuchAlgorithmException, UnsupportedEncodingException {
+	void testOrderValidate_AmountMismatch() throws IOException, NoSuchAlgorithmException {
 		Map<String, String> requestParameters = new HashMap<>();
 		requestParameters.put("verify_key", "val_id,tran_id,currency_amount,currency_type");
 		requestParameters.put("val_id", "val123");
