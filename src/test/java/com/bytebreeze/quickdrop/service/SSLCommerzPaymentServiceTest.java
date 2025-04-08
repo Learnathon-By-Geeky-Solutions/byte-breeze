@@ -158,8 +158,7 @@ class SSLCommerzPaymentServiceTest {
 	}
 
 	@Test
-	void testOrderValidate_HashVerificationFailure()
-			throws IOException, NoSuchAlgorithmException {
+	void testOrderValidate_HashVerificationFailure() throws IOException, NoSuchAlgorithmException {
 		Map<String, String> requestParameters = new HashMap<>();
 		requestParameters.put("verify_sign", "wrongHash");
 		requestParameters.put("verify_key", "val_id");
