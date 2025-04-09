@@ -11,15 +11,6 @@ import java.net.URLConnection;
 
 public class SSLCommerzUtil {
 
-	//    public static SSLCommerzInitResponse extractInitResponse(String response) throws IOException
-	// {
-	//        ObjectMapper mapper = new ObjectMapper();
-	//        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-	//        SSLCommerzInitResponse sslInitResponse = mapper.readValue(response,
-	// SSLCommerzInitResponse.class);
-	//        return sslInitResponse;
-	//    }
-
 	public static SSLCommerzValidatorResponse extractValidatorResponse(String response) throws IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
