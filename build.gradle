@@ -97,4 +97,18 @@ jacocoTestReport {
 		xml.required = true
 		html.required = true
 	}
+
+	afterEvaluate {
+		classDirectories.setFrom(files(classDirectories.files.collect {
+			fileTree(dir: it,
+					exclude: [
+							'**/com/bytebreeze/quickdrop/config/**',
+							'**/com/bytebreeze/quickdrop/dto/**',
+							'**/com/bytebreeze/quickdrop/enums/**',
+							'**/com/bytebreeze/quickdrop/exception/**',
+							'**/com/bytebreeze/quickdrop/mapper/**',
+							'**/com/bytebreeze/quickdrop/model/**',
+					])
+		}))
+	}
 }
