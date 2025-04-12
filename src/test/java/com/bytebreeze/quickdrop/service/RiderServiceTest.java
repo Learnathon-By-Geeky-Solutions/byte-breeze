@@ -163,13 +163,13 @@ class RiderServiceTest {
 	}
 
 	@Test
-	void CurrentParcelsForRider_success() {
+	void currentParcelsForRider_success() {
 		Parcel parcel = new Parcel();
 		parcel.setId(UUID.randomUUID());
 		parcel.setStatus(ParcelStatus.BOOKED);
 		parcel.setTrackingId("T123");
 		when(parcelRepository.findByStatusAndRiderIsNull(ParcelStatus.BOOKED)).thenReturn(List.of(parcel));
-		assertEquals(1, riderService.CurrentParcelsForRider().size());
+		assertEquals(1, riderService.currentParcelsForRider().size());
 	}
 
 	@Test

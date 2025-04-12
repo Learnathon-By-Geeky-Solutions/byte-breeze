@@ -301,14 +301,14 @@ class RiderControllerTest {
 	@Test
 	void testShowCurrentParcelsRequest_RiderNotAssigned() {
 		when(riderService.getAuthenticatedRider()).thenReturn(rider);
-		when(riderService.CurrentParcelsForRider()).thenReturn(Collections.singletonList(parcelDTO));
+		when(riderService.currentParcelsForRider()).thenReturn(Collections.singletonList(parcelDTO));
 
 		String view = riderController.showCurrentParcelsRequest(model);
 
 		assertEquals("rider/view-current-parcels", view);
 		verify(model).addAttribute("parcels", Collections.singletonList(parcelDTO));
 		verify(riderService).getAuthenticatedRider();
-		verify(riderService).CurrentParcelsForRider();
+		verify(riderService).currentParcelsForRider();
 		verifyNoInteractions(parcelService);
 	}
 
