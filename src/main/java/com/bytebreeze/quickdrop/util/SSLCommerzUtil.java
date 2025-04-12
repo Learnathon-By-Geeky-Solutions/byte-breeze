@@ -19,17 +19,17 @@ public final class SSLCommerzUtil {
 	}
 
 	public static String getByOpeningJavaUrlConnection(String stringUrl) throws IOException {
-		String output = "";
 		URL url = new URL(stringUrl);
 		URLConnection conn = url.openConnection();
 		conn.setConnectTimeout(5000);
 		conn.setReadTimeout(5000);
 		BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		StringBuilder output = new StringBuilder();
 		String outputLine;
 		while ((outputLine = br.readLine()) != null) {
-			output = output + outputLine;
+			output.append(outputLine);
 		}
 		br.close();
-		return output;
+		return output.toString();
 	}
 }
