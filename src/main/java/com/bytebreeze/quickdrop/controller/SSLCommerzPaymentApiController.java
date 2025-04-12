@@ -19,6 +19,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequestMapping("/sslcommerz")
 public class SSLCommerzPaymentApiController {
+	public static final String TRAN_ID = "tran_id";
+	public static final String INVALID_TRANSACTION_ID = "Invalid transaction ID";
+	public static final String ERROR = "error";
+	public static final String REDIRECT_USER_DASHBOARD = "redirect:/user/dashboard";
 
 	private final PaymentRepository paymentRepository;
 	private final ParcelRepository parcelRepository;
@@ -42,12 +46,12 @@ public class SSLCommerzPaymentApiController {
 			@RequestParam Map<String, String> paramMap, RedirectAttributes redirectAttributes)
 			throws IOException, NoSuchAlgorithmException {
 		// Extract transaction details
-		String transactionId = paramMap.get("tran_id");
+		String transactionId = paramMap.get(TRAN_ID);
 
 		// fetch payment information from database
 		Payment payment = paymentRepository
 				.findByTransactionId(transactionId)
-				.orElseThrow(() -> new IllegalArgumentException("Invalid transaction ID"));
+				.orElseThrow(() -> new IllegalArgumentException(INVALID_TRANSACTION_ID));
 		String marchentTransactionId = payment.getTransactionId();
 		String marchentTransactionAmount = payment.getAmount().toString();
 		String marchentTransactionCurrency = payment.getCurrency();
@@ -55,8 +59,8 @@ public class SSLCommerzPaymentApiController {
 		// Verify payment
 		if (!sslCommerzPaymentService.orderValidate(
 				marchentTransactionId, marchentTransactionAmount, marchentTransactionCurrency, paramMap)) {
-			redirectAttributes.addFlashAttribute("error", "Payment verification failed.");
-			return "redirect:/user/dashboard";
+			redirectAttributes.addFlashAttribute(ERROR, "Payment verification failed.");
+			return REDIRECT_USER_DASHBOARD;
 		}
 
 		// Update payment status
@@ -69,45 +73,45 @@ public class SSLCommerzPaymentApiController {
 		parcelRepository.save(parcel);
 
 		redirectAttributes.addFlashAttribute("success", "Parcel booked successfully. Relax and wait for the delivery.");
-		return "redirect:/user/dashboard";
+		return REDIRECT_USER_DASHBOARD;
 	}
 
 	@PostMapping("/failure")
 	public String handlePaymentFailure(
 			@RequestParam Map<String, String> paramMap, RedirectAttributes redirectAttributes) {
 		// Extract transaction details
-		String transactionId = paramMap.get("tran_id");
+		String transactionId = paramMap.get(TRAN_ID);
 
 		// fetch payment information from database
 		Payment payment = paymentRepository
 				.findByTransactionId(transactionId)
-				.orElseThrow(() -> new IllegalArgumentException("Invalid transaction ID"));
+				.orElseThrow(() -> new IllegalArgumentException(INVALID_TRANSACTION_ID));
 
 		// Update payment status
 		payment.setPaymentStatus(PaymentStatus.FAILED);
 		paymentRepository.save(payment);
 
-		redirectAttributes.addFlashAttribute("error", "Booking failed. Please try again.");
-		return "redirect:/user/dashboard";
+		redirectAttributes.addFlashAttribute(ERROR, "Booking failed. Please try again.");
+		return REDIRECT_USER_DASHBOARD;
 	}
 
 	@PostMapping("/cancel")
 	public String handlePaymentCancel(
 			@RequestParam Map<String, String> paramMap, RedirectAttributes redirectAttributes) {
 		// Extract transaction details
-		String transactionId = paramMap.get("tran_id");
+		String transactionId = paramMap.get(TRAN_ID);
 
 		// fetch payment information from database
 		Payment payment = paymentRepository
 				.findByTransactionId(transactionId)
-				.orElseThrow(() -> new IllegalArgumentException("Invalid transaction ID"));
+				.orElseThrow(() -> new IllegalArgumentException(INVALID_TRANSACTION_ID));
 
 		// Delete the booking from database along with payment information
 		UUID parcelId = payment.getParcel().getId();
 		paymentRepository.delete(payment);
 		parcelRepository.deleteById(parcelId);
 
-		redirectAttributes.addFlashAttribute("error", "Booking Canceled.");
-		return "redirect:/user/dashboard";
+		redirectAttributes.addFlashAttribute(ERROR, "Booking Canceled.");
+		return REDIRECT_USER_DASHBOARD;
 	}
 }
