@@ -9,7 +9,6 @@ import com.bytebreeze.quickdrop.util.SSLCommerzUtil;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -132,7 +131,6 @@ public class SSLCommerzPaymentService implements PaymentService {
 		}
 	}
 
-
 	public boolean orderValidate(
 			String merchantTrnxnId,
 			String merchantTrnxnAmount,
@@ -192,11 +190,10 @@ public class SSLCommerzPaymentService implements PaymentService {
 			String merchantTrnxnCurrency) {
 
 		return merchantTrnxnId.equals(resp.getTranId())
-				&& (Math.abs(Double.parseDouble(merchantTrnxnAmount)
-				- Double.parseDouble(resp.getCurrencyAmount())) < 1)
+				&& (Math.abs(Double.parseDouble(merchantTrnxnAmount) - Double.parseDouble(resp.getCurrencyAmount()))
+						< 1)
 				&& merchantTrnxnCurrency.equals(resp.getCurrencyType());
 	}
-
 
 	Boolean ipnHashVerify(final Map<String, String> requestParameters)
 			throws UnsupportedEncodingException, NoSuchAlgorithmException {

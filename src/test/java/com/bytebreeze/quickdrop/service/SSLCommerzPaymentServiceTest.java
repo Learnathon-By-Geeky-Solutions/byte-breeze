@@ -61,11 +61,11 @@ class SSLCommerzPaymentServiceTest {
 		sender.setEmail("john@example.com");
 	}
 
-	private SSLCommerzValidatorResponse createValidatorResponse(String status, String tranId, String amount, String currency) {
+	private SSLCommerzValidatorResponse createValidatorResponse(
+			String status, String tranId, String amount, String currency) {
 		return new SSLCommerzValidatorResponse(
-				status, null, tranId, null, null, null, null, null, null, null, null, null, null, null,
-				currency, amount, null, null, null, null, null, null, null, null, null
-		);
+				status, null, tranId, null, null, null, null, null, null, null, null, null, null, null, currency,
+				amount, null, null, null, null, null, null, null, null, null);
 	}
 
 	@Test
@@ -89,7 +89,6 @@ class SSLCommerzPaymentServiceTest {
 		assertFalse(result);
 	}
 
-
 	@Test
 	void testGetPaymentUrl_Success() {
 		SSLCommerzPaymentInitResponseDto responseDto = new SSLCommerzPaymentInitResponseDto();
@@ -99,8 +98,10 @@ class SSLCommerzPaymentServiceTest {
 		desc.setRedirectGatewayURL("http://redirect.url");
 		responseDto.setDesc(Collections.singletonList(desc));
 
-		ResponseEntity<SSLCommerzPaymentInitResponseDto> responseEntity = new ResponseEntity<>(responseDto, HttpStatus.OK);
-		when(restTemplate.postForEntity(anyString(), any(HttpEntity.class), eq(SSLCommerzPaymentInitResponseDto.class))).thenReturn(responseEntity);
+		ResponseEntity<SSLCommerzPaymentInitResponseDto> responseEntity =
+				new ResponseEntity<>(responseDto, HttpStatus.OK);
+		when(restTemplate.postForEntity(anyString(), any(HttpEntity.class), eq(SSLCommerzPaymentInitResponseDto.class)))
+				.thenReturn(responseEntity);
 
 		String result = paymentService.getPaymentUrl(parcelBookingRequestDTO, sender);
 		assertEquals("http://redirect.url", result);
@@ -112,10 +113,13 @@ class SSLCommerzPaymentServiceTest {
 		responseDto.setStatus("FAILED");
 		responseDto.setFailedreason("Invalid data");
 
-		ResponseEntity<SSLCommerzPaymentInitResponseDto> responseEntity = new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
-		when(restTemplate.postForEntity(anyString(), any(HttpEntity.class), eq(SSLCommerzPaymentInitResponseDto.class))).thenReturn(responseEntity);
+		ResponseEntity<SSLCommerzPaymentInitResponseDto> responseEntity =
+				new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
+		when(restTemplate.postForEntity(anyString(), any(HttpEntity.class), eq(SSLCommerzPaymentInitResponseDto.class)))
+				.thenReturn(responseEntity);
 
-		RuntimeException exception = assertThrows(RuntimeException.class, () -> paymentService.getPaymentUrl(parcelBookingRequestDTO, sender));
+		RuntimeException exception = assertThrows(
+				RuntimeException.class, () -> paymentService.getPaymentUrl(parcelBookingRequestDTO, sender));
 		assertTrue(exception.getMessage().contains("Failed to send payment request"));
 	}
 
@@ -128,11 +132,14 @@ class SSLCommerzPaymentServiceTest {
 		desc.setRedirectGatewayURL("http://redirect.url");
 		responseDto.setDesc(Collections.singletonList(desc));
 
-		ResponseEntity<SSLCommerzPaymentInitResponseDto> responseEntity = new ResponseEntity<>(responseDto, HttpStatus.OK);
-		when(restTemplate.postForEntity(anyString(), any(HttpEntity.class), eq(SSLCommerzPaymentInitResponseDto.class))).thenReturn(responseEntity);
+		ResponseEntity<SSLCommerzPaymentInitResponseDto> responseEntity =
+				new ResponseEntity<>(responseDto, HttpStatus.OK);
+		when(restTemplate.postForEntity(anyString(), any(HttpEntity.class), eq(SSLCommerzPaymentInitResponseDto.class)))
+				.thenReturn(responseEntity);
 
 		parcelBookingRequestDTO.setPaymentMethod("visa");
-		RuntimeException exception = assertThrows(RuntimeException.class, () -> paymentService.getPaymentUrl(parcelBookingRequestDTO, sender));
+		RuntimeException exception = assertThrows(
+				RuntimeException.class, () -> paymentService.getPaymentUrl(parcelBookingRequestDTO, sender));
 		assertEquals("Payment method not found", exception.getMessage());
 	}
 
