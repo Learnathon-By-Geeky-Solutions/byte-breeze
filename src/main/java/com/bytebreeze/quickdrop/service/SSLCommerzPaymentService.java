@@ -162,17 +162,15 @@ public class SSLCommerzPaymentService implements PaymentService {
 			String json = SSLCommerzUtil.getByOpeningJavaUrlConnection(validUrl);
 
 			if (!json.isEmpty()) {
-				SSLCommerzValidatorResponse resp = SSLCommerzUtil.extractValidatorResponse(
-						json); // new JavaScriptSerializer().Deserialize < SSLCommerzValidatorResponse >
-				// (json);
+				SSLCommerzValidatorResponse resp = SSLCommerzUtil.extractValidatorResponse(json);
 
-				if (resp.status.equals("VALID") || resp.status.equals("VALIDATED")) {
+				if (resp.getStatus().equals("VALID") || resp.getStatus().equals("VALIDATED")) {
 
-					if (merchantTrnxnId.equals(resp.tran_id)
+					if (merchantTrnxnId.equals(resp.getTranId())
 							&& (Math.abs(Double.parseDouble(merchantTrnxnAmount)
-											- Double.parseDouble(resp.currency_amount))
+											- Double.parseDouble(resp.getCurrencyAmount()))
 									< 1)
-							&& merchantTrnxnCurrency.equals(resp.currency_type)) {
+							&& merchantTrnxnCurrency.equals(resp.getCurrencyType())) {
 						return true;
 					} else {
 						this.error = "Currency Amount not matching";

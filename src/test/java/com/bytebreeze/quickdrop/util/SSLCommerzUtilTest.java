@@ -49,9 +49,9 @@ class SSLCommerzUtilTest {
 
 		assertNotNull(response);
 		assertEquals("VALID", response.getStatus());
-		assertEquals("2025-04-09", response.getTran_date());
-		assertEquals("12345", response.getTran_id());
-		assertEquals("67890", response.getVal_id());
+		assertEquals("2025-04-09", response.getTranDate());
+		assertEquals("12345", response.getTranId());
+		assertEquals("67890", response.getValId());
 		assertEquals("1000", response.getAmount());
 	}
 
@@ -63,8 +63,8 @@ class SSLCommerzUtilTest {
 
 		assertNotNull(response);
 		assertEquals("VALID", response.getStatus());
-		assertEquals("2025-04-09", response.getTran_date());
-		assertNull(response.getValue_a());
+		assertEquals("2025-04-09", response.getTranDate());
+		assertNull(response.getValueA());
 	}
 
 	@Test

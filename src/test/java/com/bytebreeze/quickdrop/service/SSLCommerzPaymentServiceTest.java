@@ -62,6 +62,13 @@ class SSLCommerzPaymentServiceTest {
 		sender.setEmail("john@example.com");
 	}
 
+	private SSLCommerzValidatorResponse createValidatorResponse(
+			String status, String tranId, String amount, String currency) {
+		return new SSLCommerzValidatorResponse(
+				status, null, tranId, null, null, null, null, null, null, null, null, null, null, null, currency,
+				amount, null, null, null, null, null, null, null, null, null);
+	}
+
 	@Test
 	void testGetPaymentUrl_Success() {
 		SSLCommerzPaymentInitResponseDto responseDto = new SSLCommerzPaymentInitResponseDto();
@@ -135,11 +142,7 @@ class SSLCommerzPaymentServiceTest {
 		String jsonResponse =
 				"{\"status\":\"VALID\",\"tran_id\":\"tran123\",\"currency_amount\":\"100.00\",\"currency_type\":\"BDT\"}";
 
-		SSLCommerzValidatorResponse validatorResponse = new SSLCommerzValidatorResponse();
-		validatorResponse.setStatus("VALID");
-		validatorResponse.setTran_id("tran123");
-		validatorResponse.setCurrency_amount("100.00");
-		validatorResponse.setCurrency_type("BDT");
+		SSLCommerzValidatorResponse validatorResponse = createValidatorResponse("VALID", "tran123", "100.00", "BDT");
 
 		try (MockedStatic<SSLCommerzUtil> mockedStatic = mockStatic(SSLCommerzUtil.class)) {
 			mockedStatic
@@ -193,11 +196,7 @@ class SSLCommerzPaymentServiceTest {
 		String jsonResponse =
 				"{\"status\":\"VALID\",\"tran_id\":\"tran123\",\"currency_amount\":\"200.00\",\"currency_type\":\"BDT\"}";
 
-		SSLCommerzValidatorResponse validatorResponse = new SSLCommerzValidatorResponse();
-		validatorResponse.setStatus("VALID");
-		validatorResponse.setTran_id("tran123");
-		validatorResponse.setCurrency_amount("200.00");
-		validatorResponse.setCurrency_type("BDT");
+		SSLCommerzValidatorResponse validatorResponse = createValidatorResponse("VALID", "tran123", "200.00", "BDT");
 
 		try (MockedStatic<SSLCommerzUtil> mockedStatic = mockStatic(SSLCommerzUtil.class)) {
 			mockedStatic
