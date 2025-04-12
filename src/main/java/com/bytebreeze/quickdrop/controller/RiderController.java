@@ -12,7 +12,6 @@ import com.bytebreeze.quickdrop.service.RiderService;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -26,6 +25,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/rider")
 @RequiredArgsConstructor
 public class RiderController {
+
+	public static final String RIDER_REGISTERTION_URL = "auth/rider-register";
+	public static final String ERROR = "error";
+	public static final String SUCCESS = "success";
+	public static final String REDIRECT_RIDER_ONBOARDING = "redirect:/rider/onboarding/";
+	public static final String ERROR_MESSAGE = "errorMessage";
+	public static final String RIDER_ONBOARDING_DTO = "riderOnboardingDTO";
+	public static final String PARCELS = "parcels";
 
 	private final RiderService riderService;
 	private final ParcelService parcelService;
@@ -46,7 +53,7 @@ public class RiderController {
 	@GetMapping("/register")
 	public String showRegistrationForm(Model model) {
 		model.addAttribute("riderRegistrationRequestDTO", new RiderRegistrationRequestDTO());
-		return "auth/rider-register";
+		return RIDER_REGISTERTION_URL;
 	}
 
 	@PostMapping("/register")
@@ -57,28 +64,28 @@ public class RiderController {
 			Model model,
 			RedirectAttributes redirectAttributes) {
 		if (bindingResult.hasErrors()) {
-			model.addAttribute("error");
+			model.addAttribute(ERROR);
 
 			// Collect all validation error messages
 			List<String> errorMessages = bindingResult.getAllErrors().stream()
 					.map(error -> error.getDefaultMessage()) // Get default messages from dto
-					.collect(Collectors.toList());
+					.toList();
 
 			// Add error messages to the model
 			model.addAttribute("validationErrors", errorMessages);
 
-			return "auth/rider-register";
+			return RIDER_REGISTERTION_URL;
 		}
 
 		try {
 			Rider savedRider = riderService.registerRider(riderRegistrationRequestDTO);
 
-			redirectAttributes.addFlashAttribute("success", "Rider Registration Successful"); // Add flash attribute
-			return "redirect:/rider/onboarding/" + savedRider.getId();
+			redirectAttributes.addFlashAttribute(SUCCESS, "Rider Registration Successful"); // Add flash attribute
+			return REDIRECT_RIDER_ONBOARDING + savedRider.getId();
 
 		} catch (Exception e) {
-			model.addAttribute("errorMessage", e.getMessage());
-			return "auth/rider-register";
+			model.addAttribute(ERROR_MESSAGE, e.getMessage());
+			return RIDER_REGISTERTION_URL;
 		}
 	}
 
@@ -92,57 +99,56 @@ public class RiderController {
 			model.addAttribute("rider", rider);
 
 			// Check that previous any page redirect the DTO or Not, if not, then add new dto.
-			if (!model.containsAttribute("riderOnboardingDTO")) {
-				model.addAttribute("riderOnboardingDTO", new RiderOnboardingDTO()); // Initialize if missing
+			if (!model.containsAttribute(RIDER_ONBOARDING_DTO)) {
+				model.addAttribute(RIDER_ONBOARDING_DTO, new RiderOnboardingDTO()); // Initialize if missing
 			}
-			// model.addAttribute("riderOnboardingDTO", new RiderOnboardingDTO());
 			return "rider/onboarding";
 
 		} catch (Exception e) {
-			model.addAttribute("errorMessage", e.getMessage());
-			return "auth/rider-register";
+			model.addAttribute(ERROR_MESSAGE, e.getMessage());
+			return RIDER_REGISTERTION_URL;
 		}
 	}
 
 	@PostMapping("/onboarding")
 	public String submitRiderOnboardingForm(
 			@RequestParam("riderId") UUID riderId,
-			@Valid @ModelAttribute("riderOnboardingDTO") RiderOnboardingDTO riderOnboardingDTO,
+			@Valid @ModelAttribute(RIDER_ONBOARDING_DTO) RiderOnboardingDTO riderOnboardingDTO,
 			BindingResult bindingResult,
 			Model model,
 			RedirectAttributes redirectAttributes) {
 
 		if (bindingResult.hasErrors()) {
-			model.addAttribute("error");
+			model.addAttribute(ERROR);
 
 			// Collect all validation error messages
 			List<String> errorMessages = bindingResult.getAllErrors().stream()
 					.map(error -> error.getDefaultMessage()) // Get default messages from dto
-					.collect(Collectors.toList());
+					.toList();
 
 			// Add error messages to the model
 			redirectAttributes.addFlashAttribute("validationErrors", errorMessages);
 
 			// Return the DTO as FlashAttribute to next redirect get req. to retain the previous entered
 			// data in field.
-			redirectAttributes.addFlashAttribute("riderOnboardingDTO", riderOnboardingDTO);
+			redirectAttributes.addFlashAttribute(RIDER_ONBOARDING_DTO, riderOnboardingDTO);
 
-			return "redirect:/rider/onboarding/" + riderId;
+			return REDIRECT_RIDER_ONBOARDING + riderId;
 		}
 		try {
 			riderService.onboardRider(riderId, riderOnboardingDTO);
 
-			redirectAttributes.addFlashAttribute("success", "Rider Onboarded successfully. Verification Pending.");
+			redirectAttributes.addFlashAttribute(SUCCESS, "Rider Onboarded successfully. Verification Pending.");
 
 			return "redirect:/rider/login";
 		} catch (Exception e) {
-			redirectAttributes.addFlashAttribute("errorMessage", "Onboarding failed: " + e.getMessage());
+			redirectAttributes.addFlashAttribute(ERROR_MESSAGE, "Onboarding failed: " + e.getMessage());
 
 			// Return the DTO as FlashAttribute to next redirect get req. to retain the previous entered
 			// data in field.
-			redirectAttributes.addFlashAttribute("riderOnboardingDTO", riderOnboardingDTO);
+			redirectAttributes.addFlashAttribute(RIDER_ONBOARDING_DTO, riderOnboardingDTO);
 
-			return "redirect:/rider/onboarding/" + riderId;
+			return REDIRECT_RIDER_ONBOARDING + riderId;
 		}
 	}
 
@@ -163,19 +169,19 @@ public class RiderController {
 				// A parcel is assigned to a rider with ASSIGNED, PICKED-UP, and IN_TRANSIT status
 				List<Parcel> parcels = riderService.getAssignedParcelByRider(rider);
 				if (parcels != null) {
-					model.addAttribute("parcels", parcels);
+					model.addAttribute(PARCELS, parcels);
 				} else {
-					model.addAttribute("error", "No parcel assigned despite rider being marked as assigned");
+					model.addAttribute(ERROR, "No parcel assigned despite rider being marked as assigned");
 				}
 
 			} catch (Exception e) {
-				model.addAttribute("error", "Failed to load parcel : " + e.getMessage());
+				model.addAttribute(ERROR, "Failed to load parcel : " + e.getMessage());
 			}
 			return "rider/view-assigned-parcels";
 		} else {
 
 			List<RiderViewCurrentParcelsResponseDTO> currentParcels = riderService.CurrentParcelsForRider();
-			model.addAttribute("parcels", currentParcels);
+			model.addAttribute(PARCELS, currentParcels);
 
 			return "rider/view-current-parcels";
 		}
@@ -186,9 +192,9 @@ public class RiderController {
 
 		try {
 			riderService.acceptParcelDelivery(parcelId);
-			redirectAttributes.addFlashAttribute("success", "Parcel accepted successfully!");
+			redirectAttributes.addFlashAttribute(SUCCESS, "Parcel accepted successfully!");
 		} catch (Exception e) {
-			redirectAttributes.addFlashAttribute("error", "Failed to accept parcel: " + e.getMessage());
+			redirectAttributes.addFlashAttribute(ERROR, "Failed to accept parcel: " + e.getMessage());
 		}
 
 		return "redirect:/rider/current-parcels";
@@ -203,9 +209,9 @@ public class RiderController {
 
 		try {
 			parcelService.updateParcelStatus(parcelId, status);
-			redirectAttributes.addFlashAttribute("success", "Parcel status updated successfully!");
+			redirectAttributes.addFlashAttribute(SUCCESS, "Parcel status updated successfully!");
 		} catch (Exception e) {
-			redirectAttributes.addFlashAttribute("error", "Failed to update status." + e.getMessage());
+			redirectAttributes.addFlashAttribute(ERROR, "Failed to update status." + e.getMessage());
 		}
 
 		return "redirect:/rider/current-parcels";
@@ -214,7 +220,7 @@ public class RiderController {
 	@GetMapping("/parcels/history")
 	public String showParcelHistory(Model model) {
 		List<Parcel> parcelList = parcelService.getRelatedParcelListOfCurrentRider();
-		model.addAttribute("parcels", parcelList);
+		model.addAttribute(PARCELS, parcelList);
 		return "rider/view-history";
 	}
 }
