@@ -3,13 +3,14 @@ package com.bytebreeze.quickdrop.service;
 import com.bytebreeze.quickdrop.dto.paymentapiresponse.SSLCommerzPaymentInitResponseDto;
 import com.bytebreeze.quickdrop.dto.paymentapiresponse.SSLCommerzValidatorResponse;
 import com.bytebreeze.quickdrop.dto.request.ParcelBookingRequestDTO;
+import com.bytebreeze.quickdrop.exception.custom.SSLCommerzPaymentInitializationException;
 import com.bytebreeze.quickdrop.model.User;
-import com.bytebreeze.quickdrop.repository.PaymentRepository;
 import com.bytebreeze.quickdrop.util.SSLCommerzUtil;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -28,8 +29,8 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public class SSLCommerzPaymentService implements PaymentService {
+	private static final String UTF_8 = "UTF-8";
 	private RestTemplate restTemplate;
-	private PaymentRepository paymentRepository;
 
 	@Value("${sslcommerz.store-id}")
 	String storeId;
@@ -47,7 +48,6 @@ public class SSLCommerzPaymentService implements PaymentService {
 	@Value("${sslcommerz.base-url}")
 	String baseUrl;
 
-	private String[] keyList;
 	String generateHash;
 	String error;
 
@@ -56,9 +56,8 @@ public class SSLCommerzPaymentService implements PaymentService {
 
 	private String validationURL = "/validator/api/validationserverAPI.php";
 
-	public SSLCommerzPaymentService(RestTemplate restTemplate, PaymentRepository paymentRepository) {
+	public SSLCommerzPaymentService(RestTemplate restTemplate) {
 		this.restTemplate = restTemplate;
-		this.paymentRepository = paymentRepository;
 	}
 
 	private String extractRedirectUrl(
@@ -129,9 +128,10 @@ public class SSLCommerzPaymentService implements PaymentService {
 			HashMap<Object, Object> errorBody = new HashMap<>();
 			errorBody.put("error", "Failed to send payment request");
 			errorBody.put("details", responseEntity.getBody());
-			throw new RuntimeException(errorBody.toString());
+			throw new SSLCommerzPaymentInitializationException(errorBody.toString());
 		}
 	}
+
 
 	public boolean orderValidate(
 			String merchantTrnxnId,
@@ -139,71 +139,78 @@ public class SSLCommerzPaymentService implements PaymentService {
 			String merchantTrnxnCurrency,
 			Map<String, String> requestParameters)
 			throws IOException, NoSuchAlgorithmException {
-		boolean hash_verified = this.ipnHashVerify(requestParameters);
-		if (hash_verified) {
 
-			String EncodedValID = URLEncoder.encode(
-					requestParameters.get("val_id"), Charset.forName("UTF-8").displayName());
-			String EncodedStoreID =
-					URLEncoder.encode(this.storeId, Charset.forName("UTF-8").displayName());
-			String EncodedStorePassword =
-					URLEncoder.encode(this.storePasswd, Charset.forName("UTF-8").displayName());
-
-			// GET Request
-			String validUrl = this.sslczURL
-					+ this.validationURL
-					+ "?val_id="
-					+ EncodedValID
-					+ "&store_id="
-					+ EncodedStoreID
-					+ "&store_passwd="
-					+ EncodedStorePassword
-					+ "&v=1&format=json";
-			String json = SSLCommerzUtil.getByOpeningJavaUrlConnection(validUrl);
-
-			if (!json.isEmpty()) {
-				SSLCommerzValidatorResponse resp = SSLCommerzUtil.extractValidatorResponse(json);
-
-				if (resp.getStatus().equals("VALID") || resp.getStatus().equals("VALIDATED")) {
-
-					if (merchantTrnxnId.equals(resp.getTranId())
-							&& (Math.abs(Double.parseDouble(merchantTrnxnAmount)
-											- Double.parseDouble(resp.getCurrencyAmount()))
-									< 1)
-							&& merchantTrnxnCurrency.equals(resp.getCurrencyType())) {
-						return true;
-					} else {
-						this.error = "Currency Amount not matching";
-						return false;
-					}
-
-				} else {
-					this.error = "This transaction is either expired or failed";
-					return false;
-				}
-			} else {
-				this.error = "Unable to get Transaction JSON status";
-				return false;
-			}
-		} else {
+		if (Boolean.FALSE.equals(ipnHashVerify(requestParameters))) {
 			this.error = "Unable to verify hash";
+			return false;
+		}
+
+		String validUrl = buildValidationUrl(requestParameters);
+		String json = SSLCommerzUtil.getByOpeningJavaUrlConnection(validUrl);
+
+		if (json.isEmpty()) {
+			this.error = "Unable to get Transaction JSON status";
+			return false;
+		}
+
+		SSLCommerzValidatorResponse resp = SSLCommerzUtil.extractValidatorResponse(json);
+		if (!isStatusValid(resp)) {
+			this.error = "This transaction is either expired or failed";
+			return false;
+		}
+
+		if (isTransactionMatching(resp, merchantTrnxnId, merchantTrnxnAmount, merchantTrnxnCurrency)) {
+			return true;
+		} else {
+			this.error = "Currency Amount not matching";
 			return false;
 		}
 	}
 
+	private String buildValidationUrl(Map<String, String> params) {
+		String encodedValID = URLEncoder.encode(params.get("val_id"), StandardCharsets.UTF_8);
+		String encodedStoreID = URLEncoder.encode(this.storeId, StandardCharsets.UTF_8);
+		String encodedStorePassword = URLEncoder.encode(this.storePasswd, StandardCharsets.UTF_8);
+
+		return this.sslczURL
+				+ this.validationURL
+				+ "?val_id=" + encodedValID
+				+ "&store_id=" + encodedStoreID
+				+ "&store_passwd=" + encodedStorePassword
+				+ "&v=1&format=json";
+	}
+
+	public boolean isStatusValid(SSLCommerzValidatorResponse resp) {
+		String status = resp.getStatus();
+		return "VALID".equals(status) || "VALIDATED".equals(status);
+	}
+
+	private boolean isTransactionMatching(
+			SSLCommerzValidatorResponse resp,
+			String merchantTrnxnId,
+			String merchantTrnxnAmount,
+			String merchantTrnxnCurrency) {
+
+		return merchantTrnxnId.equals(resp.getTranId())
+				&& (Math.abs(Double.parseDouble(merchantTrnxnAmount)
+				- Double.parseDouble(resp.getCurrencyAmount())) < 1)
+				&& merchantTrnxnCurrency.equals(resp.getCurrencyType());
+	}
+
+
 	Boolean ipnHashVerify(final Map<String, String> requestParameters)
 			throws UnsupportedEncodingException, NoSuchAlgorithmException {
-
+		String[] keyList;
 		// Check For verify_sign and verify_key parameters
 		if (!requestParameters.get("verify_sign").isEmpty()
 				&& !requestParameters.get("verify_key").isEmpty()) {
 			// Get the verify key
-			String verify_key = requestParameters.get("verify_key");
-			if (!verify_key.isEmpty()) {
+			String verifyKey = requestParameters.get("verify_key");
+			if (!verifyKey.isEmpty()) {
 
 				// Split key String by comma to make a list array
-				keyList = verify_key.split(",");
-				TreeMap<String, String> sortedMap = new TreeMap<String, String>();
+				keyList = verifyKey.split(",");
+				TreeMap<String, String> sortedMap = new TreeMap<>();
 
 				// Store key and value of post in a sorted Map
 				for (final String k : keyList) {
@@ -215,7 +222,7 @@ public class SSLCommerzPaymentService implements PaymentService {
 				sortedMap.put("store_passwd", hashedPass);
 				// Concat and make String from array
 				String hashString = "";
-				hashString += this.getParamsString(sortedMap, false) + "&";
+				hashString += getParamsString(sortedMap, false) + "&";
 
 				// Trim '&' from end of this String
 				hashString = hashString.substring(0, hashString.length() - 1); // omitting last &
@@ -235,11 +242,11 @@ public class SSLCommerzPaymentService implements PaymentService {
 	}
 
 	@SuppressWarnings("squid:S4790")
-	String md5(String s) throws UnsupportedEncodingException, NoSuchAlgorithmException {
-		byte[] bytesOfMessage = s.getBytes("UTF-8");
+	String md5(String s) throws NoSuchAlgorithmException {
+		byte[] bytesOfMessage = s.getBytes(StandardCharsets.UTF_8);
 		MessageDigest md = MessageDigest.getInstance("MD5");
 		byte[] theDigest = md.digest(bytesOfMessage);
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < theDigest.length; ++i) {
 			sb.append(Integer.toHexString((theDigest[i] & 0xFF) | 0x100).substring(1, 3));
 		}
@@ -251,16 +258,16 @@ public class SSLCommerzPaymentService implements PaymentService {
 		StringBuilder result = new StringBuilder();
 
 		for (Map.Entry<String, String> entry : params.entrySet()) {
-			if (urlEncode) result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
+			if (urlEncode) result.append(URLEncoder.encode(entry.getKey(), UTF_8));
 			else result.append(entry.getKey());
 
 			result.append("=");
-			if (urlEncode) result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
+			if (urlEncode) result.append(URLEncoder.encode(entry.getValue(), UTF_8));
 			else result.append(entry.getValue());
 			result.append("&");
 		}
 
 		String resultString = result.toString();
-		return resultString.length() > 0 ? resultString.substring(0, resultString.length() - 1) : resultString;
+		return !resultString.isEmpty() ? resultString.substring(0, resultString.length() - 1) : resultString;
 	}
 }

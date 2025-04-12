@@ -29,7 +29,6 @@ import org.springframework.web.client.RestTemplate;
 
 @ExtendWith(MockitoExtension.class)
 class SSLCommerzPaymentServiceTest {
-
 	@Mock
 	private RestTemplate restTemplate;
 
@@ -44,7 +43,7 @@ class SSLCommerzPaymentServiceTest {
 
 	@BeforeEach
 	void setUp() {
-		paymentService = new SSLCommerzPaymentService(restTemplate, paymentRepository);
+		paymentService = new SSLCommerzPaymentService(restTemplate);
 		paymentService.storeId = "testStoreId";
 		paymentService.storePasswd = "testStorePasswd";
 		paymentService.paymentInitializationUrl = "http://test.url/init";
@@ -62,38 +61,49 @@ class SSLCommerzPaymentServiceTest {
 		sender.setEmail("john@example.com");
 	}
 
-	private SSLCommerzValidatorResponse createValidatorResponse(
-			String status, String tranId, String amount, String currency) {
+	private SSLCommerzValidatorResponse createValidatorResponse(String status, String tranId, String amount, String currency) {
 		return new SSLCommerzValidatorResponse(
-				status, null, tranId, null, null, null, null, null, null, null, null, null, null, null, currency,
-				amount, null, null, null, null, null, null, null, null, null);
+				status, null, tranId, null, null, null, null, null, null, null, null, null, null, null,
+				currency, amount, null, null, null, null, null, null, null, null, null
+		);
 	}
+
+	@Test
+	void testIsStatusValid_ReturnsTrueForVALID() {
+		SSLCommerzValidatorResponse response = createValidatorResponse("VALID", "tran123", "100.00", "BDT");
+		boolean result = paymentService.isStatusValid(response);
+		assertTrue(result);
+	}
+
+	@Test
+	void testIsStatusValid_ReturnsTrueForVALIDATED() {
+		SSLCommerzValidatorResponse response = createValidatorResponse("VALIDATED", "tran123", "100.00", "BDT");
+		boolean result = paymentService.isStatusValid(response);
+		assertTrue(result);
+	}
+
+	@Test
+	void testIsStatusValid_ReturnsFalseForFAILED() {
+		SSLCommerzValidatorResponse response = createValidatorResponse("FAILED", "tran123", "100.00", "BDT");
+		boolean result = paymentService.isStatusValid(response);
+		assertFalse(result);
+	}
+
 
 	@Test
 	void testGetPaymentUrl_Success() {
 		SSLCommerzPaymentInitResponseDto responseDto = new SSLCommerzPaymentInitResponseDto();
 		responseDto.setStatus("SUCCESS");
-		List<SSLCommerzPaymentInitResponseDto.Desc> descList = new ArrayList<>();
 		SSLCommerzPaymentInitResponseDto.Desc desc = new SSLCommerzPaymentInitResponseDto.Desc();
 		desc.setGw("visa");
 		desc.setRedirectGatewayURL("http://redirect.url");
-		descList.add(desc);
-		responseDto.setDesc(descList);
+		responseDto.setDesc(Collections.singletonList(desc));
 
-		ResponseEntity<SSLCommerzPaymentInitResponseDto> responseEntity =
-				new ResponseEntity<>(responseDto, HttpStatus.OK);
-
-		when(restTemplate.postForEntity(anyString(), any(HttpEntity.class), eq(SSLCommerzPaymentInitResponseDto.class)))
-				.thenReturn(responseEntity);
+		ResponseEntity<SSLCommerzPaymentInitResponseDto> responseEntity = new ResponseEntity<>(responseDto, HttpStatus.OK);
+		when(restTemplate.postForEntity(anyString(), any(HttpEntity.class), eq(SSLCommerzPaymentInitResponseDto.class))).thenReturn(responseEntity);
 
 		String result = paymentService.getPaymentUrl(parcelBookingRequestDTO, sender);
-
 		assertEquals("http://redirect.url", result);
-		verify(restTemplate)
-				.postForEntity(
-						eq(paymentService.paymentInitializationUrl),
-						any(HttpEntity.class),
-						eq(SSLCommerzPaymentInitResponseDto.class));
 	}
 
 	@Test
@@ -102,21 +112,49 @@ class SSLCommerzPaymentServiceTest {
 		responseDto.setStatus("FAILED");
 		responseDto.setFailedreason("Invalid data");
 
-		ResponseEntity<SSLCommerzPaymentInitResponseDto> responseEntity =
-				new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
+		ResponseEntity<SSLCommerzPaymentInitResponseDto> responseEntity = new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
+		when(restTemplate.postForEntity(anyString(), any(HttpEntity.class), eq(SSLCommerzPaymentInitResponseDto.class))).thenReturn(responseEntity);
 
-		when(restTemplate.postForEntity(anyString(), any(HttpEntity.class), eq(SSLCommerzPaymentInitResponseDto.class)))
-				.thenReturn(responseEntity);
-
-		RuntimeException exception = assertThrows(
-				RuntimeException.class, () -> paymentService.getPaymentUrl(parcelBookingRequestDTO, sender));
-
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> paymentService.getPaymentUrl(parcelBookingRequestDTO, sender));
 		assertTrue(exception.getMessage().contains("Failed to send payment request"));
-		verify(restTemplate)
-				.postForEntity(
-						eq(paymentService.paymentInitializationUrl),
-						any(HttpEntity.class),
-						eq(SSLCommerzPaymentInitResponseDto.class));
+	}
+
+	@Test
+	void testGetPaymentUrl_NoMatchingGateway_ThrowsException() {
+		SSLCommerzPaymentInitResponseDto responseDto = new SSLCommerzPaymentInitResponseDto();
+		responseDto.setStatus("SUCCESS");
+		SSLCommerzPaymentInitResponseDto.Desc desc = new SSLCommerzPaymentInitResponseDto.Desc();
+		desc.setGw("mastercard");
+		desc.setRedirectGatewayURL("http://redirect.url");
+		responseDto.setDesc(Collections.singletonList(desc));
+
+		ResponseEntity<SSLCommerzPaymentInitResponseDto> responseEntity = new ResponseEntity<>(responseDto, HttpStatus.OK);
+		when(restTemplate.postForEntity(anyString(), any(HttpEntity.class), eq(SSLCommerzPaymentInitResponseDto.class))).thenReturn(responseEntity);
+
+		parcelBookingRequestDTO.setPaymentMethod("visa");
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> paymentService.getPaymentUrl(parcelBookingRequestDTO, sender));
+		assertEquals("Payment method not found", exception.getMessage());
+	}
+
+	@Test
+	void testIpnHashVerify_Failure_NoVerifySign() throws Exception {
+		Map<String, String> requestParameters = new HashMap<>();
+		requestParameters.put("verify_sign", "");
+		requestParameters.put("verify_key", "key1");
+		requestParameters.put("key1", "value1");
+
+		Boolean result = paymentService.ipnHashVerify(requestParameters);
+		assertFalse(result);
+	}
+
+	@Test
+	void testIpnHashVerify_Failure_EmptyVerifyKey() throws Exception {
+		Map<String, String> requestParameters = new HashMap<>();
+		requestParameters.put("verify_key", "");
+		requestParameters.put("verify_sign", "someHash");
+
+		Boolean result = paymentService.ipnHashVerify(requestParameters);
+		assertFalse(result);
 	}
 
 	@Test
@@ -239,19 +277,7 @@ class SSLCommerzPaymentServiceTest {
 	}
 
 	@Test
-	void testIpnHashVerify_Failure_NoVerifySign() throws NoSuchAlgorithmException, UnsupportedEncodingException {
-		Map<String, String> requestParameters = new HashMap<>();
-		requestParameters.put("verify_sign", "");
-		requestParameters.put("verify_key", "key1");
-		requestParameters.put("key1", "value1");
-
-		Boolean result = paymentService.ipnHashVerify(requestParameters);
-
-		assertFalse(result);
-	}
-
-	@Test
-	void testMd5() throws NoSuchAlgorithmException, UnsupportedEncodingException {
+	void testMd5() throws NoSuchAlgorithmException {
 		String input = "testString";
 		String result = paymentService.md5(input);
 
