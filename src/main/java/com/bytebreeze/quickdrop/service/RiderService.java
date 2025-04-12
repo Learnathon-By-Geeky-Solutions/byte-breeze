@@ -23,7 +23,6 @@ import com.bytebreeze.quickdrop.util.AuthUtil;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -135,7 +134,7 @@ public class RiderService {
 		return pendingRiders.stream()
 				.map(rider -> new RiderApprovalByAdminResponseDTO(
 						rider.getId(), rider.getFullName(), rider.getEmail(), rider.getPhoneNumber()))
-				.collect(Collectors.toList());
+				.toList();
 	}
 
 	public void updateRiderVerificationStatus(UUID riderId, VerificationStatus verificationStatus) {
@@ -154,7 +153,7 @@ public class RiderService {
 		riderRepository.save(rider);
 	}
 
-	public List<RiderViewCurrentParcelsResponseDTO> CurrentParcelsForRider() {
+	public List<RiderViewCurrentParcelsResponseDTO> currentParcelsForRider() {
 
 		List<Parcel> currentAvailableParcels = parcelRepository.findByStatusAndRiderIsNull(ParcelStatus.BOOKED);
 
@@ -183,7 +182,7 @@ public class RiderService {
 
 					return dto;
 				})
-				.collect(Collectors.toList());
+				.toList();
 	}
 
 	@Transactional

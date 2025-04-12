@@ -180,7 +180,7 @@ public class RiderController {
 			return "rider/view-assigned-parcels";
 		} else {
 
-			List<RiderViewCurrentParcelsResponseDTO> currentParcels = riderService.CurrentParcelsForRider();
+			List<RiderViewCurrentParcelsResponseDTO> currentParcels = riderService.currentParcelsForRider();
 			model.addAttribute(PARCELS, currentParcels);
 
 			return "rider/view-current-parcels";
