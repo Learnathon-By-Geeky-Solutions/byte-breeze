@@ -51,6 +51,9 @@ dependencies {
 	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 
+	// ModelMapper for entity and dto mapping
+	implementation 'org.modelmapper:modelmapper:3.2.2'
+
 	// for working with filenames and file paths, file extension
 	implementation 'commons-io:commons-io:2.13.0'
 
