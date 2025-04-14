@@ -13,7 +13,6 @@ import jakarta.transaction.Transactional;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.*;
-
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -26,8 +25,7 @@ public class ParcelService {
 			ASSIGNED, Set.of(PICKED_UP, POSTPONED),
 			PICKED_UP, Set.of(IN_TRANSIT, DELIVERED, POSTPONED),
 			IN_TRANSIT, Set.of(DELIVERED, POSTPONED),
-			POSTPONED, Set.of(PICKED_UP, ASSIGNED)
-	);
+			POSTPONED, Set.of(PICKED_UP, ASSIGNED));
 
 	private final SecureRandom random = new SecureRandom();
 	private final ProductCategoryRepository productCategoryRepository;
@@ -152,7 +150,8 @@ public class ParcelService {
 	}
 
 	private boolean isValidStatusTransition(ParcelStatus current, ParcelStatus next) {
-		return !current.equals(next) && validTransitions.getOrDefault(current, Set.of()).contains(next);
+		return !current.equals(next)
+				&& validTransitions.getOrDefault(current, Set.of()).contains(next);
 	}
 
 	private void handleDeliveryCompletion(Parcel parcel) {
@@ -175,7 +174,6 @@ public class ParcelService {
 		rider.setIsAssigned(false);
 		riderRepository.save(rider);
 	}
-
 
 	public double calculateShippingCost(CalculateShippingCostRequestDto calculateShippingCostRequestDto) {
 		// definining factor - we will make it dynamic in future

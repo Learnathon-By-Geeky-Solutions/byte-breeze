@@ -191,7 +191,7 @@ public class SSLCommerzPaymentService implements PaymentService {
 
 		return merchantTrnxnId.equals(resp.getTranId())
 				&& (Math.abs(Double.parseDouble(merchantTrnxnAmount) - Double.parseDouble(resp.getCurrencyAmount()))
-						< 1)
+				< 1)
 				&& merchantTrnxnCurrency.equals(resp.getCurrencyType());
 	}
 

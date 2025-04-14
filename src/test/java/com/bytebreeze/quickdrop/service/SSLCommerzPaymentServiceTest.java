@@ -25,6 +25,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.client.RestTemplate;
 
 @ExtendWith(MockitoExtension.class)
@@ -44,11 +45,11 @@ class SSLCommerzPaymentServiceTest {
 	@BeforeEach
 	void setUp() {
 		paymentService = new SSLCommerzPaymentService(restTemplate);
-		paymentService.storeId = "testStoreId";
-		paymentService.storePasswd = "testStorePasswd";
-		paymentService.paymentInitializationUrl = "http://test.url/init";
-		paymentService.baseUrl = "http://base.url";
-		paymentService.sslczURL = "http://sslcommerz.url";
+		ReflectionTestUtils.setField(paymentService, "storeId", "testStoreId");
+		ReflectionTestUtils.setField(paymentService, "storePasswd", "testStorePasswd");
+		ReflectionTestUtils.setField(paymentService, "paymentInitializationUrl", "http://test.url/init");
+		ReflectionTestUtils.setField(paymentService, "baseUrl", "http://base.url");
+		ReflectionTestUtils.setField(paymentService, "sslczURL", "http://sslcommerz.url");
 
 		parcelBookingRequestDTO = new ParcelBookingRequestDTO();
 		parcelBookingRequestDTO.setPrice(new BigDecimal("100.00"));
@@ -215,7 +216,7 @@ class SSLCommerzPaymentServiceTest {
 		boolean result = paymentService.orderValidate("tran123", "100.00", "BDT", requestParameters);
 
 		assertFalse(result);
-		assertEquals("Unable to verify hash", paymentService.error);
+		assertEquals("Unable to verify hash", ReflectionTestUtils.getField(paymentService, "error"));
 	}
 
 	@Test
@@ -254,7 +255,7 @@ class SSLCommerzPaymentServiceTest {
 			boolean result = paymentService.orderValidate("tran123", "100.00", "BDT", requestParameters);
 
 			assertFalse(result);
-			assertEquals("Currency Amount not matching", paymentService.error);
+			assertEquals("Currency Amount not matching", ReflectionTestUtils.getField(paymentService, "error"));
 			mockedStatic.verify(() -> SSLCommerzUtil.getByOpeningJavaUrlConnection(anyString()));
 			mockedStatic.verify(() -> SSLCommerzUtil.extractValidatorResponse(jsonResponse));
 		}
