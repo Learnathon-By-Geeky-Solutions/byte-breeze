@@ -12,7 +12,6 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import org.springframework.beans.factory.annotation.Value;
@@ -72,18 +71,29 @@ public class SSLCommerzPaymentService implements PaymentService {
 
 	@Override
 	public String getPaymentUrl(ParcelBookingRequestDTO parcelBookingRequestDTO, User sender) {
-		// Prepare form data as MultiValueMap
+		MultiValueMap<String, String> formData = buildFormData(parcelBookingRequestDTO, sender);
+		HttpEntity<MultiValueMap<String, String>> requestEntity = buildHttpEntity(formData);
+
+		ResponseEntity<SSLCommerzPaymentInitResponseDto> responseEntity = sendPaymentRequest(requestEntity);
+
+		return handlePaymentResponse(responseEntity, parcelBookingRequestDTO.getPaymentMethod());
+	}
+
+
+	private MultiValueMap<String, String> buildFormData(ParcelBookingRequestDTO dto, User sender) {
 		MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
 		formData.add("store_id", this.storeId);
 		formData.add("store_passwd", this.storePasswd);
-		formData.add("total_amount", parcelBookingRequestDTO.getPrice().toString());
+		formData.add("total_amount", dto.getPrice().toString());
 		formData.add("currency", "BDT");
-		formData.add("tran_id", parcelBookingRequestDTO.getTransactionId());
+		formData.add("tran_id", dto.getTransactionId());
 		formData.add("success_url", baseUrl + successUrl);
 		formData.add("fail_url", baseUrl + failureUrl);
 		formData.add("cancel_url", baseUrl + errorUrl);
 		formData.add("cus_name", sender.getFullName());
 		formData.add("cus_email", sender.getEmail());
+
+		// Optional fields (left blank or placeholders)
 		formData.add("cus_add1", "");
 		formData.add("cus_city", "");
 		formData.add("cus_state", "");
@@ -101,37 +111,39 @@ public class SSLCommerzPaymentService implements PaymentService {
 		formData.add("value_b", "");
 		formData.add("value_c", "");
 		formData.add("value_d", "");
-		formData.add("product_name", parcelBookingRequestDTO.getCategoryId().toString());
-		formData.add("product_category", parcelBookingRequestDTO.getCategoryId().toString());
+		formData.add("product_name", dto.getCategoryId().toString());
+		formData.add("product_category", dto.getCategoryId().toString());
 		formData.add("product_profile", "general");
 
-		// Set HTTP headers for form data
+		return formData;
+	}
+
+	private HttpEntity<MultiValueMap<String, String>> buildHttpEntity(MultiValueMap<String, String> formData) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+		return new HttpEntity<>(formData, headers);
+	}
 
-		// Wrap the data and headers in an HttpEntity
-		HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(formData, headers);
+	private ResponseEntity<SSLCommerzPaymentInitResponseDto> sendPaymentRequest(HttpEntity<MultiValueMap<String, String>> requestEntity) {
+		return restTemplate.postForEntity(
+				paymentInitializationUrl,
+				requestEntity,
+				SSLCommerzPaymentInitResponseDto.class
+		);
+	}
 
-		// Send the POST request
-		ResponseEntity<SSLCommerzPaymentInitResponseDto> responseEntity = restTemplate.postForEntity(
-				paymentInitializationUrl, requestEntity, SSLCommerzPaymentInitResponseDto.class);
-
-		// Process the response and return a matching JSON response
+	private String handlePaymentResponse(ResponseEntity<SSLCommerzPaymentInitResponseDto> responseEntity, String paymentMethod) {
 		if (responseEntity.getStatusCode() == HttpStatus.OK) {
-			HashMap<Object, Object> responseBody = new HashMap<>();
-			responseBody.put("message", "Payment request sent successfully");
-			responseBody.put("response", responseEntity.getBody());
-			if (responseEntity.getBody().getStatus().equals("FAILED")) {
-				responseBody.put("error", responseEntity.getBody().getFailedreason());
+			SSLCommerzPaymentInitResponseDto body = responseEntity.getBody();
+			if ("FAILED".equalsIgnoreCase(body.getStatus())) {
+				throw new SSLCommerzPaymentInitializationException("Payment failed: " + body.getFailedreason());
 			}
-			return extractRedirectUrl(responseEntity.getBody(), parcelBookingRequestDTO.getPaymentMethod());
+			return extractRedirectUrl(body, paymentMethod);
 		} else {
-			HashMap<Object, Object> errorBody = new HashMap<>();
-			errorBody.put("error", "Failed to send payment request");
-			errorBody.put("details", responseEntity.getBody());
-			throw new SSLCommerzPaymentInitializationException(errorBody.toString());
+			throw new SSLCommerzPaymentInitializationException("Failed to send payment request: " + responseEntity.toString());
 		}
 	}
+
 
 	public boolean orderValidate(
 			String merchantTrnxnId,
