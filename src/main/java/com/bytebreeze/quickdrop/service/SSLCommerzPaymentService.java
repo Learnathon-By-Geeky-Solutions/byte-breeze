@@ -29,6 +29,8 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class SSLCommerzPaymentService implements PaymentService {
 	private static final String UTF_8 = "UTF-8";
+	private static final String VERIFY_KEY = "verify_key";
+	private static final String VERIFY_SIGN = "verify_sign";
 	private RestTemplate restTemplate;
 
 	@Value("${sslcommerz.store-id}")
@@ -195,48 +197,54 @@ public class SSLCommerzPaymentService implements PaymentService {
 				&& merchantTrnxnCurrency.equals(resp.getCurrencyType());
 	}
 
-	Boolean ipnHashVerify(final Map<String, String> requestParameters)
+	public Boolean ipnHashVerify(final Map<String, String> requestParameters)
 			throws UnsupportedEncodingException, NoSuchAlgorithmException {
-		String[] keyList;
-		// Check For verify_sign and verify_key parameters
-		if (!requestParameters.get("verify_sign").isEmpty()
-				&& !requestParameters.get("verify_key").isEmpty()) {
-			// Get the verify key
-			String verifyKey = requestParameters.get("verify_key");
-			if (!verifyKey.isEmpty()) {
 
-				// Split key String by comma to make a list array
-				keyList = verifyKey.split(",");
-				TreeMap<String, String> sortedMap = new TreeMap<>();
-
-				// Store key and value of post in a sorted Map
-				for (final String k : keyList) {
-					sortedMap.put(k, requestParameters.get(k));
-				}
-
-				// Store Hashed Password in list
-				final String hashedPass = this.md5(this.storePasswd);
-				sortedMap.put("store_passwd", hashedPass);
-				// Concat and make String from array
-				String hashString = "";
-				hashString += getParamsString(sortedMap, false) + "&";
-
-				// Trim '&' from end of this String
-				hashString = hashString.substring(0, hashString.length() - 1); // omitting last &
-
-				// Make hash by hash_string and store
-				generateHash = this.md5(hashString);
-
-				// Check if generated hash and verify_sign match or not
-				// Matched
-				return generateHash.equals(requestParameters.get("verify_sign"));
-			}
-
-			return false;
-		} else {
+		if (!hasRequiredParams(requestParameters)) {
 			return false;
 		}
+
+		final String verifyKey = requestParameters.get(VERIFY_KEY);
+		if (verifyKey.isEmpty()) {
+			return false;
+		}
+
+		final TreeMap<String, String> sortedParams = buildSortedParams(requestParameters, verifyKey);
+		final String hashString = buildHashString(sortedParams);
+		generateHash = this.md5(hashString);
+
+		return generateHash.equals(requestParameters.get(VERIFY_SIGN));
 	}
+
+
+	private boolean hasRequiredParams(Map<String, String> params) {
+		return params.containsKey(VERIFY_SIGN) && !params.get(VERIFY_SIGN).isEmpty()
+				&& params.containsKey(VERIFY_KEY) && !params.get(VERIFY_KEY).isEmpty();
+	}
+
+	private TreeMap<String, String> buildSortedParams(Map<String, String> params, String verifyKey)
+			throws NoSuchAlgorithmException {
+
+		final String[] keyList = verifyKey.split(",");
+		final TreeMap<String, String> sortedMap = new TreeMap<>();
+
+		for (String key : keyList) {
+			sortedMap.put(key, params.get(key));
+		}
+
+		final String hashedPass = this.md5(this.storePasswd);
+		sortedMap.put("store_passwd", hashedPass);
+
+		return sortedMap;
+	}
+
+	private String buildHashString(TreeMap<String, String> sortedParams)
+			throws UnsupportedEncodingException {
+
+		String hashString = getParamsString(sortedParams, false) + "&";
+		return hashString.substring(0, hashString.length() - 1); // remove trailing '&'
+	}
+
 
 	@SuppressWarnings("squid:S4790")
 	String md5(String s) throws NoSuchAlgorithmException {
