@@ -79,7 +79,6 @@ public class SSLCommerzPaymentService implements PaymentService {
 		return handlePaymentResponse(responseEntity, parcelBookingRequestDTO.getPaymentMethod());
 	}
 
-
 	private MultiValueMap<String, String> buildFormData(ParcelBookingRequestDTO dto, User sender) {
 		MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
 		formData.add("store_id", this.storeId);
@@ -124,26 +123,41 @@ public class SSLCommerzPaymentService implements PaymentService {
 		return new HttpEntity<>(formData, headers);
 	}
 
-	private ResponseEntity<SSLCommerzPaymentInitResponseDto> sendPaymentRequest(HttpEntity<MultiValueMap<String, String>> requestEntity) {
+	private ResponseEntity<SSLCommerzPaymentInitResponseDto> sendPaymentRequest(
+			HttpEntity<MultiValueMap<String, String>> requestEntity) {
 		return restTemplate.postForEntity(
-				paymentInitializationUrl,
-				requestEntity,
-				SSLCommerzPaymentInitResponseDto.class
-		);
+				paymentInitializationUrl, requestEntity, SSLCommerzPaymentInitResponseDto.class);
 	}
 
-	private String handlePaymentResponse(ResponseEntity<SSLCommerzPaymentInitResponseDto> responseEntity, String paymentMethod) {
-		if (responseEntity.getStatusCode() == HttpStatus.OK) {
-			SSLCommerzPaymentInitResponseDto body = responseEntity.getBody();
-			if ("FAILED".equalsIgnoreCase(body.getStatus())) {
-				throw new SSLCommerzPaymentInitializationException("Payment failed: " + body.getFailedreason());
-			}
-			return extractRedirectUrl(body, paymentMethod);
-		} else {
-			throw new SSLCommerzPaymentInitializationException("Failed to send payment request: " + responseEntity.toString());
+	private String handlePaymentResponse(
+			ResponseEntity<SSLCommerzPaymentInitResponseDto> responseEntity, String paymentMethod) {
+		validateHttpStatus(responseEntity);
+		SSLCommerzPaymentInitResponseDto body = getResponseBody(responseEntity);
+		validateResponseStatus(body);
+		return extractRedirectUrl(body, paymentMethod);
+	}
+
+	private void validateHttpStatus(ResponseEntity<?> response) {
+		if (!HttpStatus.OK.equals(response.getStatusCode())) {
+			throw new SSLCommerzPaymentInitializationException("Failed to send payment request");
 		}
 	}
 
+	private SSLCommerzPaymentInitResponseDto getResponseBody(
+			ResponseEntity<SSLCommerzPaymentInitResponseDto> response) {
+		SSLCommerzPaymentInitResponseDto body = response.getBody();
+		if (body == null) {
+			throw new SSLCommerzPaymentInitializationException("Failed to send payment request: response body is null");
+		}
+		return body;
+	}
+
+	private void validateResponseStatus(SSLCommerzPaymentInitResponseDto body) {
+		if ("FAILED".equalsIgnoreCase(body.getStatus())) {
+			throw new SSLCommerzPaymentInitializationException(
+					"Failed to send payment request: " + body.getFailedreason());
+		}
+	}
 
 	public boolean orderValidate(
 			String merchantTrnxnId,
@@ -205,7 +219,7 @@ public class SSLCommerzPaymentService implements PaymentService {
 
 		return merchantTrnxnId.equals(resp.getTranId())
 				&& (Math.abs(Double.parseDouble(merchantTrnxnAmount) - Double.parseDouble(resp.getCurrencyAmount()))
-				< 1)
+						< 1)
 				&& merchantTrnxnCurrency.equals(resp.getCurrencyType());
 	}
 
@@ -228,10 +242,11 @@ public class SSLCommerzPaymentService implements PaymentService {
 		return generateHash.equals(requestParameters.get(VERIFY_SIGN));
 	}
 
-
 	private boolean hasRequiredParams(Map<String, String> params) {
-		return params.containsKey(VERIFY_SIGN) && !params.get(VERIFY_SIGN).isEmpty()
-				&& params.containsKey(VERIFY_KEY) && !params.get(VERIFY_KEY).isEmpty();
+		return params.containsKey(VERIFY_SIGN)
+				&& !params.get(VERIFY_SIGN).isEmpty()
+				&& params.containsKey(VERIFY_KEY)
+				&& !params.get(VERIFY_KEY).isEmpty();
 	}
 
 	private TreeMap<String, String> buildSortedParams(Map<String, String> params, String verifyKey)
@@ -250,13 +265,11 @@ public class SSLCommerzPaymentService implements PaymentService {
 		return sortedMap;
 	}
 
-	private String buildHashString(TreeMap<String, String> sortedParams)
-			throws UnsupportedEncodingException {
+	private String buildHashString(TreeMap<String, String> sortedParams) throws UnsupportedEncodingException {
 
 		String hashString = getParamsString(sortedParams, false) + "&";
 		return hashString.substring(0, hashString.length() - 1); // remove trailing '&'
 	}
-
 
 	@SuppressWarnings("squid:S4790")
 	String md5(String s) throws NoSuchAlgorithmException {

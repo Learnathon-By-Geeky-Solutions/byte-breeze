@@ -121,6 +121,7 @@ class SSLCommerzPaymentServiceTest {
 
 		RuntimeException exception = assertThrows(
 				RuntimeException.class, () -> paymentService.getPaymentUrl(parcelBookingRequestDTO, sender));
+		System.out.println(exception.getMessage());
 		assertTrue(exception.getMessage().contains("Failed to send payment request"));
 	}
 
