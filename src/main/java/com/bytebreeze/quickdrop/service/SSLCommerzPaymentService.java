@@ -163,34 +163,56 @@ public class SSLCommerzPaymentService implements PaymentService {
 			String merchantTrnxnId,
 			String merchantTrnxnAmount,
 			String merchantTrnxnCurrency,
-			Map<String, String> requestParameters)
-			throws IOException, NoSuchAlgorithmException {
+			Map<String, String> requestParameters) throws IOException, NoSuchAlgorithmException {
 
-		if (Boolean.FALSE.equals(ipnHashVerify(requestParameters))) {
-			this.error = "Unable to verify hash";
-			return false;
-		}
+		if (!isHashVerified(requestParameters)) return false;
 
+		SSLCommerzValidatorResponse response = getValidatedResponse(requestParameters);
+		if (response == null) return false;
+
+		return isTransactionVerified(response, merchantTrnxnId, merchantTrnxnAmount, merchantTrnxnCurrency);
+	}
+
+	private SSLCommerzValidatorResponse getValidatedResponse(Map<String, String> requestParameters) throws IOException {
 		String validUrl = buildValidationUrl(requestParameters);
 		String json = SSLCommerzUtil.getByOpeningJavaUrlConnection(validUrl);
 
 		if (json.isEmpty()) {
 			this.error = "Unable to get Transaction JSON status";
-			return false;
+			return null;
 		}
 
-		SSLCommerzValidatorResponse resp = SSLCommerzUtil.extractValidatorResponse(json);
-		if (!isStatusValid(resp)) {
+		SSLCommerzValidatorResponse response = SSLCommerzUtil.extractValidatorResponse(json);
+
+		if (!isStatusValid(response)) {
 			this.error = "This transaction is either expired or failed";
+			return null;
+		}
+
+		return response;
+	}
+
+
+	private boolean isHashVerified(Map<String, String> requestParameters) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+		if (!Boolean.TRUE.equals(ipnHashVerify(requestParameters))) {
+			this.error = "Unable to verify hash";
 			return false;
 		}
+		return true;
+	}
+
+	private boolean isTransactionVerified(
+			SSLCommerzValidatorResponse resp,
+			String merchantTrnxnId,
+			String merchantTrnxnAmount,
+			String merchantTrnxnCurrency) {
 
 		if (isTransactionMatching(resp, merchantTrnxnId, merchantTrnxnAmount, merchantTrnxnCurrency)) {
 			return true;
-		} else {
-			this.error = "Currency Amount not matching";
-			return false;
 		}
+
+		this.error = "Currency Amount not matching";
+		return false;
 	}
 
 	private String buildValidationUrl(Map<String, String> params) {
