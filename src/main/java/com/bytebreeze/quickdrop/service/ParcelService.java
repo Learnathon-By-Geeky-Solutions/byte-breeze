@@ -12,14 +12,21 @@ import com.bytebreeze.quickdrop.util.AuthUtil;
 import jakarta.transaction.Transactional;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
 public class ParcelService {
 	private static final String INVALID_SENDER = "Invalid sender";
+	private static final Map<ParcelStatus, Set<ParcelStatus>> validTransitions = Map.of(
+			ASSIGNED, Set.of(PICKED_UP, POSTPONED),
+			PICKED_UP, Set.of(IN_TRANSIT, DELIVERED, POSTPONED),
+			IN_TRANSIT, Set.of(DELIVERED, POSTPONED),
+			POSTPONED, Set.of(PICKED_UP, ASSIGNED));
+
 	private final SecureRandom random = new SecureRandom();
 	private final ProductCategoryRepository productCategoryRepository;
 	private final UserRepository userRepository;
@@ -27,21 +34,7 @@ public class ParcelService {
 	private final ParcelRepository parcelRepository;
 	private final PaymentRepository paymentRepository;
 	private final RiderService riderService;
-
-	public ParcelService(
-			ProductCategoryRepository productCategoryRepository,
-			UserRepository userRepository,
-			RiderRepository riderRepository,
-			ParcelRepository parcelRepository,
-			PaymentRepository paymentRepository,
-			RiderService riderService) {
-		this.productCategoryRepository = productCategoryRepository;
-		this.userRepository = userRepository;
-		this.riderRepository = riderRepository;
-		this.parcelRepository = parcelRepository;
-		this.paymentRepository = paymentRepository;
-		this.riderService = riderService;
-	}
+	private final ModelMapper modelMapper;
 
 	public Parcel bookParcel(ParcelBookingRequestDTO parcelBookingRequestDTO) {
 		Parcel parcel = mapToParcel(parcelBookingRequestDTO);
@@ -136,66 +129,50 @@ public class ParcelService {
 	@Transactional
 	public void updateParcelStatus(UUID id, ParcelStatus status) {
 		Parcel parcel = getParcelById(id);
-		ParcelStatus currentStatus = parcel.getStatus();
 
-		// Validate status transition
-		if (!isValidStatusTransition(currentStatus, status)) {
-			throw new IllegalStateException("Invalid status transition from " + currentStatus + " to " + status);
+		if (!isValidStatusTransition(parcel.getStatus(), status)) {
+			throw new IllegalStateException("Invalid status transition from " + parcel.getStatus() + " to " + status);
 		}
 
-		// Update common fields
-		parcel.setStatus(status);
-		parcel.setUpdatedAt(LocalDateTime.now());
-
-		// Check if status is changing to DELIVERED
-		if (status == ParcelStatus.DELIVERED) {
-			handleDeliveryCompletion(parcel);
-		} else {
-			if (status == ParcelStatus.PICKED_UP) {
-				parcel.setPickupTime(LocalDateTime.now()); // Record pickup time if applicable
-			}
-		}
+		applyStatusUpdates(parcel, status);
 		parcelRepository.save(parcel);
 	}
 
-	private boolean isValidStatusTransition(ParcelStatus current, ParcelStatus next) {
-		// Define your valid status transitions
-		if (current == next) return false;
+	private void applyStatusUpdates(Parcel parcel, ParcelStatus status) {
+		parcel.setStatus(status);
+		parcel.setUpdatedAt(LocalDateTime.now());
 
-		switch (current) {
-			case ASSIGNED:
-				return next == PICKED_UP || next == POSTPONED;
-			case PICKED_UP:
-				return next == IN_TRANSIT || next == DELIVERED || next == POSTPONED;
-			case IN_TRANSIT:
-				return next == DELIVERED || next == POSTPONED;
-			case POSTPONED:
-				return next == PICKED_UP || next == ASSIGNED;
-			default:
-				return false;
+		if (status == DELIVERED) {
+			handleDeliveryCompletion(parcel);
+		} else if (status == PICKED_UP) {
+			parcel.setPickupTime(LocalDateTime.now());
 		}
 	}
 
-	private void handleDeliveryCompletion(Parcel parcel) {
+	private boolean isValidStatusTransition(ParcelStatus current, ParcelStatus next) {
+		return !current.equals(next)
+				&& validTransitions.getOrDefault(current, Set.of()).contains(next);
+	}
 
-		// Record delivery time
+	private void handleDeliveryCompletion(Parcel parcel) {
+		Rider rider = parcel.getRider();
+		if (rider == null) {
+			throw new IllegalStateException("No rider assigned to parcel with ID: " + parcel.getId());
+		}
+
+		if (!(rider instanceof Rider)) {
+			throw new IllegalStateException("Assigned rider is not a Rider instance for parcel ID: " + parcel.getId());
+		}
+
 		LocalDateTime deliveryTime = LocalDateTime.now();
 		parcel.setDeliveryTime(deliveryTime);
 		parcel.setDeliveredAt(deliveryTime);
 
-		// Add earnings to rider's balance
-		Rider rider = parcel.getRider();
-		if (rider instanceof Rider) {
-			double currentBalance = rider.getRiderBalance();
-			double parcelEarnings = parcel.getPrice().doubleValue(); // Convert BigDecimal to double
-			rider.setRiderBalance(currentBalance + parcelEarnings);
-			rider.setIsAssigned(false);
-			riderRepository.save(rider); // Save updated rider
-		} else if (rider == null) {
-			throw new IllegalStateException("No rider assigned to parcel with ID: " + parcel.getId());
-		} else {
-			throw new IllegalStateException("Assigned rider is not a Rider instance for parcel ID: " + parcel.getId());
-		}
+		double currentBalance = rider.getRiderBalance();
+		double parcelEarnings = parcel.getPrice().doubleValue();
+		rider.setRiderBalance(currentBalance + parcelEarnings);
+		rider.setIsAssigned(false);
+		riderRepository.save(rider);
 	}
 
 	public double calculateShippingCost(CalculateShippingCostRequestDto calculateShippingCostRequestDto) {
