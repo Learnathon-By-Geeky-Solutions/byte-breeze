@@ -31,7 +31,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
+import org.springframework.test.context.ActiveProfiles;
 
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 class ParcelServiceTest {
 
@@ -52,6 +55,9 @@ class ParcelServiceTest {
 
 	@Mock
 	private RiderService riderService;
+
+	@Mock
+	private ModelMapper modelMapper;
 
 	@InjectMocks
 	private ParcelService parcelService;
@@ -108,7 +114,6 @@ class ParcelServiceTest {
 		when(userRepository.findByEmail("sender@example.com")).thenReturn(Optional.empty());
 
 		assertThrows(IllegalArgumentException.class, () -> parcelService.bookParcel(dto));
-		// No explicit verification needed; the exception confirms the flow
 	}
 
 	@Test
@@ -118,7 +123,6 @@ class ParcelServiceTest {
 		when(productCategoryRepository.findById(dto.getCategoryId())).thenReturn(Optional.empty());
 
 		assertThrows(IllegalArgumentException.class, () -> parcelService.bookParcel(dto));
-		// No explicit verification needed; the exception confirms the flow
 	}
 
 	@Test

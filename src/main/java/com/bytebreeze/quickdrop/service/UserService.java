@@ -30,22 +30,33 @@ public class UserService {
 	}
 
 	public String registerUser(UserRegistrationRequestDTO dto) {
+		validateEmailNotInUse(dto.getEmail());
 
-		if (isEmailAlreadyInUse(dto.getEmail())) {
+		User user = mapToUserEntity(dto);
+		assignDefaultRoleIfEmpty(user);
 
+		userRepository.save(user);
+		return "User registered successfully";
+	}
+
+	private void validateEmailNotInUse(String email) {
+		if (isEmailAlreadyInUse(email)) {
 			throw new AlreadyExistsException("Provided email already registered");
 		}
+	}
 
+	private User mapToUserEntity(UserRegistrationRequestDTO dto) {
 		User user = new User();
 		user.setFullName(dto.getFullName());
 		user.setEmail(dto.getEmail());
 		user.setPassword(passwordEncoder.encode(dto.getPassword()));
+		return user;
+	}
+
+	private void assignDefaultRoleIfEmpty(User user) {
 		if (user.getRoles() == null || user.getRoles().isEmpty()) {
 			user.setRoles(new HashSet<>(Collections.singletonList(Role.ROLE_USER)));
 		}
-		userRepository.save(user);
-
-		return "User registered successfully";
 	}
 
 	public User getAuthenticatedUser() {
@@ -64,24 +75,33 @@ public class UserService {
 		return userProfileUpdateDto;
 	}
 
-	public boolean updateUserProfile(UserProfileUpdateDto userProfileUpdateDto) {
-		User user = this.getAuthenticatedUser();
+	public boolean updateUserProfile(UserProfileUpdateDto dto) {
+		User user = getAuthenticatedUser();
 
-		if (userProfileUpdateDto.getFullName() != null) {
-			user.setFullName(userProfileUpdateDto.getFullName());
-		}
-
-		// Only update password if a new, non-empty password is provided
-		if (userProfileUpdateDto.getPassword() != null
-				&& !userProfileUpdateDto.getPassword().trim().isEmpty()) {
-			user.setPassword(passwordEncoder.encode(userProfileUpdateDto.getPassword()));
-		}
-
-		if (userProfileUpdateDto.getPhoneNumber() != null) {
-			user.setPhoneNumber(userProfileUpdateDto.getPhoneNumber());
-		}
+		updateFullName(user, dto);
+		updatePassword(user, dto);
+		updatePhoneNumber(user, dto);
 
 		userRepository.save(user);
 		return true;
+	}
+
+	private void updateFullName(User user, UserProfileUpdateDto dto) {
+		if (dto.getFullName() != null) {
+			user.setFullName(dto.getFullName());
+		}
+	}
+
+	private void updatePassword(User user, UserProfileUpdateDto dto) {
+		String password = dto.getPassword();
+		if (password != null && !password.trim().isEmpty()) {
+			user.setPassword(passwordEncoder.encode(password));
+		}
+	}
+
+	private void updatePhoneNumber(User user, UserProfileUpdateDto dto) {
+		if (dto.getPhoneNumber() != null) {
+			user.setPhoneNumber(dto.getPhoneNumber());
+		}
 	}
 }
