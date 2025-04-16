@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ParcelService {
+	private static final String INVALID_SENDER = "Invalid sender";
 	private final SecureRandom random = new SecureRandom();
 	private final ProductCategoryRepository productCategoryRepository;
 	private final UserRepository userRepository;
@@ -54,7 +55,7 @@ public class ParcelService {
 				.orElseThrow(() -> new IllegalArgumentException("Invalid category ID"));
 
 		Optional<User> senderOptional = userRepository.findByEmail(AuthUtil.getAuthenticatedUsername());
-		User sender = senderOptional.orElseThrow(() -> new IllegalArgumentException("Invalid sender"));
+		User sender = senderOptional.orElseThrow(() -> new IllegalArgumentException(INVALID_SENDER));
 
 		parcel.setCategory(category);
 		parcel.setDescription(dto.getDescription());
@@ -109,7 +110,7 @@ public class ParcelService {
 	public List<Parcel> getBookedButNotDeliveredParcels() {
 		User sender = userRepository
 				.findByEmail(AuthUtil.getAuthenticatedUsername())
-				.orElseThrow(() -> new IllegalArgumentException("Invalid sender"));
+				.orElseThrow(() -> new IllegalArgumentException(INVALID_SENDER));
 		return parcelRepository.findBySenderAndStatus(sender.getId(), ParcelStatus.BOOKED);
 	}
 
@@ -124,7 +125,7 @@ public class ParcelService {
 	public List<Parcel> getParcelList() {
 		User sender = userRepository
 				.findByEmail(AuthUtil.getAuthenticatedUsername())
-				.orElseThrow(() -> new IllegalArgumentException("Invalid sender"));
+				.orElseThrow(() -> new IllegalArgumentException(INVALID_SENDER));
 		return parcelRepository.getAllBySender(sender.getId());
 	}
 

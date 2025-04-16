@@ -7,6 +7,7 @@ import com.bytebreeze.quickdrop.enums.VerificationStatus;
 import com.bytebreeze.quickdrop.service.RiderService;
 import com.bytebreeze.quickdrop.service.UserService;
 import com.bytebreeze.quickdrop.util.AuthUtil;
+import com.bytebreeze.quickdrop.util.ProfileSettingUtil;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
@@ -53,19 +54,14 @@ public class AdminController {
 			RedirectAttributes redirectAttributes,
 			Model model) {
 
-		if (bindingResult.hasErrors()) {
-			return DASHBOARD_PROFILE_SETTINGS_PAGE;
-		}
-
-		try {
-			userService.updateUserProfile(dto);
-		} catch (Exception e) {
-			model.addAttribute("updateError", "An error occurred while updating your profile. Please try again.");
-			return DASHBOARD_PROFILE_SETTINGS_PAGE;
-		}
-
-		redirectAttributes.addFlashAttribute("successMessage", "Profile updated successfully!");
-		return "redirect:/admin/profile-settings?success";
+		return ProfileSettingUtil.handleUserProfileUpdate(
+				dto,
+				bindingResult,
+				redirectAttributes,
+				model,
+				userService,
+				DASHBOARD_PROFILE_SETTINGS_PAGE,
+				"/admin/profile-settings?success");
 	}
 
 	@GetMapping("/riders/pending")

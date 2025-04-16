@@ -16,6 +16,10 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
+	private static final String ADMIN_LOGIN_URL = "/admin/login";
+	private static final String REMEMBER_ME = "remember-me";
+	private static final String RIDER_LOGIN = "/rider/login";
+
 	@Value("${quickdrop.security.remember-me.key}")
 	private String rememberMeKey;
 
@@ -36,7 +40,7 @@ public class SecurityConfig {
 		http.securityMatcher("/admin/**") // Match requests starting with /admin/
 				.authorizeHttpRequests(
 						authorize -> authorize
-								.requestMatchers("/admin/login")
+								.requestMatchers(ADMIN_LOGIN_URL)
 								.permitAll() // Allow login page for anyone
 								.requestMatchers("/admin/**")
 								.hasRole("ADMIN") // Only admin can access /admin/** pages
@@ -44,19 +48,19 @@ public class SecurityConfig {
 								.authenticated() // Any other request must be authenticated
 						)
 				.formLogin(
-						form -> form.loginPage("/admin/login")
-								.loginProcessingUrl("/admin/login")
+						form -> form.loginPage(ADMIN_LOGIN_URL)
+								.loginProcessingUrl(ADMIN_LOGIN_URL)
 								.defaultSuccessUrl(
 										"/admin/dashboard") // Redirect to admin dashboard after successful login
 								.failureUrl("/admin/login?error=true") // Redirect back to login on failure
 						)
-				.rememberMe((rememberMe) -> rememberMe
+				.rememberMe(rememberMe -> rememberMe
 						.key(rememberMeKey)
-						.rememberMeParameter("remember-me")
+						.rememberMeParameter(REMEMBER_ME)
 						.tokenValiditySeconds(rememberMeTokenValidityInSeconds)
 						.rememberMeCookieName("admin-remember-me"))
 				.logout(logout -> logout.logoutUrl("/admin/logout")
-						.logoutSuccessUrl("/admin/login") // Redirect to login page after logout
+						.logoutSuccessUrl(ADMIN_LOGIN_URL) // Redirect to login page after logout
 						.invalidateHttpSession(true)
 						.clearAuthentication(true))
 				.csrf(
@@ -87,9 +91,9 @@ public class SecurityConfig {
 						.loginProcessingUrl("/user/login")
 						.defaultSuccessUrl("/user/dashboard")
 						.failureUrl("/auth/login?error=true"))
-				.rememberMe((rememberMe) -> rememberMe
+				.rememberMe(rememberMe -> rememberMe
 						.key(rememberMeKey)
-						.rememberMeParameter("remember-me")
+						.rememberMeParameter(REMEMBER_ME)
 						.tokenValiditySeconds(rememberMeTokenValidityInSeconds)
 						.rememberMeCookieName("user-remember-me"))
 				.logout(logout -> logout.logoutUrl("/user/logout")
@@ -108,7 +112,7 @@ public class SecurityConfig {
 		http.securityMatcher("/rider/**") // Match requests starting with /rider/
 				.authorizeHttpRequests(
 						authorize -> authorize // Allow login page for anyone
-								.requestMatchers("/rider/login", "/rider/register", "/rider/onboarding/**")
+								.requestMatchers(RIDER_LOGIN, "/rider/register", "/rider/onboarding/**")
 								.permitAll()
 								.requestMatchers("/rider/**")
 								.hasRole("RIDER") // Only rider can access /rider/** pages
@@ -116,19 +120,19 @@ public class SecurityConfig {
 								.authenticated() // Any other request must be authenticated
 						)
 				.formLogin(
-						form -> form.loginPage("/rider/login")
-								.loginProcessingUrl("/rider/login")
+						form -> form.loginPage(RIDER_LOGIN)
+								.loginProcessingUrl(RIDER_LOGIN)
 								.defaultSuccessUrl(
 										"/rider/dashboard") // Redirect to rider dashboard after successful login
 								.failureUrl("/rider/login?error=true") // Redirect back to login on failure
 						)
-				.rememberMe((rememberMe) -> rememberMe
+				.rememberMe(rememberMe -> rememberMe
 						.key(rememberMeKey)
-						.rememberMeParameter("remember-me")
+						.rememberMeParameter(REMEMBER_ME)
 						.tokenValiditySeconds(rememberMeTokenValidityInSeconds)
 						.rememberMeCookieName("rider-remember-me"))
 				.logout(logout -> logout.logoutUrl("/rider/logout")
-						.logoutSuccessUrl("/rider/login") // Redirect to login page after logout
+						.logoutSuccessUrl(RIDER_LOGIN) // Redirect to login page after logout
 						.invalidateHttpSession(true)
 						.clearAuthentication(true))
 				.csrf(

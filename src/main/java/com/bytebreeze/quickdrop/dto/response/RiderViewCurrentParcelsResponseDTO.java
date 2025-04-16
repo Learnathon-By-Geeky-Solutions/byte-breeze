@@ -9,12 +9,9 @@ public class RiderViewCurrentParcelsResponseDTO {
 
 	private UUID id;
 	private String trackingId;
-
-	// private ProductCategory category;
 	private String pickupDistrict;
 	private String pickupUpazila;
 	private String pickupVillage;
-
 	private String receiverDistrict;
 	private String receiverUpazila;
 	private String receiverVillage;

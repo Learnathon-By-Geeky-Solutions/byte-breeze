@@ -21,7 +21,7 @@ public class UserRegistrationRequestDTO {
 	@NotEmpty(message = "Password can not be empty")
 	@Size(min = 6, message = "Password must be at least 6 characters long")
 	@Pattern(
-			regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$",
+			regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$",
 			message = "Password must contain at least one digit, lowercase, uppercase and special character")
 	private String password;
 }

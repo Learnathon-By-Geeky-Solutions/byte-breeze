@@ -19,7 +19,7 @@ public class ParcelShippingCostController {
 	}
 
 	@PostMapping("/shipping-cost")
-	public ResponseEntity<?> calculateShippingCost(
+	public ResponseEntity<Double> calculateShippingCost(
 			@Valid @RequestBody CalculateShippingCostRequestDto calculateShippingCostRequestDto) {
 		return ResponseEntity.ok().body(parcelService.calculateShippingCost(calculateShippingCostRequestDto));
 	}

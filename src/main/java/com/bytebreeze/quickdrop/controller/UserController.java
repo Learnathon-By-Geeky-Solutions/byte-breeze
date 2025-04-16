@@ -7,8 +7,10 @@ import com.bytebreeze.quickdrop.repository.ProductCategoryRepository;
 import com.bytebreeze.quickdrop.service.ParcelService;
 import com.bytebreeze.quickdrop.service.SSLCommerzPaymentService;
 import com.bytebreeze.quickdrop.service.UserService;
+import com.bytebreeze.quickdrop.util.ProfileSettingUtil;
 import jakarta.validation.Valid;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,23 +19,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/user")
+@RequiredArgsConstructor
 public class UserController {
 	private final UserService userService;
 	private static final String DASHBOARD_PROFILE_SETTINGS_PAGE = "dashboard/account";
 	private final ProductCategoryRepository productCategoryRepository;
 	private final ParcelService parcelService;
 	private final SSLCommerzPaymentService sslCommerzPaymentService;
-
-	public UserController(
-			UserService userService,
-			ProductCategoryRepository productCategoryRepository,
-			ParcelService parcelService,
-			SSLCommerzPaymentService sslCommerzPaymentService) {
-		this.userService = userService;
-		this.productCategoryRepository = productCategoryRepository;
-		this.parcelService = parcelService;
-		this.sslCommerzPaymentService = sslCommerzPaymentService;
-	}
 
 	@GetMapping("/dashboard")
 	public String userDashboard(Model model) {
@@ -55,19 +47,14 @@ public class UserController {
 			RedirectAttributes redirectAttributes,
 			Model model) {
 
-		if (bindingResult.hasErrors()) {
-			return DASHBOARD_PROFILE_SETTINGS_PAGE;
-		}
-
-		try {
-			userService.updateUserProfile(dto);
-		} catch (Exception e) {
-			model.addAttribute("updateError", "An error occurred while updating your profile. Please try again.");
-			return DASHBOARD_PROFILE_SETTINGS_PAGE;
-		}
-
-		redirectAttributes.addFlashAttribute("successMessage", "Profile updated successfully!");
-		return "redirect:/user/profile-settings?success";
+		return ProfileSettingUtil.handleUserProfileUpdate(
+				dto,
+				bindingResult,
+				redirectAttributes,
+				model,
+				userService,
+				DASHBOARD_PROFILE_SETTINGS_PAGE,
+				"/user/profile-settings?success");
 	}
 
 	@GetMapping("/book-parcel")

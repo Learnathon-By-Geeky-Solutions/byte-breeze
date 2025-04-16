@@ -27,6 +27,13 @@ public class FileController {
 	@GetMapping("/{filename:.+}")
 	public ResponseEntity<Resource> getFile(@PathVariable String filename) {
 		try {
+			if (filename.contains("..")
+					|| filename.contains("/")
+					|| filename.contains("\\")
+					|| filename.contains("%")) {
+				return ResponseEntity.badRequest().build();
+			}
+
 			Path filePath = Paths.get(uploadDir).resolve(filename).normalize();
 
 			// Prevent directory traversal attack

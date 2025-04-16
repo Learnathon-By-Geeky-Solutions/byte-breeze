@@ -9,28 +9,27 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class SSLCommerzUtil {
+public final class SSLCommerzUtil {
+	private SSLCommerzUtil() {}
 
 	public static SSLCommerzValidatorResponse extractValidatorResponse(String response) throws IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		SSLCommerzValidatorResponse sslValidatorResponse =
-				mapper.readValue(response, SSLCommerzValidatorResponse.class);
-		return sslValidatorResponse;
+		return mapper.readValue(response, SSLCommerzValidatorResponse.class);
 	}
 
 	public static String getByOpeningJavaUrlConnection(String stringUrl) throws IOException {
-		String output = "";
 		URL url = new URL(stringUrl);
 		URLConnection conn = url.openConnection();
 		conn.setConnectTimeout(5000);
 		conn.setReadTimeout(5000);
 		BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		StringBuilder output = new StringBuilder();
 		String outputLine;
 		while ((outputLine = br.readLine()) != null) {
-			output = output + outputLine;
+			output.append(outputLine);
 		}
 		br.close();
-		return output;
+		return output.toString();
 	}
 }
