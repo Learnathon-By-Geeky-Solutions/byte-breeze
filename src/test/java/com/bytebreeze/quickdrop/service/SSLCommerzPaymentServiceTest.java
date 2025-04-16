@@ -140,11 +140,6 @@ class SSLCommerzPaymentServiceTest {
         assertTrue(exception.getMessage().contains("Failed: No response body"));
     }
 
-    // Tests for orderValidate
-    // Note: Testing orderValidate fully requires mocking static methods in SSLCommerzUtil.
-    // For pure unit testing, consider refactoring to inject a validator service.
-    // Here, we mock HashVerificationService and test the logic flow.
-
     @Test
     void testOrderValidate_HashVerificationFails() throws Exception {
         Map<String, String> requestParameters = new HashMap<>();
@@ -156,10 +151,4 @@ class SSLCommerzPaymentServiceTest {
         assertFalse(result);
     }
 
-    // Additional tests for orderValidate require mocking SSLCommerzUtil static methods,
-    // which is not possible with Mockito alone. Suggested refactoring:
-    // 1. Introduce SSLCommerzValidatorService interface with getValidatedResponse method.
-    // 2. Inject it into SSLCommerzPaymentService.
-    // 3. Mock it in tests to return SSLCommerzValidatorResponse as needed.
-    // Without refactoring, full coverage requires PowerMock or integration testing.
 }
