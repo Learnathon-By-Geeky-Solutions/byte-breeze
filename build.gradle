@@ -59,6 +59,10 @@ dependencies {
 
 	// H2 database dependencies for testing
 	testImplementation 'com.h2database:h2:2.3.232'
+
+	// OpenTelemetry
+	implementation 'io.micrometer:micrometer-tracing-bridge-otel'
+	implementation 'io.opentelemetry:opentelemetry-exporter-otlp'
 }
 
 sonarqube {
