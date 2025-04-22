@@ -5,16 +5,14 @@ import com.bytebreeze.quickdrop.repository.ProductCategoryRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ProductCategoryService {
 
-	private ProductCategoryRepository productCategoryRepository;
-
-	public ProductCategoryService(ProductCategoryRepository productCategoryRepository) {
-		this.productCategoryRepository = productCategoryRepository;
-	}
+	private final ProductCategoryRepository productCategoryRepository;
 
 	public List<ProductCategoryEntity> getAllCategories() {
 		return productCategoryRepository.findAll();

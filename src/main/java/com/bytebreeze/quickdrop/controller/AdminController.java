@@ -11,6 +11,7 @@ import com.bytebreeze.quickdrop.util.ProfileSettingUtil;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,16 +20,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/admin")
+@RequiredArgsConstructor
 public class AdminController {
 	private static final String DASHBOARD_PROFILE_SETTINGS_PAGE = "dashboard/admin-account";
 
 	private final UserService userService;
 	private final RiderService riderService;
-
-	public AdminController(UserService userService, RiderService riderService) {
-		this.userService = userService;
-		this.riderService = riderService;
-	}
 
 	@GetMapping("/login")
 	public String login() {

@@ -6,10 +6,10 @@ import static org.mockito.Mockito.*;
 
 import com.bytebreeze.quickdrop.dto.request.UserProfileUpdateDto;
 import com.bytebreeze.quickdrop.dto.request.UserRegistrationRequestDTO;
+import com.bytebreeze.quickdrop.entity.UserEntity;
 import com.bytebreeze.quickdrop.enums.Role;
 import com.bytebreeze.quickdrop.exception.AlreadyExistsException;
 import com.bytebreeze.quickdrop.exception.UserNotFoundException;
-import com.bytebreeze.quickdrop.entity.UserEntity;
 import com.bytebreeze.quickdrop.repository.UserRepository;
 import com.bytebreeze.quickdrop.util.AuthUtil;
 import java.util.Collections;

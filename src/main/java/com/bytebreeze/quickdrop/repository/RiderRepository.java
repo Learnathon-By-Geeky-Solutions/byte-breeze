@@ -2,7 +2,6 @@ package com.bytebreeze.quickdrop.repository;
 
 import com.bytebreeze.quickdrop.entity.RiderEntity;
 import com.bytebreeze.quickdrop.enums.VerificationStatus;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

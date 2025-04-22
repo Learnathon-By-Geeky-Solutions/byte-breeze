@@ -1,11 +1,12 @@
 package com.bytebreeze.quickdrop.service;
 
-import com.bytebreeze.quickdrop.dto.response.RiderDashboardResponseDTO;
 import com.bytebreeze.quickdrop.dto.request.RiderOnboardingDTO;
 import com.bytebreeze.quickdrop.dto.request.RiderRegistrationRequestDTO;
 import com.bytebreeze.quickdrop.dto.response.RiderApprovalByAdminResponseDTO;
+import com.bytebreeze.quickdrop.dto.response.RiderDashboardResponseDTO;
 import com.bytebreeze.quickdrop.dto.response.RiderDetailsResponseDto;
 import com.bytebreeze.quickdrop.dto.response.RiderViewCurrentParcelsResponseDTO;
+import com.bytebreeze.quickdrop.entity.ParcelEntity;
 import com.bytebreeze.quickdrop.entity.RiderEntity;
 import com.bytebreeze.quickdrop.enums.ParcelStatus;
 import com.bytebreeze.quickdrop.enums.Role;
@@ -15,7 +16,6 @@ import com.bytebreeze.quickdrop.exception.ParcelAlreadyAssignedException;
 import com.bytebreeze.quickdrop.exception.ParcelNotFoundException;
 import com.bytebreeze.quickdrop.exception.UserNotFoundException;
 import com.bytebreeze.quickdrop.mapper.RegisterRiderMapper;
-import com.bytebreeze.quickdrop.entity.ParcelEntity;
 import com.bytebreeze.quickdrop.repository.ParcelRepository;
 import com.bytebreeze.quickdrop.repository.RiderRepository;
 import com.bytebreeze.quickdrop.repository.UserRepository;
@@ -223,7 +223,8 @@ public class RiderService {
 	}
 
 	public RiderDetailsResponseDto getRiderDetails(UUID riderId) {
-		RiderEntity rider = riderRepository.findById(riderId).orElseThrow(() -> new UserNotFoundException("Rider not found"));
+		RiderEntity rider =
+				riderRepository.findById(riderId).orElseThrow(() -> new UserNotFoundException("Rider not found"));
 		return mapToDto(rider);
 	}
 

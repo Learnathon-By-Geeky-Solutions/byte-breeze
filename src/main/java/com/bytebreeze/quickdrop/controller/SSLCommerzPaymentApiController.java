@@ -1,9 +1,9 @@
 package com.bytebreeze.quickdrop.controller;
 
-import com.bytebreeze.quickdrop.enums.ParcelStatus;
-import com.bytebreeze.quickdrop.enums.PaymentStatus;
 import com.bytebreeze.quickdrop.entity.ParcelEntity;
 import com.bytebreeze.quickdrop.entity.PaymentEntity;
+import com.bytebreeze.quickdrop.enums.ParcelStatus;
+import com.bytebreeze.quickdrop.enums.PaymentStatus;
 import com.bytebreeze.quickdrop.repository.ParcelRepository;
 import com.bytebreeze.quickdrop.repository.PaymentRepository;
 import com.bytebreeze.quickdrop.service.SSLCommerzPaymentService;
@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/sslcommerz")
+@RequiredArgsConstructor
 public class SSLCommerzPaymentApiController {
 	public static final String TRAN_ID = "tran_id";
 	public static final String INVALID_TRANSACTION_ID = "Invalid transaction ID";
@@ -26,20 +28,10 @@ public class SSLCommerzPaymentApiController {
 
 	private final PaymentRepository paymentRepository;
 	private final ParcelRepository parcelRepository;
+	private final SSLCommerzPaymentService sslCommerzPaymentService;
 
 	@Value("${sslcommerz.store-passwd}")
 	private String storePassword;
-
-	private final SSLCommerzPaymentService sslCommerzPaymentService;
-
-	public SSLCommerzPaymentApiController(
-			SSLCommerzPaymentService sslCommerzPaymentService,
-			PaymentRepository paymentRepository,
-			ParcelRepository parcelRepository) {
-		this.sslCommerzPaymentService = sslCommerzPaymentService;
-		this.paymentRepository = paymentRepository;
-		this.parcelRepository = parcelRepository;
-	}
 
 	@PostMapping("/success")
 	public String handlePaymentSuccess(

@@ -3,14 +3,15 @@ package com.bytebreeze.quickdrop.service;
 import com.bytebreeze.quickdrop.dto.paymentapiresponse.SSLCommerzPaymentInitResponseDto;
 import com.bytebreeze.quickdrop.dto.paymentapiresponse.SSLCommerzValidatorResponse;
 import com.bytebreeze.quickdrop.dto.request.ParcelBookingRequestDTO;
-import com.bytebreeze.quickdrop.exception.SSLCommerzPaymentInitializationException;
 import com.bytebreeze.quickdrop.entity.UserEntity;
+import com.bytebreeze.quickdrop.exception.SSLCommerzPaymentInitializationException;
 import com.bytebreeze.quickdrop.util.SSLCommerzUtil;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,12 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 @Service
+@RequiredArgsConstructor
 public class SSLCommerzPaymentService implements PaymentService {
+	private static final String SUCCESS_URL = "/sslcommerz/success";
+	private static final String FAILURE_URL = "/sslcommerz/failure";
+	private static final String ERROR_URL = "/sslcommerz/cancel";
+	private static final String VALIDATION_URL = "/validator/api/validationserverAPI.php";
 
 	private final RestTemplate restTemplate;
 	private final HashVerificationService hashVerificationService;
@@ -38,16 +44,6 @@ public class SSLCommerzPaymentService implements PaymentService {
 
 	@Value("${sslcommerz.validation-url}")
 	private String sslczURL;
-
-	private static final String SUCCESS_URL = "/sslcommerz/success";
-	private static final String FAILURE_URL = "/sslcommerz/failure";
-	private static final String ERROR_URL = "/sslcommerz/cancel";
-	private static final String VALIDATION_URL = "/validator/api/validationserverAPI.php";
-
-	public SSLCommerzPaymentService(RestTemplate restTemplate, HashVerificationService hashVerificationService) {
-		this.restTemplate = restTemplate;
-		this.hashVerificationService = hashVerificationService;
-	}
 
 	@Override
 	public String getPaymentUrl(ParcelBookingRequestDTO dto, UserEntity sender) {

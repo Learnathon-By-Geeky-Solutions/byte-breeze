@@ -1,8 +1,8 @@
 package com.bytebreeze.quickdrop.repository;
 
-import com.bytebreeze.quickdrop.enums.ParcelStatus;
 import com.bytebreeze.quickdrop.entity.ParcelEntity;
 import com.bytebreeze.quickdrop.entity.RiderEntity;
+import com.bytebreeze.quickdrop.enums.ParcelStatus;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -2,28 +2,25 @@ package com.bytebreeze.quickdrop.service;
 
 import com.bytebreeze.quickdrop.dto.request.UserProfileUpdateDto;
 import com.bytebreeze.quickdrop.dto.request.UserRegistrationRequestDTO;
+import com.bytebreeze.quickdrop.entity.UserEntity;
 import com.bytebreeze.quickdrop.enums.Role;
 import com.bytebreeze.quickdrop.exception.AlreadyExistsException;
 import com.bytebreeze.quickdrop.exception.UserNotFoundException;
-import com.bytebreeze.quickdrop.entity.UserEntity;
 import com.bytebreeze.quickdrop.repository.UserRepository;
 import com.bytebreeze.quickdrop.util.AuthUtil;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
-
-	public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-		this.userRepository = userRepository;
-		this.passwordEncoder = passwordEncoder;
-	}
 
 	public boolean isEmailAlreadyInUse(String email) {
 		return userRepository.findByEmail(email).isPresent();

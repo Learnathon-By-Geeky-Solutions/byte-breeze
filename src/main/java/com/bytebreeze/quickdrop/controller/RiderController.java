@@ -3,10 +3,9 @@ package com.bytebreeze.quickdrop.controller;
 import com.bytebreeze.quickdrop.dto.request.RiderOnboardingDTO;
 import com.bytebreeze.quickdrop.dto.request.RiderRegistrationRequestDTO;
 import com.bytebreeze.quickdrop.dto.response.RiderViewCurrentParcelsResponseDTO;
+import com.bytebreeze.quickdrop.entity.ParcelEntity;
 import com.bytebreeze.quickdrop.entity.RiderEntity;
 import com.bytebreeze.quickdrop.enums.ParcelStatus;
-import com.bytebreeze.quickdrop.entity.ParcelEntity;
-import com.bytebreeze.quickdrop.repository.ParcelRepository;
 import com.bytebreeze.quickdrop.service.ParcelService;
 import com.bytebreeze.quickdrop.service.RiderService;
 import jakarta.validation.Valid;
@@ -36,7 +35,6 @@ public class RiderController {
 
 	private final RiderService riderService;
 	private final ParcelService parcelService;
-	private final ParcelRepository parcelRepository;
 
 	@GetMapping("/login")
 	public String riderLogin(Model model) {
