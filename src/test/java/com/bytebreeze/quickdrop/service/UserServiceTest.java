@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-import com.bytebreeze.quickdrop.dto.UserProfileUpdateDto;
-import com.bytebreeze.quickdrop.dto.UserRegistrationRequestDTO;
+import com.bytebreeze.quickdrop.dto.request.UserProfileUpdateDto;
+import com.bytebreeze.quickdrop.dto.request.UserRegistrationRequestDTO;
 import com.bytebreeze.quickdrop.enums.Role;
 import com.bytebreeze.quickdrop.exception.custom.AlreadyExistsException;
 import com.bytebreeze.quickdrop.exception.custom.UserNotFoundException;

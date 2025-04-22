@@ -1,8 +1,8 @@
 package com.bytebreeze.quickdrop.service;
 
-import com.bytebreeze.quickdrop.dto.RiderDashboardResponseDTO;
-import com.bytebreeze.quickdrop.dto.RiderOnboardingDTO;
-import com.bytebreeze.quickdrop.dto.RiderRegistrationRequestDTO;
+import com.bytebreeze.quickdrop.dto.response.RiderDashboardResponseDTO;
+import com.bytebreeze.quickdrop.dto.request.RiderOnboardingDTO;
+import com.bytebreeze.quickdrop.dto.request.RiderRegistrationRequestDTO;
 import com.bytebreeze.quickdrop.dto.response.RiderApprovalByAdminResponseDTO;
 import com.bytebreeze.quickdrop.dto.response.RiderDetailsResponseDto;
 import com.bytebreeze.quickdrop.dto.response.RiderViewCurrentParcelsResponseDTO;

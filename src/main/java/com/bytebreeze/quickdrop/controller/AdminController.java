@@ -1,6 +1,6 @@
 package com.bytebreeze.quickdrop.controller;
 
-import com.bytebreeze.quickdrop.dto.UserProfileUpdateDto;
+import com.bytebreeze.quickdrop.dto.request.UserProfileUpdateDto;
 import com.bytebreeze.quickdrop.dto.response.RiderApprovalByAdminResponseDTO;
 import com.bytebreeze.quickdrop.dto.response.RiderDetailsResponseDto;
 import com.bytebreeze.quickdrop.enums.VerificationStatus;

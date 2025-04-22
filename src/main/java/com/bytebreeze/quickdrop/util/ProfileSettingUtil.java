@@ -1,6 +1,6 @@
 package com.bytebreeze.quickdrop.util;
 
-import com.bytebreeze.quickdrop.dto.UserProfileUpdateDto;
+import com.bytebreeze.quickdrop.dto.request.UserProfileUpdateDto;
 import com.bytebreeze.quickdrop.service.UserService;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;

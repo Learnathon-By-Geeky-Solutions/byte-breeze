@@ -4,9 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-import com.bytebreeze.quickdrop.dto.RiderDashboardResponseDTO;
-import com.bytebreeze.quickdrop.dto.RiderOnboardingDTO;
-import com.bytebreeze.quickdrop.dto.RiderRegistrationRequestDTO;
+import com.bytebreeze.quickdrop.dto.response.RiderDashboardResponseDTO;
+import com.bytebreeze.quickdrop.dto.request.RiderOnboardingDTO;
+import com.bytebreeze.quickdrop.dto.request.RiderRegistrationRequestDTO;
 import com.bytebreeze.quickdrop.dto.response.RiderViewCurrentParcelsResponseDTO;
 import com.bytebreeze.quickdrop.enums.ParcelStatus;
 import com.bytebreeze.quickdrop.enums.VerificationStatus;

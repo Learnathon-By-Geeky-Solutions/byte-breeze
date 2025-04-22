@@ -1,7 +1,7 @@
 package com.bytebreeze.quickdrop.controller;
 
-import com.bytebreeze.quickdrop.dto.RiderOnboardingDTO;
-import com.bytebreeze.quickdrop.dto.RiderRegistrationRequestDTO;
+import com.bytebreeze.quickdrop.dto.request.RiderOnboardingDTO;
+import com.bytebreeze.quickdrop.dto.request.RiderRegistrationRequestDTO;
 import com.bytebreeze.quickdrop.dto.response.RiderViewCurrentParcelsResponseDTO;
 import com.bytebreeze.quickdrop.enums.ParcelStatus;
 import com.bytebreeze.quickdrop.model.Parcel;

@@ -3,7 +3,8 @@ package com.bytebreeze.quickdrop.service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import com.bytebreeze.quickdrop.dto.*;
+import com.bytebreeze.quickdrop.dto.request.RiderOnboardingDTO;
+import com.bytebreeze.quickdrop.dto.request.RiderRegistrationRequestDTO;
 import com.bytebreeze.quickdrop.dto.response.*;
 import com.bytebreeze.quickdrop.enums.*;
 import com.bytebreeze.quickdrop.exception.custom.*;
