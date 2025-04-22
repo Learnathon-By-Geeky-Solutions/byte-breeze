@@ -1,7 +1,7 @@
 package com.bytebreeze.quickdrop.service;
 
-import com.bytebreeze.quickdrop.exception.custom.FileStorageException;
-import com.bytebreeze.quickdrop.exception.custom.FileValidationException;
+import com.bytebreeze.quickdrop.exception.FileStorageException;
+import com.bytebreeze.quickdrop.exception.FileValidationException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
