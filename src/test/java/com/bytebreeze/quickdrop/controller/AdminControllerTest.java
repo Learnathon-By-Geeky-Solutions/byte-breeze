@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-import com.bytebreeze.quickdrop.dto.UserProfileUpdateDto;
+import com.bytebreeze.quickdrop.dto.request.UserProfileUpdateDto;
 import com.bytebreeze.quickdrop.dto.response.RiderApprovalByAdminResponseDTO;
 import com.bytebreeze.quickdrop.dto.response.RiderDetailsResponseDto;
 import com.bytebreeze.quickdrop.enums.VerificationStatus;
@@ -20,10 +20,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 class AdminControllerTest {
 

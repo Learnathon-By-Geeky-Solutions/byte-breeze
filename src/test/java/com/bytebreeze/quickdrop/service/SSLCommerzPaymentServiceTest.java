@@ -6,7 +6,7 @@ import static org.mockito.Mockito.*;
 
 import com.bytebreeze.quickdrop.dto.paymentapiresponse.SSLCommerzPaymentInitResponseDto;
 import com.bytebreeze.quickdrop.dto.request.ParcelBookingRequestDTO;
-import com.bytebreeze.quickdrop.model.User;
+import com.bytebreeze.quickdrop.entity.UserEntity;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.*;
@@ -18,8 +18,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
 
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 class SSLCommerzPaymentServiceTest {
 
@@ -32,7 +34,7 @@ class SSLCommerzPaymentServiceTest {
 	private SSLCommerzPaymentService paymentService;
 
 	private ParcelBookingRequestDTO parcelBookingRequestDTO;
-	private User sender;
+	private UserEntity sender;
 
 	private void setPrivateField(Object target, String fieldName, Object value) throws Exception {
 		Field field = target.getClass().getDeclaredField(fieldName);
@@ -55,7 +57,7 @@ class SSLCommerzPaymentServiceTest {
 		parcelBookingRequestDTO.setPaymentMethod("visa");
 		parcelBookingRequestDTO.setCategoryId(UUID.randomUUID());
 
-		sender = new User();
+		sender = new UserEntity();
 		sender.setFullName("John Doe");
 		sender.setEmail("john@example.com");
 	}

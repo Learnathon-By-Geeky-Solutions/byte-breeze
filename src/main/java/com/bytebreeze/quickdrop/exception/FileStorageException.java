@@ -1,4 +1,4 @@
-package com.bytebreeze.quickdrop.exception.custom;
+package com.bytebreeze.quickdrop.exception;
 
 public class FileStorageException extends RuntimeException {
 	public FileStorageException(String message) {

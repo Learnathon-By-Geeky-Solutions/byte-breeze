@@ -1,6 +1,6 @@
 package com.bytebreeze.quickdrop.security;
 
-import com.bytebreeze.quickdrop.model.User;
+import com.bytebreeze.quickdrop.entity.UserEntity;
 import com.bytebreeze.quickdrop.repository.UserRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,7 +16,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		User user = userRepository
+		UserEntity user = userRepository
 				.findByEmail(email)
 				.orElseThrow(() -> new UsernameNotFoundException("User not found by email :" + email));
 

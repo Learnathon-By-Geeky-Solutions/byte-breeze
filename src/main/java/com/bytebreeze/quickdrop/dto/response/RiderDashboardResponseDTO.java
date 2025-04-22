@@ -1,4 +1,4 @@
-package com.bytebreeze.quickdrop.dto;
+package com.bytebreeze.quickdrop.dto.response;
 
 import com.bytebreeze.quickdrop.enums.VerificationStatus;
 import lombok.Data;

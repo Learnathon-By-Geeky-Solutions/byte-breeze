@@ -20,7 +20,9 @@ import org.mockito.Mock;
 import org.mockito.MockedConstruction;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.test.context.ActiveProfiles;
 
+@ActiveProfiles("test")
 class SSLCommerzUtilTest {
 
 	@InjectMocks

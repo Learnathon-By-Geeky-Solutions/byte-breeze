@@ -1,4 +1,4 @@
-package com.bytebreeze.quickdrop.model;
+package com.bytebreeze.quickdrop.entity;
 
 import com.bytebreeze.quickdrop.enums.EmailVerified;
 import com.bytebreeze.quickdrop.enums.Role;
@@ -18,7 +18,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Getter
 @Setter
 @NoArgsConstructor
-public class User {
+public class UserEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID id;

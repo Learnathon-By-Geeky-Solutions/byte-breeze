@@ -1,7 +1,7 @@
 package com.bytebreeze.quickdrop.repository;
 
+import com.bytebreeze.quickdrop.entity.RiderEntity;
 import com.bytebreeze.quickdrop.enums.VerificationStatus;
-import com.bytebreeze.quickdrop.model.Rider;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -9,12 +9,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RiderRepository extends JpaRepository<Rider, UUID> {
-	Optional<Rider> findByEmail(String email);
+public interface RiderRepository extends JpaRepository<RiderEntity, UUID> {
+	Optional<RiderEntity> findByEmail(String email);
 
-	Optional<Rider> findById(UUID id);
+	Optional<RiderEntity> findById(UUID id);
 
-	Optional<Rider> findByNationalIdNumber(String nationalIdNumber);
+	Optional<RiderEntity> findByNationalIdNumber(String nationalIdNumber);
 
-	List<Rider> findByVerificationStatus(VerificationStatus verificationStatus);
+	List<RiderEntity> findByVerificationStatus(VerificationStatus verificationStatus);
 }

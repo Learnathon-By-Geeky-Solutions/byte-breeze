@@ -4,16 +4,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-import com.bytebreeze.quickdrop.dto.RiderDashboardResponseDTO;
-import com.bytebreeze.quickdrop.dto.RiderOnboardingDTO;
-import com.bytebreeze.quickdrop.dto.RiderRegistrationRequestDTO;
+import com.bytebreeze.quickdrop.dto.request.RiderOnboardingDTO;
+import com.bytebreeze.quickdrop.dto.request.RiderRegistrationRequestDTO;
+import com.bytebreeze.quickdrop.dto.response.RiderDashboardResponseDTO;
 import com.bytebreeze.quickdrop.dto.response.RiderViewCurrentParcelsResponseDTO;
+import com.bytebreeze.quickdrop.entity.ParcelEntity;
+import com.bytebreeze.quickdrop.entity.RiderEntity;
 import com.bytebreeze.quickdrop.enums.ParcelStatus;
 import com.bytebreeze.quickdrop.enums.VerificationStatus;
-import com.bytebreeze.quickdrop.exception.custom.AlreadyExistsException;
-import com.bytebreeze.quickdrop.exception.custom.ParcelNotFoundException;
-import com.bytebreeze.quickdrop.model.Parcel;
-import com.bytebreeze.quickdrop.model.Rider;
+import com.bytebreeze.quickdrop.exception.AlreadyExistsException;
+import com.bytebreeze.quickdrop.exception.ParcelNotFoundException;
 import com.bytebreeze.quickdrop.service.ParcelService;
 import com.bytebreeze.quickdrop.service.RiderService;
 import java.math.BigDecimal;
@@ -24,10 +24,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 class RiderControllerTest {
 
@@ -51,19 +53,19 @@ class RiderControllerTest {
 
 	private UUID riderId;
 	private UUID parcelId;
-	private Rider rider;
+	private RiderEntity rider;
 	private RiderRegistrationRequestDTO registrationDTO;
 	private RiderOnboardingDTO onboardingDTO;
 	private RiderDashboardResponseDTO dashboardResponse;
 	private RiderViewCurrentParcelsResponseDTO parcelDTO;
-	private Parcel parcel;
+	private ParcelEntity parcel;
 
 	@BeforeEach
 	void setUp() {
 		riderId = UUID.randomUUID();
 		parcelId = UUID.randomUUID();
 
-		rider = new Rider();
+		rider = new RiderEntity();
 		rider.setId(riderId);
 		rider.setFullName("John Doe");
 		rider.setEmail("john@example.com");
@@ -89,7 +91,7 @@ class RiderControllerTest {
 		parcelDTO.setTrackingId("123456");
 		parcelDTO.setPrice(new BigDecimal("100.00"));
 
-		parcel = new Parcel();
+		parcel = new ParcelEntity();
 		parcel.setId(parcelId);
 		parcel.setTrackingId("123456");
 		parcel.setStatus(ParcelStatus.ASSIGNED);

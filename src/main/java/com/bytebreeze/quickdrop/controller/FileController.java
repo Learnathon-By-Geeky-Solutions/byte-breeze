@@ -4,7 +4,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
-import java.util.logging.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -17,9 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/files")
+@Slf4j
 public class FileController {
-
-	private static final Logger logger = Logger.getLogger(FileController.class.getName());
 
 	@Value("${storage.local.path}")
 	private String uploadDir;
@@ -55,7 +54,7 @@ public class FileController {
 					.body(resource);
 
 		} catch (MalformedURLException e) {
-			logger.severe("Malformed file URL: " + e.getMessage());
+			log.warn("Malformed file URL: " + e.getMessage());
 			return ResponseEntity.badRequest().build();
 		}
 	}
