@@ -3,7 +3,7 @@ package com.bytebreeze.quickdrop.service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import com.bytebreeze.quickdrop.model.ProductCategory;
+import com.bytebreeze.quickdrop.entity.ProductCategory;
 import com.bytebreeze.quickdrop.repository.ProductCategoryRepository;
 import java.util.Arrays;
 import java.util.List;

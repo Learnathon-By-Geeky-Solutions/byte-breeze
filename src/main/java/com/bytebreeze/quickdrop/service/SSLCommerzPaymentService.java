@@ -4,7 +4,7 @@ import com.bytebreeze.quickdrop.dto.paymentapiresponse.SSLCommerzPaymentInitResp
 import com.bytebreeze.quickdrop.dto.paymentapiresponse.SSLCommerzValidatorResponse;
 import com.bytebreeze.quickdrop.dto.request.ParcelBookingRequestDTO;
 import com.bytebreeze.quickdrop.exception.custom.SSLCommerzPaymentInitializationException;
-import com.bytebreeze.quickdrop.model.User;
+import com.bytebreeze.quickdrop.entity.User;
 import com.bytebreeze.quickdrop.util.SSLCommerzUtil;
 import java.io.IOException;
 import java.net.URLEncoder;

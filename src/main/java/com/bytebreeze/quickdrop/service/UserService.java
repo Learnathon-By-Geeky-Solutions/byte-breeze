@@ -5,7 +5,7 @@ import com.bytebreeze.quickdrop.dto.request.UserRegistrationRequestDTO;
 import com.bytebreeze.quickdrop.enums.Role;
 import com.bytebreeze.quickdrop.exception.custom.AlreadyExistsException;
 import com.bytebreeze.quickdrop.exception.custom.UserNotFoundException;
-import com.bytebreeze.quickdrop.model.User;
+import com.bytebreeze.quickdrop.entity.User;
 import com.bytebreeze.quickdrop.repository.UserRepository;
 import com.bytebreeze.quickdrop.util.AuthUtil;
 import java.util.Collections;

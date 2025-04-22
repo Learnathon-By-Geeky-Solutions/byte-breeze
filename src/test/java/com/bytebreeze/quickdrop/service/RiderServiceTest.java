@@ -9,7 +9,7 @@ import com.bytebreeze.quickdrop.dto.response.*;
 import com.bytebreeze.quickdrop.enums.*;
 import com.bytebreeze.quickdrop.exception.custom.*;
 import com.bytebreeze.quickdrop.mapper.RegisterRiderMapper;
-import com.bytebreeze.quickdrop.model.*;
+import com.bytebreeze.quickdrop.entity.*;
 import com.bytebreeze.quickdrop.repository.*;
 import com.bytebreeze.quickdrop.util.AuthUtil;
 import java.time.LocalDate;

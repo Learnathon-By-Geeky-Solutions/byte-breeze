@@ -1,6 +1,6 @@
 package com.bytebreeze.quickdrop.security;
 
-import com.bytebreeze.quickdrop.model.User;
+import com.bytebreeze.quickdrop.entity.User;
 import com.bytebreeze.quickdrop.repository.UserRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

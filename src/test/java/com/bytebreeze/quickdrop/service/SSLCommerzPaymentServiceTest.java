@@ -6,7 +6,7 @@ import static org.mockito.Mockito.*;
 
 import com.bytebreeze.quickdrop.dto.paymentapiresponse.SSLCommerzPaymentInitResponseDto;
 import com.bytebreeze.quickdrop.dto.request.ParcelBookingRequestDTO;
-import com.bytebreeze.quickdrop.model.User;
+import com.bytebreeze.quickdrop.entity.User;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.*;

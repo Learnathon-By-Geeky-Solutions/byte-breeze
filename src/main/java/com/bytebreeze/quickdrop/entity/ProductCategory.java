@@ -1,4 +1,4 @@
-package com.bytebreeze.quickdrop.model;
+package com.bytebreeze.quickdrop.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;

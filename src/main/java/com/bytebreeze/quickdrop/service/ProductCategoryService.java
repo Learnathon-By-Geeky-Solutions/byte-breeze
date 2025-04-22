@@ -1,6 +1,6 @@
 package com.bytebreeze.quickdrop.service;
 
-import com.bytebreeze.quickdrop.model.ProductCategory;
+import com.bytebreeze.quickdrop.entity.ProductCategory;
 import com.bytebreeze.quickdrop.repository.ProductCategoryRepository;
 import java.util.List;
 import java.util.Optional;

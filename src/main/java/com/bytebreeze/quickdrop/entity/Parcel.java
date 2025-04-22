@@ -1,4 +1,4 @@
-package com.bytebreeze.quickdrop.model;
+package com.bytebreeze.quickdrop.entity;
 
 import com.bytebreeze.quickdrop.enums.ParcelStatus;
 import jakarta.persistence.*;

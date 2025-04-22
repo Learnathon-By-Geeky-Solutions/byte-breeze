@@ -1,7 +1,7 @@
 package com.bytebreeze.quickdrop.mapper;
 
 import com.bytebreeze.quickdrop.dto.request.RiderOnboardingDTO;
-import com.bytebreeze.quickdrop.model.Rider;
+import com.bytebreeze.quickdrop.entity.Rider;
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
 

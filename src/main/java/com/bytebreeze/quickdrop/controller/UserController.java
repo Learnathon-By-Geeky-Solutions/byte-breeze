@@ -2,7 +2,7 @@ package com.bytebreeze.quickdrop.controller;
 
 import com.bytebreeze.quickdrop.dto.request.UserProfileUpdateDto;
 import com.bytebreeze.quickdrop.dto.request.ParcelBookingRequestDTO;
-import com.bytebreeze.quickdrop.model.Parcel;
+import com.bytebreeze.quickdrop.entity.Parcel;
 import com.bytebreeze.quickdrop.repository.ProductCategoryRepository;
 import com.bytebreeze.quickdrop.service.ParcelService;
 import com.bytebreeze.quickdrop.service.SSLCommerzPaymentService;

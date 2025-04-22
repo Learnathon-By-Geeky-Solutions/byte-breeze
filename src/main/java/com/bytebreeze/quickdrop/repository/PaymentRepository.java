@@ -1,6 +1,6 @@
 package com.bytebreeze.quickdrop.repository;
 
-import com.bytebreeze.quickdrop.model.Payment;
+import com.bytebreeze.quickdrop.entity.Payment;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -2,8 +2,8 @@ package com.bytebreeze.quickdrop.controller;
 
 import com.bytebreeze.quickdrop.enums.ParcelStatus;
 import com.bytebreeze.quickdrop.enums.PaymentStatus;
-import com.bytebreeze.quickdrop.model.Parcel;
-import com.bytebreeze.quickdrop.model.Payment;
+import com.bytebreeze.quickdrop.entity.Parcel;
+import com.bytebreeze.quickdrop.entity.Payment;
 import com.bytebreeze.quickdrop.repository.ParcelRepository;
 import com.bytebreeze.quickdrop.repository.PaymentRepository;
 import com.bytebreeze.quickdrop.service.SSLCommerzPaymentService;

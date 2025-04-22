@@ -1,7 +1,7 @@
 package com.bytebreeze.quickdrop.service;
 
 import com.bytebreeze.quickdrop.dto.request.ParcelBookingRequestDTO;
-import com.bytebreeze.quickdrop.model.User;
+import com.bytebreeze.quickdrop.entity.User;
 
 public interface PaymentService {
 	/*
