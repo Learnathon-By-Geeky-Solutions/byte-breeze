@@ -1,4 +1,4 @@
-package com.bytebreeze.quickdrop.model;
+package com.bytebreeze.quickdrop.entity;
 
 import com.bytebreeze.quickdrop.enums.ParcelStatus;
 import jakarta.persistence.*;
@@ -12,7 +12,7 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Parcel {
+public class ParcelEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,7 +20,7 @@ public class Parcel {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "category_id")
-	private ProductCategory category;
+	private ProductCategoryEntity category;
 
 	@Column(columnDefinition = "TEXT")
 	private String description;
@@ -72,11 +72,11 @@ public class Parcel {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "sender_id", nullable = false)
-	private User sender;
+	private UserEntity sender;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "rider_id")
-	private Rider rider;
+	private RiderEntity rider;
 
 	@Column(name = "rider_otp")
 	private String riderOtp;

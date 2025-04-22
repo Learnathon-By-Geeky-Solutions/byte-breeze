@@ -1,4 +1,4 @@
-package com.bytebreeze.quickdrop.model;
+package com.bytebreeze.quickdrop.entity;
 
 import com.bytebreeze.quickdrop.enums.Gender;
 import com.bytebreeze.quickdrop.enums.VehicleType;
@@ -15,7 +15,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "riders")
 @PrimaryKeyJoinColumn(name = "id")
-public class Rider extends User {
+public class RiderEntity extends UserEntity {
 
 	@Column(nullable = true)
 	private LocalDate dateOfBirth;

@@ -3,12 +3,15 @@ package com.bytebreeze.quickdrop.service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import com.bytebreeze.quickdrop.dto.*;
+import com.bytebreeze.quickdrop.dto.request.RiderOnboardingDTO;
+import com.bytebreeze.quickdrop.dto.request.RiderRegistrationRequestDTO;
 import com.bytebreeze.quickdrop.dto.response.*;
+import com.bytebreeze.quickdrop.entity.*;
 import com.bytebreeze.quickdrop.enums.*;
-import com.bytebreeze.quickdrop.exception.custom.*;
+import com.bytebreeze.quickdrop.exception.AlreadyExistsException;
+import com.bytebreeze.quickdrop.exception.ParcelAlreadyAssignedException;
+import com.bytebreeze.quickdrop.exception.UserNotFoundException;
 import com.bytebreeze.quickdrop.mapper.RegisterRiderMapper;
-import com.bytebreeze.quickdrop.model.*;
 import com.bytebreeze.quickdrop.repository.*;
 import com.bytebreeze.quickdrop.util.AuthUtil;
 import java.time.LocalDate;
@@ -20,7 +23,9 @@ import org.mockito.*;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
 
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 class RiderServiceTest {
 
@@ -45,11 +50,11 @@ class RiderServiceTest {
 	@Mock
 	private RegisterRiderMapper registerRiderMapper;
 
-	private Rider rider;
+	private RiderEntity rider;
 
 	@BeforeEach
 	void setUp() {
-		rider = new Rider();
+		rider = new RiderEntity();
 		rider.setId(UUID.randomUUID());
 		rider.setEmail("rider@example.com");
 		rider.setIsAvailable(true);
@@ -59,7 +64,7 @@ class RiderServiceTest {
 
 	@Test
 	void isEmailAlreadyInUse_true() {
-		when(userRepository.findByEmail("test@example.com")).thenReturn(Optional.of(new Rider()));
+		when(userRepository.findByEmail("test@example.com")).thenReturn(Optional.of(new RiderEntity()));
 		assertTrue(riderService.isEmailAlreadyInUse("test@example.com"));
 	}
 
@@ -87,7 +92,7 @@ class RiderServiceTest {
 		try (MockedStatic<AuthUtil> mockedStatic = mockStatic(AuthUtil.class)) {
 			mockedStatic.when(AuthUtil::getAuthenticatedUsername).thenReturn("rider@example.com");
 			when(riderRepository.findByEmail("rider@example.com")).thenReturn(Optional.of(rider));
-			Rider result = riderService.getAuthenticatedRider();
+			RiderEntity result = riderService.getAuthenticatedRider();
 			assertEquals(rider, result);
 		}
 	}
@@ -117,14 +122,14 @@ class RiderServiceTest {
 		RiderRegistrationRequestDTO dto = new RiderRegistrationRequestDTO();
 		dto.setEmail("rider@example.com");
 		dto.setPassword("1234");
-		Rider mapped = new Rider();
+		RiderEntity mapped = new RiderEntity();
 
 		when(userRepository.findByEmail(dto.getEmail())).thenReturn(Optional.empty());
 		when(passwordEncoder.encode("1234")).thenReturn("encoded");
 		when(registerRiderMapper.toEntity(dto)).thenReturn(mapped);
 		when(riderRepository.save(mapped)).thenReturn(mapped);
 
-		Rider result = riderService.registerRider(dto);
+		RiderEntity result = riderService.registerRider(dto);
 		assertNotNull(result);
 	}
 
@@ -132,7 +137,7 @@ class RiderServiceTest {
 	void registerRider_emailExists() {
 		RiderRegistrationRequestDTO dto = new RiderRegistrationRequestDTO();
 		dto.setEmail("test@example.com");
-		when(userRepository.findByEmail("test@example.com")).thenReturn(Optional.of(new Rider()));
+		when(userRepository.findByEmail("test@example.com")).thenReturn(Optional.of(new RiderEntity()));
 		assertThrows(AlreadyExistsException.class, () -> riderService.registerRider(dto));
 	}
 
@@ -164,7 +169,7 @@ class RiderServiceTest {
 
 	@Test
 	void currentParcelsForRider_success() {
-		Parcel parcel = new Parcel();
+		ParcelEntity parcel = new ParcelEntity();
 		parcel.setId(UUID.randomUUID());
 		parcel.setStatus(ParcelStatus.BOOKED);
 		parcel.setTrackingId("T123");
@@ -174,7 +179,7 @@ class RiderServiceTest {
 
 	@Test
 	void acceptParcelDelivery_success() {
-		Parcel parcel = new Parcel();
+		ParcelEntity parcel = new ParcelEntity();
 		parcel.setId(UUID.randomUUID());
 		parcel.setStatus(ParcelStatus.BOOKED);
 
@@ -192,9 +197,9 @@ class RiderServiceTest {
 	@Test
 	void acceptParcelDelivery_alreadyAssignedToOther() {
 		// Arrange
-		Parcel parcel = new Parcel();
+		ParcelEntity parcel = new ParcelEntity();
 		parcel.setId(UUID.randomUUID());
-		parcel.setRider(new Rider()); // Simulate parcel already assigned
+		parcel.setRider(new RiderEntity()); // Simulate parcel already assigned
 
 		try (MockedStatic<AuthUtil> mockedStatic = mockStatic(AuthUtil.class)) {
 			mockedStatic.when(AuthUtil::getAuthenticatedUsername).thenReturn("rider@example.com");
@@ -213,7 +218,7 @@ class RiderServiceTest {
 	@Test
 	void acceptParcelDelivery_riderAlreadyAssigned() {
 		// Arrange
-		Parcel parcel = new Parcel();
+		ParcelEntity parcel = new ParcelEntity();
 		parcel.setId(UUID.randomUUID());
 
 		try (MockedStatic<AuthUtil> mockedStatic = mockStatic(AuthUtil.class)) {
@@ -232,8 +237,8 @@ class RiderServiceTest {
 
 	@Test
 	void getAssignedParcelByRider_success() {
-		when(parcelRepository.findByStatusInAndRider(anyList(), eq(rider))).thenReturn(List.of(new Parcel()));
-		List<Parcel> result = riderService.getAssignedParcelByRider(rider);
+		when(parcelRepository.findByStatusInAndRider(anyList(), eq(rider))).thenReturn(List.of(new ParcelEntity()));
+		List<ParcelEntity> result = riderService.getAssignedParcelByRider(rider);
 		assertEquals(1, result.size());
 	}
 
@@ -284,7 +289,7 @@ class RiderServiceTest {
 		riderOnboardingDTO.setDriversLicenseNumber("892412345");
 
 		// Mock repository behavior for finding rider and checking for existing National ID
-		Rider existingRider = new Rider();
+		RiderEntity existingRider = new RiderEntity();
 		existingRider.setId(riderId); // Ensure the riderId is set
 		existingRider.setNationalIdNumber("123456789");
 		existingRider.setDateOfBirth(dateOfBirth);
@@ -308,10 +313,10 @@ class RiderServiceTest {
 		when(fileStorageService.storeFile(any())).thenReturn("file/path");
 
 		// Mock save to return the rider
-		when(riderRepository.save(any(Rider.class))).thenReturn(existingRider);
+		when(riderRepository.save(any(RiderEntity.class))).thenReturn(existingRider);
 
 		// Act
-		Rider onboardedRider = riderService.onboardRider(riderId, riderOnboardingDTO);
+		RiderEntity onboardedRider = riderService.onboardRider(riderId, riderOnboardingDTO);
 
 		// Assert
 		assertNotNull(onboardedRider);

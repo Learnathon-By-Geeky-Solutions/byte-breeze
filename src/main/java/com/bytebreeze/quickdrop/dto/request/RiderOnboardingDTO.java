@@ -1,4 +1,4 @@
-package com.bytebreeze.quickdrop.dto;
+package com.bytebreeze.quickdrop.dto.request;
 
 import com.bytebreeze.quickdrop.enums.Gender;
 import com.bytebreeze.quickdrop.enums.VehicleType;

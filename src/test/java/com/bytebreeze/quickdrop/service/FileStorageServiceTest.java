@@ -3,8 +3,8 @@ package com.bytebreeze.quickdrop.service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import com.bytebreeze.quickdrop.exception.custom.FileStorageException;
-import com.bytebreeze.quickdrop.exception.custom.FileValidationException;
+import com.bytebreeze.quickdrop.exception.FileStorageException;
+import com.bytebreeze.quickdrop.exception.FileValidationException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -12,15 +12,21 @@ import java.nio.file.Paths;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+@ActiveProfiles("test")
+@ExtendWith(MockitoExtension.class)
 class FileStorageServiceTest {
-
+	@Mock
 	private FileStorageService fileStorageService;
 
-	private final String tempStoragePath = "C:/Users/dell/Downloads/test-uploads";
+	private final String tempStoragePath = "test-uploads";
 
 	@BeforeEach
 	void setUp() {
