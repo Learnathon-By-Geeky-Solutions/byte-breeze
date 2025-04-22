@@ -3,7 +3,7 @@ package com.bytebreeze.quickdrop.service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import com.bytebreeze.quickdrop.entity.ProductCategory;
+import com.bytebreeze.quickdrop.entity.ProductCategoryEntity;
 import com.bytebreeze.quickdrop.repository.ProductCategoryRepository;
 import java.util.Arrays;
 import java.util.List;
@@ -26,22 +26,22 @@ class ProductCategoryServiceTest {
 	private ProductCategoryService productCategoryService;
 
 	private UUID categoryId;
-	private ProductCategory sampleCategory;
+	private ProductCategoryEntity sampleCategory;
 
 	@BeforeEach
 	void setUp() {
 		categoryId = UUID.randomUUID();
-		sampleCategory = new ProductCategory();
+		sampleCategory = new ProductCategoryEntity();
 		sampleCategory.setId(categoryId);
 		sampleCategory.setCategory("Electronics");
 	}
 
 	@Test
 	void testGetAllCategories() {
-		List<ProductCategory> categories = Arrays.asList(sampleCategory, new ProductCategory());
+		List<ProductCategoryEntity> categories = Arrays.asList(sampleCategory, new ProductCategoryEntity());
 		when(productCategoryRepository.findAll()).thenReturn(categories);
 
-		List<ProductCategory> result = productCategoryService.getAllCategories();
+		List<ProductCategoryEntity> result = productCategoryService.getAllCategories();
 
 		assertEquals(2, result.size());
 		verify(productCategoryRepository, times(1)).findAll();
@@ -51,7 +51,7 @@ class ProductCategoryServiceTest {
 	void testGetCategoryById_Found() {
 		when(productCategoryRepository.findById(categoryId)).thenReturn(Optional.of(sampleCategory));
 
-		ProductCategory result = productCategoryService.getCategoryById(categoryId);
+		ProductCategoryEntity result = productCategoryService.getCategoryById(categoryId);
 
 		assertNotNull(result);
 		assertEquals(categoryId, result.getId());
@@ -62,7 +62,7 @@ class ProductCategoryServiceTest {
 	void testGetCategoryById_NotFound() {
 		when(productCategoryRepository.findById(categoryId)).thenReturn(Optional.empty());
 
-		ProductCategory result = productCategoryService.getCategoryById(categoryId);
+		ProductCategoryEntity result = productCategoryService.getCategoryById(categoryId);
 
 		assertNull(result);
 		verify(productCategoryRepository, times(1)).findById(categoryId);
@@ -72,7 +72,7 @@ class ProductCategoryServiceTest {
 	void testAddCategory() {
 		when(productCategoryRepository.save(sampleCategory)).thenReturn(sampleCategory);
 
-		ProductCategory result = productCategoryService.addCategory(sampleCategory);
+		ProductCategoryEntity result = productCategoryService.addCategory(sampleCategory);
 
 		assertNotNull(result);
 		assertEquals(categoryId, result.getId());
@@ -84,7 +84,7 @@ class ProductCategoryServiceTest {
 		when(productCategoryRepository.existsById(categoryId)).thenReturn(true);
 		when(productCategoryRepository.save(sampleCategory)).thenReturn(sampleCategory);
 
-		ProductCategory result = productCategoryService.updateCategory(categoryId, sampleCategory);
+		ProductCategoryEntity result = productCategoryService.updateCategory(categoryId, sampleCategory);
 
 		assertNotNull(result);
 		assertEquals(categoryId, result.getId());
@@ -96,7 +96,7 @@ class ProductCategoryServiceTest {
 	void testUpdateCategory_NotFound() {
 		when(productCategoryRepository.existsById(categoryId)).thenReturn(false);
 
-		ProductCategory result = productCategoryService.updateCategory(categoryId, sampleCategory);
+		ProductCategoryEntity result = productCategoryService.updateCategory(categoryId, sampleCategory);
 
 		assertNull(result);
 		verify(productCategoryRepository, times(1)).existsById(categoryId);

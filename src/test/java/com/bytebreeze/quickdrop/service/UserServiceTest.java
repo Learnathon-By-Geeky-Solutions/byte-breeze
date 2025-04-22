@@ -9,7 +9,7 @@ import com.bytebreeze.quickdrop.dto.request.UserRegistrationRequestDTO;
 import com.bytebreeze.quickdrop.enums.Role;
 import com.bytebreeze.quickdrop.exception.custom.AlreadyExistsException;
 import com.bytebreeze.quickdrop.exception.custom.UserNotFoundException;
-import com.bytebreeze.quickdrop.entity.User;
+import com.bytebreeze.quickdrop.entity.UserEntity;
 import com.bytebreeze.quickdrop.repository.UserRepository;
 import com.bytebreeze.quickdrop.util.AuthUtil;
 import java.util.Collections;
@@ -40,13 +40,13 @@ class UserServiceTest {
 	@InjectMocks
 	private UserService userService;
 
-	private User user;
+	private UserEntity user;
 	private String email = "test@example.com";
 	private MockedStatic<AuthUtil> authUtilMockedStatic;
 
 	@BeforeEach
 	void setUp() {
-		user = new User();
+		user = new UserEntity();
 		user.setId(UUID.randomUUID());
 		user.setFullName("Test User");
 		user.setEmail(email);
@@ -88,14 +88,14 @@ class UserServiceTest {
 
 		when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
 		when(passwordEncoder.encode("password123")).thenReturn("encodedPassword");
-		when(userRepository.save(any(User.class))).thenReturn(user);
+		when(userRepository.save(any(UserEntity.class))).thenReturn(user);
 
 		String result = userService.registerUser(dto);
 
 		assertEquals("User registered successfully", result);
 		verify(userRepository, times(1)).findByEmail(email);
 		verify(passwordEncoder, times(1)).encode("password123");
-		verify(userRepository, times(1)).save(any(User.class));
+		verify(userRepository, times(1)).save(any(UserEntity.class));
 	}
 
 	@Test
@@ -108,7 +108,7 @@ class UserServiceTest {
 		assertThrows(AlreadyExistsException.class, () -> userService.registerUser(dto));
 		verify(userRepository, times(1)).findByEmail(email);
 		verify(passwordEncoder, never()).encode(anyString());
-		verify(userRepository, never()).save(any(User.class));
+		verify(userRepository, never()).save(any(UserEntity.class));
 	}
 
 	@Test
@@ -116,7 +116,7 @@ class UserServiceTest {
 		authUtilMockedStatic.when(AuthUtil::getAuthenticatedUsername).thenReturn(email);
 		when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
 
-		User result = userService.getAuthenticatedUser();
+		UserEntity result = userService.getAuthenticatedUser();
 
 		assertEquals(user, result);
 		verify(userRepository, times(1)).findByEmail(email);
@@ -156,7 +156,7 @@ class UserServiceTest {
 		authUtilMockedStatic.when(AuthUtil::getAuthenticatedUsername).thenReturn(email);
 		when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
 		when(passwordEncoder.encode("newPassword")).thenReturn("encodedNewPassword");
-		when(userRepository.save(any(User.class))).thenReturn(user);
+		when(userRepository.save(any(UserEntity.class))).thenReturn(user);
 
 		boolean result = userService.updateUserProfile(dto);
 
@@ -177,7 +177,7 @@ class UserServiceTest {
 
 		authUtilMockedStatic.when(AuthUtil::getAuthenticatedUsername).thenReturn(email);
 		when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
-		when(userRepository.save(any(User.class))).thenReturn(user);
+		when(userRepository.save(any(UserEntity.class))).thenReturn(user);
 
 		boolean result = userService.updateUserProfile(dto);
 
@@ -199,7 +199,7 @@ class UserServiceTest {
 
 		authUtilMockedStatic.when(AuthUtil::getAuthenticatedUsername).thenReturn(email);
 		when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
-		when(userRepository.save(any(User.class))).thenReturn(user);
+		when(userRepository.save(any(UserEntity.class))).thenReturn(user);
 
 		boolean result = userService.updateUserProfile(dto);
 
@@ -221,7 +221,7 @@ class UserServiceTest {
 
 		authUtilMockedStatic.when(AuthUtil::getAuthenticatedUsername).thenReturn(email);
 		when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
-		when(userRepository.save(any(User.class))).thenReturn(user);
+		when(userRepository.save(any(UserEntity.class))).thenReturn(user);
 
 		boolean result = userService.updateUserProfile(dto);
 

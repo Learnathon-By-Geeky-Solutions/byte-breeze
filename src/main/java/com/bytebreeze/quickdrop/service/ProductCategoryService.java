@@ -1,6 +1,6 @@
 package com.bytebreeze.quickdrop.service;
 
-import com.bytebreeze.quickdrop.entity.ProductCategory;
+import com.bytebreeze.quickdrop.entity.ProductCategoryEntity;
 import com.bytebreeze.quickdrop.repository.ProductCategoryRepository;
 import java.util.List;
 import java.util.Optional;
@@ -16,20 +16,20 @@ public class ProductCategoryService {
 		this.productCategoryRepository = productCategoryRepository;
 	}
 
-	public List<ProductCategory> getAllCategories() {
+	public List<ProductCategoryEntity> getAllCategories() {
 		return productCategoryRepository.findAll();
 	}
 
-	public ProductCategory getCategoryById(UUID categoryId) {
-		Optional<ProductCategory> category = productCategoryRepository.findById(categoryId);
+	public ProductCategoryEntity getCategoryById(UUID categoryId) {
+		Optional<ProductCategoryEntity> category = productCategoryRepository.findById(categoryId);
 		return category.orElse(null);
 	}
 
-	public ProductCategory addCategory(ProductCategory category) {
+	public ProductCategoryEntity addCategory(ProductCategoryEntity category) {
 		return productCategoryRepository.save(category);
 	}
 
-	public ProductCategory updateCategory(UUID categoryId, ProductCategory category) {
+	public ProductCategoryEntity updateCategory(UUID categoryId, ProductCategoryEntity category) {
 		if (productCategoryRepository.existsById(categoryId)) {
 			category.setId(categoryId); // Ensure the ID is set correctly for update
 			return productCategoryRepository.save(category);

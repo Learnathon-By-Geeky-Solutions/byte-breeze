@@ -15,7 +15,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "riders")
 @PrimaryKeyJoinColumn(name = "id")
-public class Rider extends User {
+public class RiderEntity extends UserEntity {
 
 	@Column(nullable = true)
 	private LocalDate dateOfBirth;

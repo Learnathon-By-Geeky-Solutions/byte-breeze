@@ -2,7 +2,7 @@ package com.bytebreeze.quickdrop.controller;
 
 import com.bytebreeze.quickdrop.dto.request.UserProfileUpdateDto;
 import com.bytebreeze.quickdrop.dto.request.ParcelBookingRequestDTO;
-import com.bytebreeze.quickdrop.entity.Parcel;
+import com.bytebreeze.quickdrop.entity.ParcelEntity;
 import com.bytebreeze.quickdrop.repository.ProductCategoryRepository;
 import com.bytebreeze.quickdrop.service.ParcelService;
 import com.bytebreeze.quickdrop.service.SSLCommerzPaymentService;
@@ -29,7 +29,7 @@ public class UserController {
 
 	@GetMapping("/dashboard")
 	public String userDashboard(Model model) {
-		List<Parcel> bookedParcels = parcelService.getBookedButNotDeliveredParcels();
+		List<ParcelEntity> bookedParcels = parcelService.getBookedButNotDeliveredParcels();
 		model.addAttribute("bookedParcels", bookedParcels);
 		return "dashboard/home";
 	}
@@ -78,7 +78,7 @@ public class UserController {
 
 		// save the parcel booking information
 		parcelBookingRequestDTO.setTransactionId(parcelService.generateTransactionId());
-		Parcel parcel = parcelService.bookParcel(parcelBookingRequestDTO);
+		ParcelEntity parcel = parcelService.bookParcel(parcelBookingRequestDTO);
 
 		// save the payment information
 		parcelService.savePayment(parcel, parcelBookingRequestDTO);
@@ -92,7 +92,7 @@ public class UserController {
 
 	@GetMapping("/parcel-history")
 	public String getParcelHistory(Model model) {
-		List<Parcel> parcelHistory = parcelService.getParcelList();
+		List<ParcelEntity> parcelHistory = parcelService.getParcelList();
 		model.addAttribute("parcelHistory", parcelHistory);
 		return "dashboard/parcel-history";
 	}

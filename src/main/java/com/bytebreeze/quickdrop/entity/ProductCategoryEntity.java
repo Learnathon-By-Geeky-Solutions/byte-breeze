@@ -14,7 +14,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ProductCategory {
+public class ProductCategoryEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID id;

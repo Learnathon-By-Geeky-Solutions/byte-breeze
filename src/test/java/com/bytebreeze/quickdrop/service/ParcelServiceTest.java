@@ -6,12 +6,9 @@ import static org.mockito.Mockito.*;
 
 import com.bytebreeze.quickdrop.dto.request.CalculateShippingCostRequestDto;
 import com.bytebreeze.quickdrop.dto.request.ParcelBookingRequestDTO;
+import com.bytebreeze.quickdrop.entity.*;
 import com.bytebreeze.quickdrop.enums.ParcelStatus;
-import com.bytebreeze.quickdrop.entity.Parcel;
-import com.bytebreeze.quickdrop.entity.Payment;
-import com.bytebreeze.quickdrop.entity.ProductCategory;
-import com.bytebreeze.quickdrop.entity.Rider;
-import com.bytebreeze.quickdrop.entity.User;
+import com.bytebreeze.quickdrop.entity.RiderEntity;
 import com.bytebreeze.quickdrop.repository.ParcelRepository;
 import com.bytebreeze.quickdrop.repository.PaymentRepository;
 import com.bytebreeze.quickdrop.repository.ProductCategoryRepository;
@@ -62,22 +59,22 @@ class ParcelServiceTest {
 	@InjectMocks
 	private ParcelService parcelService;
 
-	private User sender;
-	private ProductCategory category;
-	private Rider rider;
+	private UserEntity sender;
+	private ProductCategoryEntity category;
+	private RiderEntity rider;
 	private MockedStatic<AuthUtil> authUtilMockedStatic;
 
 	@BeforeEach
 	void setUp() {
-		sender = new User();
+		sender = new UserEntity();
 		sender.setId(UUID.randomUUID());
 		sender.setEmail("sender@example.com");
 
-		category = new ProductCategory();
+		category = new ProductCategoryEntity();
 		category.setId(UUID.randomUUID());
 		category.setCategory("Electronics");
 
-		rider = new Rider();
+		rider = new RiderEntity();
 		rider.setId(UUID.randomUUID());
 		rider.setRiderBalance(0.0);
 		rider.setIsAssigned(true);
@@ -96,14 +93,14 @@ class ParcelServiceTest {
 		authUtilMockedStatic.when(AuthUtil::getAuthenticatedUsername).thenReturn("sender@example.com");
 		when(userRepository.findByEmail("sender@example.com")).thenReturn(Optional.of(sender));
 		when(productCategoryRepository.findById(dto.getCategoryId())).thenReturn(Optional.of(category));
-		when(parcelRepository.save(any(Parcel.class))).thenAnswer(invocation -> invocation.getArgument(0));
+		when(parcelRepository.save(any(ParcelEntity.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-		Parcel result = parcelService.bookParcel(dto);
+		ParcelEntity result = parcelService.bookParcel(dto);
 
 		assertNotNull(result);
 		assertEquals(sender, result.getSender());
 		assertEquals(category, result.getCategory());
-		verify(parcelRepository, times(1)).save(any(Parcel.class));
+		verify(parcelRepository, times(1)).save(any(ParcelEntity.class));
 	}
 
 	@Test
@@ -134,25 +131,25 @@ class ParcelServiceTest {
 
 	@Test
 	void testSavePayment_Success() {
-		Parcel parcel = new Parcel();
+		ParcelEntity parcel = new ParcelEntity();
 		parcel.setSender(sender);
 		ParcelBookingRequestDTO dto = createParcelBookingRequestDTO();
-		when(paymentRepository.save(any(Payment.class))).thenAnswer(invocation -> invocation.getArgument(0));
+		when(paymentRepository.save(any(PaymentEntity.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
 		parcelService.savePayment(parcel, dto);
 
-		verify(paymentRepository, times(1)).save(any(Payment.class));
+		verify(paymentRepository, times(1)).save(any(PaymentEntity.class));
 	}
 
 	@Test
 	void testGetBookedButNotDeliveredParcels_Success() {
 		authUtilMockedStatic.when(AuthUtil::getAuthenticatedUsername).thenReturn("sender@example.com");
 		when(userRepository.findByEmail("sender@example.com")).thenReturn(Optional.of(sender));
-		List<Parcel> parcels = Collections.singletonList(new Parcel());
+		List<ParcelEntity> parcels = Collections.singletonList(new ParcelEntity());
 		when(parcelRepository.findBySenderAndStatus(sender.getId(), ParcelStatus.BOOKED))
 				.thenReturn(parcels);
 
-		List<Parcel> result = parcelService.getBookedButNotDeliveredParcels();
+		List<ParcelEntity> result = parcelService.getBookedButNotDeliveredParcels();
 
 		assertEquals(parcels, result);
 		verify(parcelRepository, times(1)).findBySenderAndStatus(sender.getId(), ParcelStatus.BOOKED);
@@ -181,10 +178,10 @@ class ParcelServiceTest {
 	void testGetParcelList_Success() {
 		authUtilMockedStatic.when(AuthUtil::getAuthenticatedUsername).thenReturn("sender@example.com");
 		when(userRepository.findByEmail("sender@example.com")).thenReturn(Optional.of(sender));
-		List<Parcel> parcels = Collections.singletonList(new Parcel());
+		List<ParcelEntity> parcels = Collections.singletonList(new ParcelEntity());
 		when(parcelRepository.getAllBySender(sender.getId())).thenReturn(parcels);
 
-		List<Parcel> result = parcelService.getParcelList();
+		List<ParcelEntity> result = parcelService.getParcelList();
 
 		assertEquals(parcels, result);
 		verify(parcelRepository, times(1)).getAllBySender(sender.getId());
@@ -193,10 +190,10 @@ class ParcelServiceTest {
 	@Test
 	void testGetParcelById_Success() {
 		UUID parcelId = UUID.randomUUID();
-		Parcel parcel = new Parcel();
+		ParcelEntity parcel = new ParcelEntity();
 		when(parcelRepository.findById(parcelId)).thenReturn(Optional.of(parcel));
 
-		Parcel result = parcelService.getParcelById(parcelId);
+		ParcelEntity result = parcelService.getParcelById(parcelId);
 
 		assertEquals(parcel, result);
 		verify(parcelRepository, times(1)).findById(parcelId);
@@ -213,13 +210,13 @@ class ParcelServiceTest {
 	@Test
 	void testUpdateParcelStatus_Delivered_Success() {
 		UUID parcelId = UUID.randomUUID();
-		Parcel parcel = new Parcel();
+		ParcelEntity parcel = new ParcelEntity();
 		parcel.setStatus(ParcelStatus.IN_TRANSIT);
 		parcel.setRider(rider);
 		parcel.setPrice(BigDecimal.valueOf(100.0));
 		when(parcelRepository.findById(parcelId)).thenReturn(Optional.of(parcel));
-		when(parcelRepository.save(any(Parcel.class))).thenReturn(parcel);
-		when(riderRepository.save(any(Rider.class))).thenReturn(rider);
+		when(parcelRepository.save(any(ParcelEntity.class))).thenReturn(parcel);
+		when(riderRepository.save(any(RiderEntity.class))).thenReturn(rider);
 
 		parcelService.updateParcelStatus(parcelId, ParcelStatus.DELIVERED);
 
@@ -234,10 +231,10 @@ class ParcelServiceTest {
 	@Test
 	void testUpdateParcelStatus_PickedUp_Success() {
 		UUID parcelId = UUID.randomUUID();
-		Parcel parcel = new Parcel();
+		ParcelEntity parcel = new ParcelEntity();
 		parcel.setStatus(ParcelStatus.ASSIGNED);
 		when(parcelRepository.findById(parcelId)).thenReturn(Optional.of(parcel));
-		when(parcelRepository.save(any(Parcel.class))).thenReturn(parcel);
+		when(parcelRepository.save(any(ParcelEntity.class))).thenReturn(parcel);
 
 		parcelService.updateParcelStatus(parcelId, ParcelStatus.PICKED_UP);
 
@@ -249,7 +246,7 @@ class ParcelServiceTest {
 	@Test
 	void testUpdateParcelStatus_InvalidTransition() {
 		UUID parcelId = UUID.randomUUID();
-		Parcel parcel = new Parcel();
+		ParcelEntity parcel = new ParcelEntity();
 		parcel.setStatus(ParcelStatus.BOOKED);
 		when(parcelRepository.findById(parcelId)).thenReturn(Optional.of(parcel));
 
@@ -260,7 +257,7 @@ class ParcelServiceTest {
 	@Test
 	void testUpdateParcelStatus_Delivered_NoRider() {
 		UUID parcelId = UUID.randomUUID();
-		Parcel parcel = new Parcel();
+		ParcelEntity parcel = new ParcelEntity();
 		parcel.setStatus(ParcelStatus.IN_TRANSIT);
 		parcel.setRider(null);
 		when(parcelRepository.findById(parcelId)).thenReturn(Optional.of(parcel));
@@ -281,11 +278,11 @@ class ParcelServiceTest {
 
 	@Test
 	void testGetRelatedParcelListOfCurrentRider_Success() {
-		List<Parcel> parcels = Collections.singletonList(new Parcel());
+		List<ParcelEntity> parcels = Collections.singletonList(new ParcelEntity());
 		when(riderService.getAuthenticatedRider()).thenReturn(rider);
 		when(parcelRepository.findByRider(rider)).thenReturn(parcels);
 
-		List<Parcel> result = parcelService.getRelatedParcelListOfCurrentRider();
+		List<ParcelEntity> result = parcelService.getRelatedParcelListOfCurrentRider();
 
 		assertEquals(parcels, result);
 		verify(riderService, times(1)).getAuthenticatedRider();

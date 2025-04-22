@@ -4,7 +4,7 @@ import com.bytebreeze.quickdrop.dto.paymentapiresponse.SSLCommerzPaymentInitResp
 import com.bytebreeze.quickdrop.dto.paymentapiresponse.SSLCommerzValidatorResponse;
 import com.bytebreeze.quickdrop.dto.request.ParcelBookingRequestDTO;
 import com.bytebreeze.quickdrop.exception.custom.SSLCommerzPaymentInitializationException;
-import com.bytebreeze.quickdrop.entity.User;
+import com.bytebreeze.quickdrop.entity.UserEntity;
 import com.bytebreeze.quickdrop.util.SSLCommerzUtil;
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -50,14 +50,14 @@ public class SSLCommerzPaymentService implements PaymentService {
 	}
 
 	@Override
-	public String getPaymentUrl(ParcelBookingRequestDTO dto, User sender) {
+	public String getPaymentUrl(ParcelBookingRequestDTO dto, UserEntity sender) {
 		MultiValueMap<String, String> formData = buildFormData(dto, sender);
 		HttpEntity<MultiValueMap<String, String>> requestEntity = buildHttpEntity(formData);
 		ResponseEntity<SSLCommerzPaymentInitResponseDto> responseEntity = sendPaymentRequest(requestEntity);
 		return handlePaymentResponse(responseEntity, dto.getPaymentMethod());
 	}
 
-	private MultiValueMap<String, String> buildFormData(ParcelBookingRequestDTO dto, User sender) {
+	private MultiValueMap<String, String> buildFormData(ParcelBookingRequestDTO dto, UserEntity sender) {
 		MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
 		formData.add("store_id", storeId);
 		formData.add("store_passwd", storePasswd);

@@ -3,9 +3,9 @@ package com.bytebreeze.quickdrop.controller;
 import com.bytebreeze.quickdrop.dto.request.RiderOnboardingDTO;
 import com.bytebreeze.quickdrop.dto.request.RiderRegistrationRequestDTO;
 import com.bytebreeze.quickdrop.dto.response.RiderViewCurrentParcelsResponseDTO;
+import com.bytebreeze.quickdrop.entity.RiderEntity;
 import com.bytebreeze.quickdrop.enums.ParcelStatus;
-import com.bytebreeze.quickdrop.entity.Parcel;
-import com.bytebreeze.quickdrop.entity.Rider;
+import com.bytebreeze.quickdrop.entity.ParcelEntity;
 import com.bytebreeze.quickdrop.repository.ParcelRepository;
 import com.bytebreeze.quickdrop.service.ParcelService;
 import com.bytebreeze.quickdrop.service.RiderService;
@@ -78,7 +78,7 @@ public class RiderController {
 		}
 
 		try {
-			Rider savedRider = riderService.registerRider(riderRegistrationRequestDTO);
+			RiderEntity savedRider = riderService.registerRider(riderRegistrationRequestDTO);
 
 			redirectAttributes.addFlashAttribute(SUCCESS, "Rider Registration Successful"); // Add flash attribute
 			return REDIRECT_RIDER_ONBOARDING + savedRider.getId();
@@ -93,7 +93,7 @@ public class RiderController {
 	public String showRiderOnboardingForm(@PathVariable UUID riderId, Model model) {
 
 		try {
-			Rider rider = riderService.findByRiderId(riderId);
+			RiderEntity rider = riderService.findByRiderId(riderId);
 
 			// sending rider to store rider ID
 			model.addAttribute("rider", rider);
@@ -161,13 +161,13 @@ public class RiderController {
 	@GetMapping("/current-parcels")
 	public String showCurrentParcelsRequest(Model model) {
 
-		Rider rider = riderService.getAuthenticatedRider();
+		RiderEntity rider = riderService.getAuthenticatedRider();
 		if (rider.getIsAssigned()) {
 
 			try {
 
 				// A parcel is assigned to a rider with ASSIGNED, PICKED-UP, and IN_TRANSIT status
-				List<Parcel> parcels = riderService.getAssignedParcelByRider(rider);
+				List<ParcelEntity> parcels = riderService.getAssignedParcelByRider(rider);
 				if (parcels != null) {
 					model.addAttribute(PARCELS, parcels);
 				} else {
@@ -219,7 +219,7 @@ public class RiderController {
 
 	@GetMapping("/parcels/history")
 	public String showParcelHistory(Model model) {
-		List<Parcel> parcelList = parcelService.getRelatedParcelListOfCurrentRider();
+		List<ParcelEntity> parcelList = parcelService.getRelatedParcelListOfCurrentRider();
 		model.addAttribute(PARCELS, parcelList);
 		return "rider/view-history";
 	}

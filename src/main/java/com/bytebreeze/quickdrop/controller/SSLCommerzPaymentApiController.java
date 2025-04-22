@@ -2,8 +2,8 @@ package com.bytebreeze.quickdrop.controller;
 
 import com.bytebreeze.quickdrop.enums.ParcelStatus;
 import com.bytebreeze.quickdrop.enums.PaymentStatus;
-import com.bytebreeze.quickdrop.entity.Parcel;
-import com.bytebreeze.quickdrop.entity.Payment;
+import com.bytebreeze.quickdrop.entity.ParcelEntity;
+import com.bytebreeze.quickdrop.entity.PaymentEntity;
 import com.bytebreeze.quickdrop.repository.ParcelRepository;
 import com.bytebreeze.quickdrop.repository.PaymentRepository;
 import com.bytebreeze.quickdrop.service.SSLCommerzPaymentService;
@@ -49,7 +49,7 @@ public class SSLCommerzPaymentApiController {
 		String transactionId = paramMap.get(TRAN_ID);
 
 		// fetch payment information from database
-		Payment payment = paymentRepository
+		PaymentEntity payment = paymentRepository
 				.findByTransactionId(transactionId)
 				.orElseThrow(() -> new IllegalArgumentException(INVALID_TRANSACTION_ID));
 		String marchentTransactionId = payment.getTransactionId();
@@ -68,7 +68,7 @@ public class SSLCommerzPaymentApiController {
 		paymentRepository.save(payment);
 
 		// upate parcel status
-		Parcel parcel = payment.getParcel();
+		ParcelEntity parcel = payment.getParcel();
 		parcel.setStatus(ParcelStatus.BOOKED);
 		parcelRepository.save(parcel);
 
@@ -83,7 +83,7 @@ public class SSLCommerzPaymentApiController {
 		String transactionId = paramMap.get(TRAN_ID);
 
 		// fetch payment information from database
-		Payment payment = paymentRepository
+		PaymentEntity payment = paymentRepository
 				.findByTransactionId(transactionId)
 				.orElseThrow(() -> new IllegalArgumentException(INVALID_TRANSACTION_ID));
 
@@ -102,7 +102,7 @@ public class SSLCommerzPaymentApiController {
 		String transactionId = paramMap.get(TRAN_ID);
 
 		// fetch payment information from database
-		Payment payment = paymentRepository
+		PaymentEntity payment = paymentRepository
 				.findByTransactionId(transactionId)
 				.orElseThrow(() -> new IllegalArgumentException(INVALID_TRANSACTION_ID));
 

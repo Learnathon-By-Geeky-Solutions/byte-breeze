@@ -12,8 +12,8 @@ import com.bytebreeze.quickdrop.enums.ParcelStatus;
 import com.bytebreeze.quickdrop.enums.VerificationStatus;
 import com.bytebreeze.quickdrop.exception.custom.AlreadyExistsException;
 import com.bytebreeze.quickdrop.exception.custom.ParcelNotFoundException;
-import com.bytebreeze.quickdrop.entity.Parcel;
-import com.bytebreeze.quickdrop.entity.Rider;
+import com.bytebreeze.quickdrop.entity.ParcelEntity;
+import com.bytebreeze.quickdrop.entity.RiderEntity;
 import com.bytebreeze.quickdrop.service.ParcelService;
 import com.bytebreeze.quickdrop.service.RiderService;
 import java.math.BigDecimal;
@@ -51,19 +51,19 @@ class RiderControllerTest {
 
 	private UUID riderId;
 	private UUID parcelId;
-	private Rider rider;
+	private RiderEntity rider;
 	private RiderRegistrationRequestDTO registrationDTO;
 	private RiderOnboardingDTO onboardingDTO;
 	private RiderDashboardResponseDTO dashboardResponse;
 	private RiderViewCurrentParcelsResponseDTO parcelDTO;
-	private Parcel parcel;
+	private ParcelEntity parcel;
 
 	@BeforeEach
 	void setUp() {
 		riderId = UUID.randomUUID();
 		parcelId = UUID.randomUUID();
 
-		rider = new Rider();
+		rider = new RiderEntity();
 		rider.setId(riderId);
 		rider.setFullName("John Doe");
 		rider.setEmail("john@example.com");
@@ -89,7 +89,7 @@ class RiderControllerTest {
 		parcelDTO.setTrackingId("123456");
 		parcelDTO.setPrice(new BigDecimal("100.00"));
 
-		parcel = new Parcel();
+		parcel = new ParcelEntity();
 		parcel.setId(parcelId);
 		parcel.setTrackingId("123456");
 		parcel.setStatus(ParcelStatus.ASSIGNED);

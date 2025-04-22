@@ -36,19 +36,19 @@ public class ParcelService {
 	private final RiderService riderService;
 	private final ModelMapper modelMapper;
 
-	public Parcel bookParcel(ParcelBookingRequestDTO parcelBookingRequestDTO) {
-		Parcel parcel = mapToParcel(parcelBookingRequestDTO);
+	public ParcelEntity bookParcel(ParcelBookingRequestDTO parcelBookingRequestDTO) {
+		ParcelEntity parcel = mapToParcel(parcelBookingRequestDTO);
 		return parcelRepository.save(parcel);
 	}
 
-	public Parcel mapToParcel(ParcelBookingRequestDTO dto) {
-		Parcel parcel = new Parcel();
-		ProductCategory category = productCategoryRepository
+	public ParcelEntity mapToParcel(ParcelBookingRequestDTO dto) {
+		ParcelEntity parcel = new ParcelEntity();
+		ProductCategoryEntity category = productCategoryRepository
 				.findById(dto.getCategoryId())
 				.orElseThrow(() -> new IllegalArgumentException("Invalid category ID"));
 
-		Optional<User> senderOptional = userRepository.findByEmail(AuthUtil.getAuthenticatedUsername());
-		User sender = senderOptional.orElseThrow(() -> new IllegalArgumentException(INVALID_SENDER));
+		Optional<UserEntity> senderOptional = userRepository.findByEmail(AuthUtil.getAuthenticatedUsername());
+		UserEntity sender = senderOptional.orElseThrow(() -> new IllegalArgumentException(INVALID_SENDER));
 
 		parcel.setCategory(category);
 		parcel.setDescription(dto.getDescription());
@@ -88,8 +88,8 @@ public class ParcelService {
 		return timePart + randomPart.toString();
 	}
 
-	public void savePayment(Parcel parcel, ParcelBookingRequestDTO parcelBookingRequestDTO) {
-		Payment payment = new Payment();
+	public void savePayment(ParcelEntity parcel, ParcelBookingRequestDTO parcelBookingRequestDTO) {
+		PaymentEntity payment = new PaymentEntity();
 		payment.setAmount(parcelBookingRequestDTO.getPrice());
 		payment.setTransactionId(parcelBookingRequestDTO.getTransactionId());
 		payment.setPaymentMethod(parcelBookingRequestDTO.getPaymentMethod());
@@ -100,8 +100,8 @@ public class ParcelService {
 		paymentRepository.save(payment);
 	}
 
-	public List<Parcel> getBookedButNotDeliveredParcels() {
-		User sender = userRepository
+	public List<ParcelEntity> getBookedButNotDeliveredParcels() {
+		UserEntity sender = userRepository
 				.findByEmail(AuthUtil.getAuthenticatedUsername())
 				.orElseThrow(() -> new IllegalArgumentException(INVALID_SENDER));
 		return parcelRepository.findBySenderAndStatus(sender.getId(), ParcelStatus.BOOKED);
@@ -115,20 +115,20 @@ public class ParcelService {
 		return trackingId;
 	}
 
-	public List<Parcel> getParcelList() {
-		User sender = userRepository
+	public List<ParcelEntity> getParcelList() {
+		UserEntity sender = userRepository
 				.findByEmail(AuthUtil.getAuthenticatedUsername())
 				.orElseThrow(() -> new IllegalArgumentException(INVALID_SENDER));
 		return parcelRepository.getAllBySender(sender.getId());
 	}
 
-	public Parcel getParcelById(UUID id) {
+	public ParcelEntity getParcelById(UUID id) {
 		return parcelRepository.findById(id).orElseThrow(() -> new RuntimeException("Parcel not found"));
 	}
 
 	@Transactional
 	public void updateParcelStatus(UUID id, ParcelStatus status) {
-		Parcel parcel = getParcelById(id);
+		ParcelEntity parcel = getParcelById(id);
 
 		if (!isValidStatusTransition(parcel.getStatus(), status)) {
 			throw new IllegalStateException("Invalid status transition from " + parcel.getStatus() + " to " + status);
@@ -138,7 +138,7 @@ public class ParcelService {
 		parcelRepository.save(parcel);
 	}
 
-	private void applyStatusUpdates(Parcel parcel, ParcelStatus status) {
+	private void applyStatusUpdates(ParcelEntity parcel, ParcelStatus status) {
 		parcel.setStatus(status);
 		parcel.setUpdatedAt(LocalDateTime.now());
 
@@ -154,13 +154,13 @@ public class ParcelService {
 				&& validTransitions.getOrDefault(current, Set.of()).contains(next);
 	}
 
-	private void handleDeliveryCompletion(Parcel parcel) {
-		Rider rider = parcel.getRider();
+	private void handleDeliveryCompletion(ParcelEntity parcel) {
+		RiderEntity rider = parcel.getRider();
 		if (rider == null) {
 			throw new IllegalStateException("No rider assigned to parcel with ID: " + parcel.getId());
 		}
 
-		if (!(rider instanceof Rider)) {
+		if (!(rider instanceof RiderEntity)) {
 			throw new IllegalStateException("Assigned rider is not a Rider instance for parcel ID: " + parcel.getId());
 		}
 
@@ -188,9 +188,9 @@ public class ParcelService {
 		return cost;
 	}
 
-	public List<Parcel> getRelatedParcelListOfCurrentRider() {
+	public List<ParcelEntity> getRelatedParcelListOfCurrentRider() {
 
-		Rider rider = riderService.getAuthenticatedRider();
+		RiderEntity rider = riderService.getAuthenticatedRider();
 		return parcelRepository.findByRider(rider);
 	}
 }

@@ -1,7 +1,7 @@
 package com.bytebreeze.quickdrop.mapper;
 
 import com.bytebreeze.quickdrop.dto.request.RiderOnboardingDTO;
-import com.bytebreeze.quickdrop.entity.Rider;
+import com.bytebreeze.quickdrop.entity.RiderEntity;
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
 
@@ -9,5 +9,5 @@ import org.springframework.stereotype.Component;
 @Component
 public interface OnboardRiderMapper {
 
-	Rider toEntity(RiderOnboardingDTO riderOnboardingDTO);
+	RiderEntity toEntity(RiderOnboardingDTO riderOnboardingDTO);
 }

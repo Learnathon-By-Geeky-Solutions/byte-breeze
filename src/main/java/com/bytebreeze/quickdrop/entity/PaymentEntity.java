@@ -12,7 +12,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Payment {
+@Table(name = "payment")
+public class PaymentEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID id;
@@ -24,10 +25,10 @@ public class Payment {
 	private String bankTransactionId;
 
 	@ManyToOne(cascade = CascadeType.ALL)
-	private User user;
+	private UserEntity user;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	private Parcel parcel;
+	private ParcelEntity parcel;
 
 	private PaymentStatus paymentStatus;
 }
