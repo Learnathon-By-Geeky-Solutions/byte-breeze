@@ -114,7 +114,7 @@ jacocoTestReport {
 							'**/com/bytebreeze/quickdrop/enums/**',
 							'**/com/bytebreeze/quickdrop/exception/**',
 							'**/com/bytebreeze/quickdrop/mapper/**',
-							'**/com/bytebreeze/quickdrop/model/**',
+							'**/com/bytebreeze/quickdrop/entity/**',
 					])
 		}))
 	}
