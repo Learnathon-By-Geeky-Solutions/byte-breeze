@@ -77,6 +77,7 @@
 - [Tech Stack](#-tech-stack)
 - [Project Structure](#-project-structure-simplified)
 - [Project Resources](#-project-resources)
+- [Released Features (MVP)](#-Released-Features-(MVP))
 - [Getting Started](#getting-started)
 - [Development Guidelines](#development-guidelines)
 - [Resources](#resources)
@@ -313,16 +314,13 @@ The Entity-Relationship (ER) diagram above visually represents the database sche
 ```
 
 
-## 📄 Project Resources
-
-| Category             | Document Name           | Link                                                                 |
-|----------------------|-------------------------|----------------------------------------------------------------------|
-| 📘 Documents         | Requirement Breakdown    | [View](https://docs.google.com/spreadsheets/d/1xkvcfqKs8xaK-G49qsPYhYuLTmGR0uW70pVxoA6MyY0/edit?gid=1403762707#gid=1403762707) |
-| 📘 Documents         | Project Documentation    | [View](docs/Team/)                                                   |
-| 🧩 UML Diagram       | UML Diagram              | [View](docs/Team/UML/)                                               |
-| 🗄️ Database Schema   | Database Schema          | [View](docs/Team/database/)                                          |
-
-
+## 🧱 Released Features (MVP)
+                                      
+<p align="center">
+    <img src="docs/Team/UML/images/improved-delivery-system-svg.png" width=50% alt="Class diagram convention">
+    <br />
+  <b>Released features of our system in first MVP</b>
+</p>
 
 
 
