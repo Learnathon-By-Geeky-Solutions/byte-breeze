@@ -124,6 +124,16 @@
 
 A tech-driven, role-based parcel delivery platform designed to address the modern challenges of intra-city logistics. Built to streamline the delivery process for **customers**, **e-commerce sellers**, and **delivery riders**, with powerful admin tools and real-time tracking capabilities.
 
+<div align="center">
+  <img src="docs/Team/UML/images/Main flow1.png" alt="delivery system flow" width="40%">
+  <span>        </span>
+  <img src="docs/Team/UML/images/Main flow3.png" alt="delivery system flow" width="40%">
+
+  <br />
+  <p> <b></b>Flow diagram of parcel delivery system</b></p>
+  
+</div>
+
 ---
 
 ## 🚀 Project Context
