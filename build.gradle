@@ -66,6 +66,9 @@ dependencies {
 
 	// Promethues
 	implementation 'io.micrometer:micrometer-registry-prometheus'
+
+	// Loki log appender
+	implementation 'com.github.loki4j:loki-logback-appender:1.6.0'
 }
 
 sonarqube {
