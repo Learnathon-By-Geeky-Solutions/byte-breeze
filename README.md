@@ -108,12 +108,12 @@
 
 ## 👥 Team Members & Mentor
 
-| Role        | Name                                                         | GitHub Profile                                      |
-|-------------|--------------------------------------------------------------|-----------------------------------------------------|
-| Team Leader | Suvash Kumar                                                 | [@suvashsumon](https://github.com/suvashsumon)     |
-| Member      | Md. Khairul Bashar                                           | [@KhairulBasharbd](https://github.com/KhairulBasharbd) |
-| Member      | Md. Tofael Ahmed                                             | [@Tofaal9152](https://github.com/Tofaal9152)        |
-| Mentor      | Jamilur Rahman, *Senior Software Engineer, Brain Station 23* | [@jamilxt](https://github.com/jamilxt)             |
+| Role        | GitHub Profile                                      |
+|-------------|-----------------------------------------------------|
+| Team Leader | [Suvash Kumar Sumon](https://github.com/suvashsumon)     |
+| Member      | [Khairul Basar](https://github.com/KhairulBasharbd) |
+| Member      |  [Tofaal](https://github.com/Tofaal9152)        |
+| Mentor      |  [Jamilxt](https://github.com/jamilxt)             |
 
 
 ---
