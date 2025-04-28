@@ -18,11 +18,22 @@
 
 
 ---
-[![GitHub Issues](https://img.shields.io/github/issues/Learnathon-By-Geeky-Solutions/byte-breeze?color=red&logo=github)](https://github.com/Learnathon-By-Geeky-Solutions/byte-breeze/issues)
-[![WBS Docs](https://img.shields.io/badge/WBS-Docs-FF6B6B?logo=googledocs)](https://docs.google.com/spreadsheets/d/1xkvcfqKs8xaK-G49qsPYhYuLTmGR0uW70pVxoA6MyY0/edit?gid=1578793000#gid=1578793000) 
-[![Project Management](https://img.shields.io/badge/Project-Management-8A2BE2?logo=bookstack)](https://github.com/orgs/Learnathon-By-Geeky-Solutions/projects/69/views/6?filterQuery=-sprint%3A%22Sprint+7%22&visibleFields=%5B%22Title%22%2C%22Assignees%22%2C%22Status%22%2C170470221%2C%22Labels%22%2C171229050%5D)
-[![wiki](https://img.shields.io/badge/wiki-view-grey?labelColor=black&style=for-the-badge&logo=github)](https://github.com/Learnathon-By-Geeky-Solutions/byte-breeze/wiki)
+<div align="center">
+
+[![DeliveryParcel.me - Live](https://img.shields.io/badge/DeliveryParcel.me-Live-brightgreen?style=for-the-badge&logo=google-chrome&logoColor=white)](https://deliveryparcel.me)
+
+<br/>
+
+
+[![WBS Docs](https://img.shields.io/badge/WBS_Docs-view-FF6B6B?style=for-the-badge&logo=googledocs)](https://docs.google.com/spreadsheets/d/1xkvcfqKs8xaK-G49qsPYhYuLTmGR0uW70pVxoA6MyY0/edit?gid=1578793000#gid=1578793000)
+[![Diagrams](https://img.shields.io/badge/Diagrams-view-grey?labelColor=E88305&style=for-the-badge&logo=lucid&logoColor=white)](https://github.com/Learnathon-By-Geeky-Solutions/byte-breeze/tree/main/docs/Team/UML)
+[![Project Board](https://img.shields.io/badge/Project_Board-view-8A2BE2?style=for-the-badge&logo=bookstack)](https://github.com/orgs/Learnathon-By-Geeky-Solutions/projects/69/views/6?filterQuery=-sprint%3A%22Sprint+7%22)
+[![Wiki](https://img.shields.io/badge/Wiki-view-black?style=for-the-badge&logo=github)](https://github.com/Learnathon-By-Geeky-Solutions/byte-breeze/wiki)
+[![GitHub Issues](https://img.shields.io/badge/issues-view-red?style=for-the-badge&logo=github)](https://github.com/Learnathon-By-Geeky-Solutions/byte-breeze/issues)
+</div>
+
 ---
+
 
 ## 📊 SonarCloud Analysis
 
@@ -39,7 +50,7 @@
 <details>
 <summary>🔽 Click to expand/collapse</summary>
 
-- [Live Deployment](#live-deployment)
+- [Live Deployment](#-live-deployment)
 - [Team Members & Mentor](#-team-members--mentor)
 - [Project Context](#-project-context)
 - [Key Features](#-key-features)
@@ -58,15 +69,9 @@
 
 ---
 
-# Live Deloyment
+## 🚀 Live Deloyment
 
-
-<div>
-
-
-### https://deliveryparcel.me [![live demo](https://img.shields.io/badge/live%20demo-view-grey?labelColor=8A05FF&style=for-the-badge&logo=render)](https://deliveryparcel.me) 
-</div>
-
+### https://deliveryparcel.me/
 
 ### 🔐 Portal Access Credentials
 
