@@ -72,7 +72,8 @@
     - [Customer (P2P)](#-customer-p2p)
     - [E-Commerce Seller (B2C)](#-e-commerce-seller-b2c)
     - [Delivery Rider](#-delivery-rider)
-    - [System Admin](#-system-admin)
+    - [System Admin](#-system-admin) 
+- [System Design & Architecture](#-system-design-&-architecture)
 - [Tech Stack](#-tech-stack)
 - [Project Structure](#-project-structure-simplified)
 - [Project Resources](#-project-resources)
@@ -271,9 +272,11 @@ The Entity-Relationship (ER) diagram above visually represents the database sche
 | **Authentication** | Spring Security, JWT                       |
 | **Database**    | PostgreSQL (Relational), Hibernate ORM     |
 | **APIs**        | RESTful APIs, Spring MVC                   |
-| **Testing**     | JUnit (Unit), Postman (API), JMeter (Load) |
-| **DevOps**      | AWS (Deployment), GitHub Actions (CI/CD)   |
+| **Testing**     | JUnit (Unit),Mockito, JMeter (Load) |
+| **DevOps**      | Azure (IAAS Deployment), Render (PAAS Deployment), GitHub Actions (CI/CD)   |
 | **Version Control** | Git, GitHub                                |
+|**Observability**| OpenTelemetry, JaegerUI, Prometheus, Grafana, Loki           |
+|**Project Management**| Github Project         |
 ---
 
 ## 📁 Project Structure (Simplified)
