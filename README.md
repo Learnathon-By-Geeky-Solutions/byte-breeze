@@ -249,6 +249,16 @@ With rapid urbanization and the e-commerce boom, the demand for reliable, effici
 
 
 
+### Database Diagram
+<p align="center">
+    <img src="docs/Team/database/ER_Diagram_V2.jpeg" width=40% alt="Class diagram convention">
+    <br />
+  <b>Initial ERD of our system</b>
+</p>
+The Entity-Relationship (ER) diagram above visually represents the database schema and relationships between tables.
+
+
+
 ---
 ## 🧰 Tech Stack
 
