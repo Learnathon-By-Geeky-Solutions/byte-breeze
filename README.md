@@ -1,9 +1,45 @@
-# 📦 Smart Parcel Delivery System
+<div align="center">
+    
+# 📦Smart Parcel Delivery System
+
+<!-- Row 1 -->
+![Java](https://img.shields.io/badge/Java-ED8B00?style=flat-square&logo=java)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-6DB33F?style=flat-square&logo=springboot)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql)
+![Hibernate](https://img.shields.io/badge/Hibernate-59666C?style=flat-square&logo=hibernate)
+![GitHub Projects](https://img.shields.io/badge/GitHub%20Projects-181717?style=flat-square&logo=github)
+![JUnit](https://img.shields.io/badge/JUnit-25A162?style=flat-square&logo=junit5)
+![Mockito](https://img.shields.io/badge/Mockito-3DDC84?style=flat-square&logo=mockito)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker)
+![Azure](https://img.shields.io/badge/Azure-0078D4?style=flat-square&logo=microsoftazure)
+![OpenTelemetry](https://img.shields.io/badge/OpenTelemetry-000000?style=flat-square&logo=opentelemetry)
+
+</div>
+
+
+---
+[![GitHub Issues](https://img.shields.io/github/issues/Learnathon-By-Geeky-Solutions/byte-breeze?color=red&logo=github)](https://github.com/Learnathon-By-Geeky-Solutions/byte-breeze/issues)
+[![WBS Docs](https://img.shields.io/badge/WBS-Docs-FF6B6B?logo=googledocs)](https://docs.google.com/spreadsheets/d/1xkvcfqKs8xaK-G49qsPYhYuLTmGR0uW70pVxoA6MyY0/edit?gid=1578793000#gid=1578793000) 
+[![Project Management](https://img.shields.io/badge/Project-Management-8A2BE2?logo=bookstack)](https://github.com/orgs/Learnathon-By-Geeky-Solutions/projects/69/views/6?filterQuery=-sprint%3A%22Sprint+7%22&visibleFields=%5B%22Title%22%2C%22Assignees%22%2C%22Status%22%2C170470221%2C%22Labels%22%2C171229050%5D)
+[![wiki](https://img.shields.io/badge/wiki-view-grey?labelColor=black&style=for-the-badge&logo=github)](https://github.com/Learnathon-By-Geeky-Solutions/byte-breeze/wiki)
+---
+
+## 📊 SonarCloud Analysis
+
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Learnathon-By-Geeky-Solutions_byte-breeze&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Learnathon-By-Geeky-Solutions_byte-breeze)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=Learnathon-By-Geeky-Solutions_byte-breeze&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=Learnathon-By-Geeky-Solutions_byte-breeze)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Learnathon-By-Geeky-Solutions_byte-breeze&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Learnathon-By-Geeky-Solutions_byte-breeze)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=Learnathon-By-Geeky-Solutions_byte-breeze&metric=bugs)](https://sonarcloud.io/summary/new_code?id=Learnathon-By-Geeky-Solutions_byte-breeze)
+
+
 
 ---
 ## 📑 Table of Contents
 
-- [Live Deployment](#live-deloyment)
+<details>
+<summary>🔽 Click to expand/collapse</summary>
+
+- [Live Deployment](#live-deployment)
 - [Team Members & Mentor](#-team-members--mentor)
 - [Project Context](#-project-context)
 - [Key Features](#-key-features)
@@ -18,18 +54,27 @@
 - [Development Guidelines](#development-guidelines)
 - [Resources](#resources)
 
+</details>
+
 ---
 
 # Live Deloyment
 
-### Live Link: https://quickdrop-q0q3.onrender.com/
+
+<div>
+
+
+### https://deliveryparcel.me [![live demo](https://img.shields.io/badge/live%20demo-view-grey?labelColor=8A05FF&style=for-the-badge&logo=render)](https://deliveryparcel.me) 
+</div>
+
+
 ### 🔐 Portal Access Credentials
 
 | Portal       | URL                                                        | Email                | Password           |
 |--------------|------------------------------------------------------------|----------------------|---------------------|
-| **Customer** | [Login](https://quickdrop-q0q3.onrender.com/auth/login)    | user2@gmail.com      | @Padma&1953         |
-| **Rider**    | [Login](https://quickdrop-q0q3.onrender.com/rider/login)   | amirider@gmail.com   | @Amirider&1953      |
-| **Admin**    | [Login](https://quickdrop-q0q3.onrender.com/admin/login)   | *Access Restricted*  | *Access Restricted* |
+| **Customer** | [Login](https://deliveryparcel.me/auth/login)    |       |          |
+| **Rider**    | [Login](https://deliveryparcel.me/rider/login)   |    |       |
+| **Admin**    | [Login](https://deliveryparcel.me/admin/login)   | *Access Restricted*  | *Access Restricted* |
 ---
 
 ## 👥 Team Members & Mentor
