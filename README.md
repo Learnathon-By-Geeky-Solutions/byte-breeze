@@ -203,7 +203,7 @@ With rapid urbanization and the e-commerce boom, the demand for reliable, effici
 
 ### Architecture Diagram
 <div align="center">
-  <img src="docs/Team/UML/images/system-architecture-diagram.png" alt="delivery system flow" width="40%"><br/>
+  <img src="docs/Team/UML/images/system-architecture-diagram.png" alt="delivery system flow" width="70%"><br/>
   <p> <b>High level architecture of our system</b></p>
 </div>
 
@@ -317,7 +317,7 @@ The Entity-Relationship (ER) diagram above visually represents the database sche
 ## 🧱 Released Features (MVP)
                                       
 <p align="center">
-    <img src="docs/Team/UML/images/improved-delivery-system-svg.png" width=50% alt="Class diagram convention">
+    <img src="docs/Team/UML/images/improved-delivery-system-svg.png" width=60% alt="Class diagram convention">
     <br />
   <b>Released features of our system in first MVP</b>
 </p>
