@@ -2,6 +2,10 @@
     
 # 📦Smart Parcel Delivery System
 
+<div align="center">
+  <img src="docs/Team/UML/images/QuickDrop.jpg" alt="LifeRide Banner" width="20%">
+</div>
+
 <!-- Row 1 -->
 ![Java](https://img.shields.io/badge/Java-ED8B00?style=flat-square&logo=java)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-6DB33F?style=flat-square&logo=springboot)
