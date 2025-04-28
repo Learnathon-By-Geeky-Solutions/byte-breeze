@@ -222,6 +222,30 @@ With rapid urbanization and the e-commerce boom, the demand for reliable, effici
     <b>Activity Diagram for Delivery Rider</b>
 </p>
 
+#### Class Diagram
+##### Key Classes:
+1. **User** (Base class for Customer, Seller, Rider, and Admin).
+2. **Customer** (Send the parcel delivery request)
+3. **Rider** (Delivery the parcel from sender to receiver)
+4. **Admin** (Manages the system and parcel)
+5. **Parcel** (Represents a Parcel to be delivered).
+6. **Payment** (Handles transactions for sending a parcel ).
+7. **Pricing Rule** (Set the price for a specific parcel).
+8. **Review** (Handles customer ratings and feedback).
+
+
+
+<p align="center">
+    <img src="docs/Team/UML/uml_class_diagram_Bytr_breeze.jpg" width= 40% alt="Parcel Delivery Class Diagram">
+    <br />
+    <b>Class Diagram of System</b>
+</p>
+
+<p align="center">
+    <img src="docs/Team/UML/images/classdiagram convention.jpg" width=30% alt="Class diagram convention">
+    <br />
+  <b>Type of UML relationship sign</b>
+</p>
 
 
 
