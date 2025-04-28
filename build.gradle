@@ -101,6 +101,10 @@ spotless {
 	}
 }
 
+tasks.withType(JavaCompile).configureEach {task -> {
+	task.dependsOn "spotlessApply"
+}}
+
 jacoco {
 	toolVersion = "0.8.10"
 }
