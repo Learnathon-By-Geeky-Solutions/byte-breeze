@@ -26,7 +26,7 @@ class FileStorageServiceTest {
 	@Mock
 	private FileStorageService fileStorageService;
 
-	private final String tempStoragePath = "test-uploads";
+	private final String tempStoragePath = "uploads";
 
 	@BeforeEach
 	void setUp() {
