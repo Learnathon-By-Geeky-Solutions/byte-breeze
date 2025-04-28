@@ -31,7 +31,7 @@
 
 <br/>
 
-[![Observability Traces](https://img.shields.io/badge/Traces-OpenTelemetry-FFA500?style=for-the-badge&logo=opentelemetry&logoColor=white)](https://tracing.deliveryparcel.me/)
+[![Observability Traces](https://img.shields.io/badge/Traces-JaegerUI-FFA500?style=for-the-badge&logo=opentelemetry&logoColor=white)](https://tracing.deliveryparcel.me/)
 [![Metrics Dashboard](https://img.shields.io/badge/Metrics-Prometheus-E6522C?style=for-the-badge&logo=prometheus&logoColor=white)](https://metrics.deliveryparcel.me/)
 [![Monitoring](https://img.shields.io/badge/Monitoring-Grafana-F46800?style=for-the-badge&logo=grafana&logoColor=white)](https://monitor.deliveryparcel.me/)
 [![Logs](https://img.shields.io/badge/Logs-ELK_Stack-005571?style=for-the-badge&logo=elasticstack&logoColor=white)](https://logs.deliveryparcel.me/)
@@ -62,7 +62,7 @@
 ## 📑 Table of Contents
 
 <details>
-<summary>🔽 Click to expand/collapse</summary>
+<summary> Click to expand/collapse</summary>
 
 - [Live Deployment](#-live-deployment)
 - [Team Members & Mentor](#-team-members--mentor)
@@ -83,18 +83,28 @@
 
 ---
 
-## 🚀 Live Deloyment
+## 🚀 Live Deployment
 
-### https://deliveryparcel.me/
+### 🌐 Production Environment (Azure VM - IAAS)
+[![Azure Production](https://img.shields.io/badge/Production-Azure_VM-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white)](https://deliveryparcel.me/)
 
-### 🔐 Portal Access Credentials
+> The production environment is hosted on Azure VM as an IAAS solution for optimal performance and reliability.
 
-| Portal       | URL                                                        | Email                | Password           |
-|--------------|------------------------------------------------------------|----------------------|---------------------|
-| **Customer** | [Login](https://deliveryparcel.me/auth/login)    |       |          |
-| **Rider**    | [Login](https://deliveryparcel.me/rider/login)   |    |       |
-| **Admin**    | [Login](https://deliveryparcel.me/admin/login)   | *Access Restricted*  | *Access Restricted* |
 ---
+
+### 🛠️ Development Environment (Render - PAAS)
+[![Render Development](https://img.shields.io/badge/Development-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://quickdrop-q0q3.onrender.com/)
+
+> The development environment is hosted on Render as a PAAS solution for testing and development purposes.
+
+#### 🔐 Portal Access Credentials
+| Portal       | URL                                                                 | Email               | Password          |
+|--------------|---------------------------------------------------------------------|---------------------|-------------------|
+| **Customer** | [Login](https://quickdrop-q0q3.onrender.com/auth/login)  | `user2@gmail.com`   | `@Padma&1953`     |
+| **Rider**    | [Login](https://quickdrop-q0q3.onrender.com/rider/login) | `amirider@gmail.com`| `@Amirider&1953`  |
+| **Admin**    | [Login](https://quickdrop-q0q3.onrender.com/admin/login) | *Access Restricted* | *Access Restricted* |
+
+> **Note**: Production credentials are restricted for security reasons.
 
 ## 👥 Team Members & Mentor
 
