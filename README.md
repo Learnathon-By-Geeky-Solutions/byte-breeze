@@ -116,7 +116,7 @@
 
 
 <div align="center">
-  <img src="/docs/Team/UML/images/deliveryparcel.me_.png" width = 50% alt="use_case_diagram"><br/>
+  <img src="/docs/Team/UML/images/deliveryparcel.me_.png" width = 60% alt="use_case_diagram"><br/>
   <p> <b>Landing Page</b></p>
 </div>
 
