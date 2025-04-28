@@ -183,7 +183,49 @@ With rapid urbanization and the e-commerce boom, the demand for reliable, effici
 - 🛡️ **Fraud Detection** – Monitor and prevent suspicious activity
 
 ---
+## 🏗 System Design & Architecture
 
+### Architecture Diagram
+<div align="center">
+  <img src="docs/Team/UML/images/system-architecture-diagram.png" alt="delivery system flow" width="40%"><br/>
+  <p> <b>High level architecture of our system</b></p>
+</div>
+
+### UML Diagram
+
+#### Use Case Diagram
+  The main actors in our system are:
+- **Customer** - Books parcels and tracks deliveries.
+- **Delivery Rider** - Accepts and delivers parcels.
+- **System Admin** - Manages users and monitors system activities.
+<div align="center">
+  <img src="docs/Team/UML/uml_use_case_diagram_Bytr_breeze.jpg" alt="use_case_diagram" width="40%"><br/>
+  <p> <b>Use case diagram of our system</b></p>
+</div>
+
+#### Activity Diagram
+
+##### Parcel Booking Process by Customer(sender):
+
+<p align="center">
+    <img src="docs/Team/UML/uml_customer_activity_diagram_Bytr_breeze.jpg" width="40% alt=" Activity Diagram for Customer(sender)">
+    <br />
+    <b>Activity Diagram for Customer(sender)</b>
+</p>
+
+
+##### Parcel Delivery Process By Rider:
+
+<p align="center">
+    <img src="docs/Team/UML/uml_rider_activity_diagram.jpg" width="40% alt="Activity Diagram for Delivery Rider">
+    <br />
+    <b>Activity Diagram for Delivery Rider</b>
+</p>
+
+
+
+
+---
 ## 🧰 Tech Stack
 
 | Layer           | Technology                                 |
