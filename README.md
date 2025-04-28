@@ -66,6 +66,7 @@
 
 - [Live Deployment](#-live-deployment)
 - [Team Members & Mentor](#-team-members--mentor)
+- [Project Introduction](#-project-introduction)
 - [Project Context](#-project-context)
 - [Key Features](#-key-features)
     - [Customer (P2P)](#-customer-p2p)
@@ -120,6 +121,8 @@
 
 ---
 
+## 🎯 Project Introduction
+
 <h1 align= "center">Smart Parcel Delivery System</h1>
 
 A tech-driven, role-based parcel delivery platform designed to address the modern challenges of intra-city logistics. Built to streamline the delivery process for **customers**, **e-commerce sellers**, and **delivery riders**, with powerful admin tools and real-time tracking capabilities.
@@ -128,9 +131,8 @@ A tech-driven, role-based parcel delivery platform designed to address the moder
   <img src="docs/Team/UML/images/Main flow1.png" alt="delivery system flow" width="40%">
   <span>        </span>
   <img src="docs/Team/UML/images/Main flow3.png" alt="delivery system flow" width="40%">
-
   <br />
-  <p> <b></b>Flow diagram of parcel delivery system</b></p>
+  <p> <b>Main flow of parcel delivery system</b></p>
   
 </div>
 
