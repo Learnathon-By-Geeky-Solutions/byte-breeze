@@ -1,10 +1,13 @@
 <div align="center">
-    
-# 📦Smart Parcel Delivery System
 
 <div align="center">
-  <img src="docs/Team/UML/images/QuickDrop.jpg" alt="LifeRide Banner" width="20%">
+  <img src="docs/Team/UML/images/QuickDrop.jpg" alt="LifeRide Banner" width="50%">
 </div>
+
+
+# 📦Smart Parcel Delivery System
+
+
 
 <!-- Row 1 -->
 ![Java](https://img.shields.io/badge/Java-ED8B00?style=flat-square&logo=java)
