@@ -90,7 +90,7 @@
 
 > The production environment is hosted on Azure VM as an IAAS solution for optimal performance and reliability.
 
----
+
 
 ### 🛠️ Development Environment (Render - PAAS)
 [![Render Development](https://img.shields.io/badge/Development-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://quickdrop-q0q3.onrender.com/)
@@ -105,6 +105,8 @@
 | **Admin**    | [Login](https://quickdrop-q0q3.onrender.com/admin/login) | *Access Restricted* | *Access Restricted* |
 
 > **Note**: Production credentials are restricted for security reasons.
+
+---
 
 ## 👥 Team Members & Mentor
 
