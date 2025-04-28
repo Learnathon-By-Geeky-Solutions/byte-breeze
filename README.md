@@ -31,12 +31,19 @@
 
 <br/>
 
+[![Observability Traces](https://img.shields.io/badge/Traces-OpenTelemetry-FFA500?style=for-the-badge&logo=opentelemetry&logoColor=white)](https://tracing.deliveryparcel.me/)
+[![Metrics Dashboard](https://img.shields.io/badge/Metrics-Prometheus-E6522C?style=for-the-badge&logo=prometheus&logoColor=white)](https://metrics.deliveryparcel.me/)
+[![Monitoring](https://img.shields.io/badge/Monitoring-Grafana-F46800?style=for-the-badge&logo=grafana&logoColor=white)](https://monitor.deliveryparcel.me/)
+[![Logs](https://img.shields.io/badge/Logs-ELK_Stack-005571?style=for-the-badge&logo=elasticstack&logoColor=white)](https://logs.deliveryparcel.me/)
+
+<br/>
 
 [![WBS Docs](https://img.shields.io/badge/WBS_Docs-view-FF6B6B?style=for-the-badge&logo=googledocs)](https://docs.google.com/spreadsheets/d/1xkvcfqKs8xaK-G49qsPYhYuLTmGR0uW70pVxoA6MyY0/edit?gid=1578793000#gid=1578793000)
-[![Diagrams](https://img.shields.io/badge/Diagrams-view-grey?labelColor=E88305&style=for-the-badge&logo=lucid&logoColor=white)](https://github.com/Learnathon-By-Geeky-Solutions/byte-breeze/tree/main/docs/Team/UML)
+[![Diagrams](https://img.shields.io/badge/Diagrams-View-E88305?style=for-the-badge&logo=lucidchart&logoColor=white)](https://github.com/Learnathon-By-Geeky-Solutions/byte-breeze/tree/main/docs/Team/UML)
 [![Project Board](https://img.shields.io/badge/Project_Board-view-8A2BE2?style=for-the-badge&logo=bookstack)](https://github.com/orgs/Learnathon-By-Geeky-Solutions/projects/69/views/6?filterQuery=-sprint%3A%22Sprint+7%22)
 [![Wiki](https://img.shields.io/badge/Wiki-view-black?style=for-the-badge&logo=github)](https://github.com/Learnathon-By-Geeky-Solutions/byte-breeze/wiki)
 [![GitHub Issues](https://img.shields.io/badge/issues-view-red?style=for-the-badge&logo=github)](https://github.com/Learnathon-By-Geeky-Solutions/byte-breeze/issues)
+
 </div>
 
 ---
