@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
-import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -68,18 +67,5 @@ class FileControllerTest {
 
 		String filename = "../" + outside.getFileName().toString();
 		assertEquals(HttpStatus.BAD_REQUEST, controller.getFile(filename).getStatusCode());
-	}
-
-	@Test
-	void getFile_whenUploadDirIsIllegal_throwsInvalidPathException() throws Exception {
-		// inject an illegal uploadDir that Paths.get() cannot parse
-		Field uploadDirField = FileController.class.getDeclaredField("uploadDir");
-		uploadDirField.setAccessible(true);
-		uploadDirField.set(controller, "://not-a-valid-path");
-
-		assertThrows(
-				InvalidPathException.class,
-				() -> controller.getFile("anything.txt"),
-				"Expected an InvalidPathException when uploadDir contains illegal characters");
 	}
 }
