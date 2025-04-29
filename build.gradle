@@ -81,7 +81,7 @@ sonarqube {
 		property "sonar.tests", "src/test/java"
 		property "sonar.java.binaries", "build/classes/java/main"
 		property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
-		property "sonar.coverage.exclusions", "**/com/bytebreeze/quickdrop/config/**, **/com/bytebreeze/quickdrop/dto/**, **/com/bytebreeze/quickdrop/enums/**, **/com/bytebreeze/quickdrop/exception/**, **/com/bytebreeze/quickdrop/mapper/**, **/com/bytebreeze/quickdrop/entity/**"
+		property "sonar.coverage.exclusions", "**/com/bytebreeze/quickdrop/config/**, **/com/bytebreeze/quickdrop/dto/**, **/com/bytebreeze/quickdrop/enums/**, **/com/bytebreeze/quickdrop/exception/**, **/com/bytebreeze/quickdrop/mapper/**, **/com/bytebreeze/quickdrop/entity/**, '**/com/bytebreeze/quickdrop/security/**'"
 	}
 }
 
@@ -126,6 +126,7 @@ jacocoTestReport {
 							'**/com/bytebreeze/quickdrop/exception/**',
 							'**/com/bytebreeze/quickdrop/mapper/**',
 							'**/com/bytebreeze/quickdrop/entity/**',
+							'**/com/bytebreeze/quickdrop/security/**'
 					])
 		}))
 	}
