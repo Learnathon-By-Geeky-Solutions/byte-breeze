@@ -1,14 +1,13 @@
 package com.bytebreeze.quickdrop.security;
 
 import com.bytebreeze.quickdrop.repository.UserRepository;
-import com.google.common.util.concurrent.RateLimiter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
@@ -19,20 +18,14 @@ public class SecurityConfig {
 	private static final String ADMIN_LOGIN_URL = "/admin/login";
 	private static final String REMEMBER_ME = "remember-me";
 	private static final String RIDER_LOGIN = "/rider/login";
+	private static final int REMEMBER_ME_TOKEN_VALIDITY_IN_SECONDS = 30 * 24 * 60 * 60; // one month
 
 	@Value("${quickdrop.security.remember-me.key}")
 	private String rememberMeKey;
 
-	private int rememberMeTokenValidityInSeconds = 30 * 24 * 60 * 60; // one month
-
 	@Bean
 	public UserDetailsService userDetailsService(UserRepository userRepository) {
 		return new CustomUserDetailsService(userRepository);
-	}
-
-	@Bean
-	public RateLimiter registrationRateLimiter() {
-		return RateLimiter.create(10.0); // 10 requests per second
 	}
 
 	@Bean
@@ -57,7 +50,7 @@ public class SecurityConfig {
 				.rememberMe(rememberMe -> rememberMe
 						.key(rememberMeKey)
 						.rememberMeParameter(REMEMBER_ME)
-						.tokenValiditySeconds(rememberMeTokenValidityInSeconds)
+						.tokenValiditySeconds(REMEMBER_ME_TOKEN_VALIDITY_IN_SECONDS)
 						.rememberMeCookieName("admin-remember-me"))
 				.logout(logout -> logout.logoutUrl("/admin/logout")
 						.logoutSuccessUrl(ADMIN_LOGIN_URL) // Redirect to login page after logout
@@ -94,7 +87,7 @@ public class SecurityConfig {
 				.rememberMe(rememberMe -> rememberMe
 						.key(rememberMeKey)
 						.rememberMeParameter(REMEMBER_ME)
-						.tokenValiditySeconds(rememberMeTokenValidityInSeconds)
+						.tokenValiditySeconds(REMEMBER_ME_TOKEN_VALIDITY_IN_SECONDS)
 						.rememberMeCookieName("user-remember-me"))
 				.logout(logout -> logout.logoutUrl("/user/logout")
 						.logoutSuccessUrl("/auth/logout")
@@ -129,7 +122,7 @@ public class SecurityConfig {
 				.rememberMe(rememberMe -> rememberMe
 						.key(rememberMeKey)
 						.rememberMeParameter(REMEMBER_ME)
-						.tokenValiditySeconds(rememberMeTokenValidityInSeconds)
+						.tokenValiditySeconds(REMEMBER_ME_TOKEN_VALIDITY_IN_SECONDS)
 						.rememberMeCookieName("rider-remember-me"))
 				.logout(logout -> logout.logoutUrl("/rider/logout")
 						.logoutSuccessUrl(RIDER_LOGIN) // Redirect to login page after logout
@@ -145,7 +138,6 @@ public class SecurityConfig {
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-
-		return new BCryptPasswordEncoder();
+		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 	}
 }
