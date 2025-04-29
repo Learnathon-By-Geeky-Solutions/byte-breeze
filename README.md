@@ -117,7 +117,6 @@
 <tr>
 <td valign="top">
 
-
 <div align="center">
   <img src="/docs/Team/UML/images/deliveryparcel.me_.png" alt="use_case_diagram"><br/>
   <p> <b>Landing Page</b></p>
@@ -320,7 +319,7 @@ The Entity-Relationship (ER) diagram above visually represents the database sche
 ## 🧱 Released Features (MVP)
                                       
 <p align="center">
-    <img src="docs/Team/UML/images/improved-delivery-system-svg.png" width=60% alt="Class diagram convention">
+    <img src="docs/Team/UML/images/improved-delivery-system-svg.png" width=100% alt="Class diagram convention">
     <br />
   <b>Released features of our system in first MVP</b>
 </p>
