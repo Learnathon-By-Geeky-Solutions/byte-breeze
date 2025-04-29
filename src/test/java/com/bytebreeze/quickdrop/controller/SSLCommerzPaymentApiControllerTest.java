@@ -79,7 +79,7 @@ class SSLCommerzPaymentApiControllerTest {
 			throws IOException, NoSuchAlgorithmException {
 		// Arrange
 		when(paymentRepository.findByTransactionId(transactionId)).thenReturn(Optional.of(paymentEntity));
-		when(sslCommerzPaymentService.orderValidate(eq(transactionId), eq("100.00"), eq("BDT"), eq(paramMap)))
+		when(sslCommerzPaymentService.orderValidate(transactionId, "100.00", "BDT", paramMap))
 				.thenReturn(true);
 		when(paymentRepository.save(any(PaymentEntity.class))).thenReturn(paymentEntity);
 		when(parcelRepository.save(any(ParcelEntity.class))).thenReturn(parcelEntity);
@@ -105,7 +105,7 @@ class SSLCommerzPaymentApiControllerTest {
 			throws IOException, NoSuchAlgorithmException {
 		// Arrange
 		when(paymentRepository.findByTransactionId(transactionId)).thenReturn(Optional.of(paymentEntity));
-		when(sslCommerzPaymentService.orderValidate(eq(transactionId), eq("100.00"), eq("BDT"), eq(paramMap)))
+		when(sslCommerzPaymentService.orderValidate(transactionId, "100.00", "BDT", paramMap))
 				.thenReturn(false);
 		when(redirectAttributes.addFlashAttribute(eq("error"), anyString())).thenReturn(redirectAttributes);
 
