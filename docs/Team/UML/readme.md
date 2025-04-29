@@ -28,7 +28,7 @@ satisfaction.
 
 
 <p align="center">
-    <img src="images/smart parcel deliverysystem.webp" alt="smart parcel delivery cl">
+    <img src="images/smart parcel deliverysystem.webp" width = 40%  alt="smart parcel delivery cl">
     <br />
     Smart parcel delivery system
 </p>
