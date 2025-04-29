@@ -1,7 +1,8 @@
+
 <div align="center">
 
 <div align="center">
-  <img src="docs/Team/UML/images/QuickDrop.jpg" alt="LifeRide Banner" width="50%">
+  <img src="docs/Team/UML/images/QuickDrop.jpg" alt="LifeRide Banner" width="100%">
 </div>
 
 
@@ -90,7 +91,7 @@
 
 <table>
 <tr>
-<td width="60%" valign="top">
+<td valign="top">
 
 ### 🌐 Production Environment (Azure VM - IAAS)
 [![Azure Production](https://img.shields.io/badge/Production-Azure_VM-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white)](https://deliveryparcel.me/)
@@ -112,11 +113,13 @@
 > **Note**: Production credentials are restricted for security reasons.
 
 </td>
-<td width="40%" valign="top">
+</tr>
+<tr>
+<td valign="top">
 
 
 <div align="center">
-  <img src="/docs/Team/UML/images/deliveryparcel.me_.png" width = 60% alt="use_case_diagram"><br/>
+  <img src="/docs/Team/UML/images/deliveryparcel.me_.png" alt="use_case_diagram"><br/>
   <p> <b>Landing Page</b></p>
 </div>
 
@@ -145,7 +148,7 @@ A tech-driven, role-based parcel delivery platform designed to address the moder
 
 <div align="center">
   <img src="docs/Team/UML/images/Main flow1.png" alt="delivery system flow" width="40%">
-  <span>        </span>
+  </br>
   <img src="docs/Team/UML/images/Main flow3.png" alt="delivery system flow" width="40%">
   <br />
   <p> <b>Main flow of parcel delivery system</b></p>
@@ -203,7 +206,7 @@ With rapid urbanization and the e-commerce boom, the demand for reliable, effici
 
 ### Architecture Diagram
 <div align="center">
-  <img src="docs/Team/UML/images/system-architecture-diagram.png" alt="delivery system flow" width="70%"><br/>
+  <img src="docs/Team/UML/images/system-architecture-diagram.png" alt="delivery system flow" width="100%"><br/>
   <p> <b>High level architecture of our system</b></p>
 </div>
 
@@ -215,7 +218,7 @@ With rapid urbanization and the e-commerce boom, the demand for reliable, effici
 - **Delivery Rider** - Accepts and delivers parcels.
 - **System Admin** - Manages users and monitors system activities.
 <div align="center">
-  <img src="docs/Team/UML/uml_use_case_diagram_Bytr_breeze.jpg" alt="use_case_diagram" width="40%"><br/>
+  <img src="docs/Team/UML/uml_use_case_diagram_Bytr_breeze.jpg" alt="use_case_diagram" width="100%"><br/>
   <p> <b>Use case diagram of our system</b></p>
 </div>
 
@@ -224,7 +227,7 @@ With rapid urbanization and the e-commerce boom, the demand for reliable, effici
 ##### Parcel Booking Process by Customer(sender):
 
 <p align="center">
-    <img src="docs/Team/UML/uml_customer_activity_diagram_Bytr_breeze.jpg" width="40% alt=" Activity Diagram for Customer(sender)">
+    <img src="docs/Team/UML/uml_customer_activity_diagram_Bytr_breeze.jpg" width="100% alt=" Activity Diagram for Customer(sender)">
     <br />
     <b>Activity Diagram for Customer(sender)</b>
 </p>
@@ -233,7 +236,7 @@ With rapid urbanization and the e-commerce boom, the demand for reliable, effici
 ##### Parcel Delivery Process By Rider:
 
 <p align="center">
-    <img src="docs/Team/UML/uml_rider_activity_diagram.jpg" width="40% alt="Activity Diagram for Delivery Rider">
+    <img src="docs/Team/UML/uml_rider_activity_diagram.jpg" width="100% alt="Activity Diagram for Delivery Rider">
     <br />
     <b>Activity Diagram for Delivery Rider</b>
 </p>
@@ -252,7 +255,7 @@ With rapid urbanization and the e-commerce boom, the demand for reliable, effici
 
 
 <p align="center">
-    <img src="docs/Team/UML/uml_class_diagram_Bytr_breeze.jpg" width= 40% alt="Parcel Delivery Class Diagram">
+    <img src="docs/Team/UML/uml_class_diagram_Bytr_breeze.jpg" width= 100% alt="Parcel Delivery Class Diagram">
     <br />
     <b>Class Diagram of System</b>
 </p>
@@ -267,7 +270,7 @@ With rapid urbanization and the e-commerce boom, the demand for reliable, effici
 
 ### Database Diagram
 <p align="center">
-    <img src="docs/Team/database/ER_Diagram_V2.jpeg" width=40% alt="Class diagram convention">
+    <img src="docs/Team/database/ER_Diagram_V2.jpeg" width=100% alt="Class diagram convention">
     <br />
   <b>Initial ERD of our system</b>
 </p>
@@ -312,7 +315,7 @@ The Entity-Relationship (ER) diagram above visually represents the database sche
 ├───service
 └───util
 ```
-
+---
 
 ## 🧱 Released Features (MVP)
                                       
@@ -321,6 +324,7 @@ The Entity-Relationship (ER) diagram above visually represents the database sche
     <br />
   <b>Released features of our system in first MVP</b>
 </p>
+
 
 
 
