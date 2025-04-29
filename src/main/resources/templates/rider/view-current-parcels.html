@@ -97,7 +97,6 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Add click event to all accept buttons
         document.querySelectorAll('.accept-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const parcelId = this.getAttribute('data-id');
@@ -108,31 +107,34 @@
                     icon: "warning",
                     buttons: ["Cancel", "Accept"],
                     dangerMode: true,
-                })
-                    .then((willAccept) => {
-                        if (willAccept) {
-                            // Create a form dynamically
-                            const form = document.createElement('form');
-                            form.method = 'POST';
-                            form.action = `/rider/Accept/${parcelId}`;
+                }).then((willAccept) => {
+                    if (willAccept) {
+                        // Encode parcelId safely
+                        const safeParcelId = encodeURIComponent(parcelId);
 
-                            // Add CSRF token if needed (for Spring Security)
-                            const csrfToken = document.querySelector('meta[name="_csrf"]')?.content;
-                            if (csrfToken) {
-                                const csrfInput = document.createElement('input');
-                                csrfInput.type = 'hidden';
-                                csrfInput.name = '_csrf';
-                                csrfInput.value = csrfToken;
-                                form.appendChild(csrfInput);
-                            }
+                        // Create a form dynamically
+                        const form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = `/rider/Accept/${safeParcelId}`;
 
-                            document.body.appendChild(form);
-                            form.submit();
+                        // Add CSRF token if needed (for Spring Security)
+                        const csrfToken = document.querySelector('meta[name="_csrf"]')?.content;
+                        if (csrfToken) {
+                            const csrfInput = document.createElement('input');
+                            csrfInput.type = 'hidden';
+                            csrfInput.name = '_csrf';
+                            csrfInput.value = csrfToken;
+                            form.appendChild(csrfInput);
                         }
-                    });
+
+                        document.body.appendChild(form);
+                        form.submit();
+                    }
+                });
             });
         });
     });
 </script>
+
 </body>
 </html>
