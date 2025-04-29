@@ -9,7 +9,6 @@ import com.bytebreeze.quickdrop.dto.paymentapiresponse.SSLCommerzValidatorRespon
 import com.bytebreeze.quickdrop.dto.request.ParcelBookingRequestDTO;
 import com.bytebreeze.quickdrop.entity.UserEntity;
 import com.bytebreeze.quickdrop.util.SSLCommerzUtil;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.*;
@@ -150,13 +149,13 @@ class SSLCommerzPaymentServiceTest {
 
 	@Test
 	void testOrderValidate_HashVerificationFails() throws Exception {
-		Map<String, String> requestParameters = new HashMap<>();
+		Map<String, String> inputParameters = new HashMap<>();
 		requestParameters.put("val_id", "val123");
 
 		when(hashVerificationService.verifyIPNHash(anyMap(), eq("testStorePasswd")))
 				.thenReturn(false);
 
-		boolean result = paymentService.orderValidate("tran123", "100.00", "BDT", requestParameters);
+		boolean result = paymentService.orderValidate("tran123", "100.00", "BDT", inputParameters);
 		assertFalse(result);
 	}
 
@@ -172,7 +171,7 @@ class SSLCommerzPaymentServiceTest {
 	}
 
 	@Test
-	void getValidatedResponse_EmptyJsonResponse_ReturnsNull() throws IOException {
+	void getValidatedResponse_EmptyJsonResponse_ReturnsNull() {
 		// Arrange
 		try (MockedStatic<SSLCommerzUtil> mockedUtil = Mockito.mockStatic(SSLCommerzUtil.class)) {
 			mockedUtil
@@ -200,7 +199,7 @@ class SSLCommerzPaymentServiceTest {
 		}
 	}
 
-	private SSLCommerzValidatorResponse invokeGetValidatedResponse(Map<String, String> params) throws IOException {
+	private SSLCommerzValidatorResponse invokeGetValidatedResponse(Map<String, String> params) {
 		try {
 			java.lang.reflect.Method method =
 					SSLCommerzPaymentService.class.getDeclaredMethod("getValidatedResponse", Map.class);
