@@ -8,9 +8,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 public class ProfileSettingUtil {
 
-	private ProfileSettingUtil() {
-		throw new UnsupportedOperationException("Utility class - instantiation not allowed");
-	}
+	private ProfileSettingUtil() {}
 
 	public static String handleUserProfileUpdate(
 			UserProfileUpdateDto dto,

@@ -1,60 +1,71 @@
 package com.bytebreeze.quickdrop.controller;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.web.servlet.MockMvc;
+import org.junit.jupiter.api.io.TempDir;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-@ActiveProfiles("test")
-@WebMvcTest(FileController.class)
-@AutoConfigureMockMvc(addFilters = false)
-@TestPropertySource(properties = "storage.local.path=uploads")
 class FileControllerTest {
 
-	@Autowired
-	private MockMvc mockMvc;
+	private FileController controller;
 
-	@Value("${storage.local.path}")
-	private String uploadDir;
-
-	private Path validFilePath;
+	@TempDir
+	Path tempUploadDir;
 
 	@BeforeEach
-	void setup() throws IOException {
-		Files.createDirectories(Paths.get(uploadDir));
-		validFilePath = Paths.get(uploadDir, "test.txt");
-		Files.writeString(validFilePath, "This is a test file");
+	void setUp() throws Exception {
+		controller = new FileController();
+		// inject uploadDir via reflection
+		Field uploadDirField = FileController.class.getDeclaredField("uploadDir");
+		uploadDirField.setAccessible(true);
+		uploadDirField.set(controller, tempUploadDir.toString());
+		// create a sample file
+		Files.writeString(tempUploadDir.resolve("sample.txt"), "hello world");
 	}
 
 	@Test
-	void testGetFile_Success() throws Exception {
-		mockMvc.perform(get("/files/test.txt"))
-				.andExpect(status().isOk())
-				.andExpect(header().string("Content-Disposition", "inline; filename=\"test.txt\""))
-				.andExpect(content().contentType(MediaType.TEXT_PLAIN))
-				.andExpect(content().string("This is a test file"));
+	void getFile_whenFileExists_returnsOkWithResource() throws Exception {
+		ResponseEntity<Resource> resp = controller.getFile("sample.txt");
+
+		assertEquals(HttpStatus.OK, resp.getStatusCode());
+		assertEquals("inline; filename=\"sample.txt\"", resp.getHeaders().getFirst(HttpHeaders.CONTENT_DISPOSITION));
+		assertEquals("text/plain", resp.getHeaders().getContentType().toString());
+
+		try (InputStream is = resp.getBody().getInputStream()) {
+			byte[] data = is.readAllBytes();
+			assertEquals("hello world", new String(data));
+		}
 	}
 
 	@Test
-	void testGetFile_FileNotFound() throws Exception {
-		mockMvc.perform(get("/files/nonexistent.txt")).andExpect(status().isNotFound());
+	void getFile_whenFileDoesNotExist_returnsNotFound() {
+		ResponseEntity<Resource> resp = controller.getFile("no-such.txt");
+		assertEquals(HttpStatus.NOT_FOUND, resp.getStatusCode());
 	}
 
 	@Test
-	void testGetFile_MalformedUrl() throws Exception {
-		mockMvc.perform(get("/files/%")).andExpect(status().isBadRequest());
+	void getFile_whenFilenameContainsTraversalChars_returnsBadRequest() {
+		assertEquals(HttpStatus.BAD_REQUEST, controller.getFile("../secret.txt").getStatusCode());
+		assertEquals(HttpStatus.BAD_REQUEST, controller.getFile("foo/bar.txt").getStatusCode());
+		assertEquals(HttpStatus.BAD_REQUEST, controller.getFile("foo\\bar.txt").getStatusCode());
+		assertEquals(HttpStatus.BAD_REQUEST, controller.getFile("bad%name.txt").getStatusCode());
+	}
+
+	@Test
+	void getFile_whenPathNormalizationEscapesUploadDir_returnsBadRequest() throws Exception {
+		Path outside = Files.createTempFile("outside", ".txt");
+		Files.writeString(outside, "oops");
+
+		String filename = "../" + outside.getFileName().toString();
+		assertEquals(HttpStatus.BAD_REQUEST, controller.getFile(filename).getStatusCode());
 	}
 }

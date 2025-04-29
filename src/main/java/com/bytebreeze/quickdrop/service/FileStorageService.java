@@ -65,13 +65,19 @@ public class FileStorageService {
 	}
 
 	public String storeFile(MultipartFile file) {
-
 		try {
-
 			validateFile(file);
 
 			String uniqueFileName = UUID.randomUUID() + "_" + sanitizeFileName(file.getOriginalFilename());
-			Path filePath = Paths.get(localUploadPath, uniqueFileName);
+
+			// Combine and normalize the path
+			Path targetDir = Paths.get(localUploadPath).toAbsolutePath().normalize();
+			Path filePath = targetDir.resolve(uniqueFileName).normalize();
+
+			// Ensure that the resulting path is still within the target directory
+			if (!filePath.startsWith(targetDir)) {
+				throw new FileStorageException("Invalid file path: potential path traversal attack");
+			}
 
 			Files.createDirectories(filePath.getParent());
 			Files.write(filePath, file.getBytes());
@@ -79,7 +85,6 @@ public class FileStorageService {
 			return uniqueFileName;
 
 		} catch (IOException e) {
-
 			throw new FileStorageException("Failed to store file locally", e);
 		}
 	}

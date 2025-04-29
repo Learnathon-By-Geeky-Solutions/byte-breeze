@@ -63,6 +63,12 @@ dependencies {
 	// OpenTelemetry
 	implementation 'io.micrometer:micrometer-tracing-bridge-otel'
 	implementation 'io.opentelemetry:opentelemetry-exporter-otlp'
+
+	// Promethues
+	implementation 'io.micrometer:micrometer-registry-prometheus'
+
+	// Loki log appender
+	implementation 'com.github.loki4j:loki-logback-appender:1.6.0'
 }
 
 sonarqube {
@@ -75,6 +81,7 @@ sonarqube {
 		property "sonar.tests", "src/test/java"
 		property "sonar.java.binaries", "build/classes/java/main"
 		property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
+		property "sonar.coverage.exclusions", "**/com/bytebreeze/quickdrop/config/**, **/com/bytebreeze/quickdrop/dto/**, **/com/bytebreeze/quickdrop/enums/**, **/com/bytebreeze/quickdrop/exception/**, **/com/bytebreeze/quickdrop/mapper/**, **/com/bytebreeze/quickdrop/entity/**, **/com/bytebreeze/quickdrop/security/**"
 	}
 }
 
@@ -93,6 +100,10 @@ spotless {
 		endWithNewline()
 	}
 }
+
+tasks.withType(JavaCompile).configureEach {task -> {
+	task.dependsOn "spotlessApply"
+}}
 
 jacoco {
 	toolVersion = "0.8.10"
@@ -114,7 +125,8 @@ jacocoTestReport {
 							'**/com/bytebreeze/quickdrop/enums/**',
 							'**/com/bytebreeze/quickdrop/exception/**',
 							'**/com/bytebreeze/quickdrop/mapper/**',
-							'**/com/bytebreeze/quickdrop/model/**',
+							'**/com/bytebreeze/quickdrop/entity/**',
+							'**/com/bytebreeze/quickdrop/security/**'
 					])
 		}))
 	}
