@@ -261,7 +261,7 @@ With rapid urbanization and the e-commerce boom, the demand for reliable, effici
 </p>
 
 <p align="center">
-    <img src="docs/Team/UML/images/classdiagram convention.jpg" width=30% alt="Class diagram convention">
+    <img src="docs/Team/UML/images/classdiagram convention.jpg" width=70% alt="Class diagram convention">
     <br />
   <b>Type of UML relationship sign</b>
 </p>
@@ -325,10 +325,10 @@ The Entity-Relationship (ER) diagram above visually represents the database sche
   <b>Released features of our system in first MVP</b>
 </p>
 
+---
 
 
-
-## Getting Started
+## 🛠️  Getting Started
 0. **Ensure Prerequisites:** Ensure your system have those running:
 
 | Tool        | Required Version | Download Link                                          |
