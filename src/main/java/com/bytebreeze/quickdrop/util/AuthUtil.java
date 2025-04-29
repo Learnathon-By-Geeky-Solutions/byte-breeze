@@ -8,9 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public class AuthUtil {
-	private AuthUtil() {
-		throw new UnsupportedOperationException("Utility class - instantiation not allowed");
-	}
+	private AuthUtil() {}
 
 	public static String getAuthenticatedUsername() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
