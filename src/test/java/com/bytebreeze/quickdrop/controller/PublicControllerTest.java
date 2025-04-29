@@ -8,11 +8,11 @@ import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.MockedStatic;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.ui.Model;
 
-@ActiveProfiles("test")
 class PublicControllerTest {
 
 	private PublicController publicController;
@@ -31,34 +31,18 @@ class PublicControllerTest {
 		authUtilMock.close();
 	}
 
-	@Test
-	void home_authenticatedAdmin_redirectsToAdminDashboard() {
-		authUtilMock.when(AuthUtil::isAuthenticated).thenReturn(true);
-		authUtilMock.when(AuthUtil::getAuthenticatedUserRoles).thenReturn(List.of("ROLE_ADMIN"));
+	@ParameterizedTest
+	@CsvSource({
+		"ROLE_ADMIN, redirect:/admin/dashboard",
+		"ROLE_USER, redirect:/user/dashboard",
+		"ROLE_RIDER, redirect:/rider/dashboard"
+	})
+	void home_authenticatedUser_redirectsBasedOnRole(String role, String expectedRedirect) {
+		when(AuthUtil.isAuthenticated()).thenReturn(true);
+		when(AuthUtil.getAuthenticatedUserRoles()).thenReturn(List.of(role));
 
 		String viewName = publicController.home(model);
-
-		assertEquals("redirect:/admin/dashboard", viewName);
-	}
-
-	@Test
-	void home_authenticatedUser_redirectsToUserDashboard() {
-		authUtilMock.when(AuthUtil::isAuthenticated).thenReturn(true);
-		authUtilMock.when(AuthUtil::getAuthenticatedUserRoles).thenReturn(List.of("ROLE_USER"));
-
-		String viewName = publicController.home(model);
-
-		assertEquals("redirect:/user/dashboard", viewName);
-	}
-
-	@Test
-	void home_authenticatedRider_redirectsToRiderDashboard() {
-		authUtilMock.when(AuthUtil::isAuthenticated).thenReturn(true);
-		authUtilMock.when(AuthUtil::getAuthenticatedUserRoles).thenReturn(List.of("ROLE_RIDER"));
-
-		String viewName = publicController.home(model);
-
-		assertEquals("redirect:/rider/dashboard", viewName);
+		assertEquals(expectedRedirect, viewName);
 	}
 
 	@Test

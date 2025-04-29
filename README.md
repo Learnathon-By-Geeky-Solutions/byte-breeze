@@ -331,8 +331,8 @@ The Entity-Relationship (ER) diagram above visually represents the database sche
 |-------------|------------------|--------------------------------------------------------|
 | Java JDK    | 17+              | [Download JDK](https://adoptium.net/)                 |
 | Gradle      | Wrapper included | N/A (uses `./gradlew`)                                |
-| PostgreSQL  | 12+              | [Download](https://www.postgresql.org/download/)      |
 | Git         | Any              | [Download](https://git-scm.com/downloads)             |
+| Docker      | Any              | [Download](https://www.docker.com/get-started)        |
 
 1. **Clone Project:** Clone the project to your local machine using SSH:
 ```
@@ -350,15 +350,12 @@ Make sure you have executable permission on `gradlew`. If not, run:
 ```
 chmod +x gradlew
 ```
-4. **Set Environment Variables:** To run this project you need to set the following environment variables on your environment:
+
+4. Run docker-compose to start the PostgreSQL database:
 ```
-DB_URL=your_postgresql_database_url
-DB_USERNAME=your_postgresql_database_username
-DB_PASSWORD=your_postgresql_database_password
-SSLCOM_STORE_ID=your_sslcommerz_store_id
-SSLCOM_STORE_PASSWD=your_sslcommerz_store_password 
-SSLCOM_BASE_URL=your_sslcommerz_base_url
+docker-compose up -d
 ```
+
 5. **Run:** Run the Application by this command:
 ```
 ./gradlew bootRun

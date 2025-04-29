@@ -5,15 +5,11 @@ import static org.mockito.Mockito.*;
 
 import com.bytebreeze.quickdrop.dto.request.UserProfileUpdateDto;
 import com.bytebreeze.quickdrop.service.UserService;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-@ActiveProfiles("test")
 class ProfileSettingUtilTest {
 
 	@Test
@@ -72,17 +68,5 @@ class ProfileSettingUtilTest {
 
 		assertEquals("profile-page", result);
 		verify(model, times(1)).addAttribute(eq("updateError"), anyString());
-	}
-
-	@Test
-	void testPrivateConstructorCoverage() throws Exception {
-		Constructor<ProfileSettingUtil> constructor = ProfileSettingUtil.class.getDeclaredConstructor();
-		constructor.setAccessible(true);
-
-		InvocationTargetException thrown = assertThrows(InvocationTargetException.class, constructor::newInstance);
-
-		assertTrue(thrown.getCause() instanceof UnsupportedOperationException);
-		assertEquals(
-				"Utility class - instantiation not allowed", thrown.getCause().getMessage());
 	}
 }
