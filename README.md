@@ -363,9 +363,9 @@ docker-compose up -d
 ```
 ./gradlew bootRun
 ```
-The app will start on the default port: `http://localhost:8080`
+The app will start on the default port: [http://localhost:8080](http://localhost:8080)
 
 ## Resources
-- [Project Documentation](docs/)
-- [Development Setup](docs/setup.md)
+- [Project Documentation](https://github.com/Learnathon-By-Geeky-Solutions/byte-breeze/tree/main/docs/Team)
+- [Development Setup](https://github.com/Learnathon-By-Geeky-Solutions/byte-breeze/wiki/%F0%9F%9B%A0%EF%B8%8F-Installation-Guide)
 - [Contributing Guidelines](CONTRIBUTING.md)
