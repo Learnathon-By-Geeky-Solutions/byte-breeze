@@ -24,8 +24,30 @@
 
 </div>
 
+---
+
+## 📖 About the Project
+
+**QuickDrop** is a **Smart Parcel Delivery System** — a web-based platform that makes sending and receiving parcels within a city fast, simple, and transparent.
+
+### What does it do?
+
+It connects three types of users through one platform:
+
+- **Customers** book a parcel delivery by entering pickup and drop-off details, pay online, and track their parcel in real time.
+- **Riders** receive nearby delivery requests, pick up parcels, follow optimized routes, and get paid upon completion.
+- **Admins** manage users, monitor deliveries, set pricing rules, and view system-wide analytics.
+
+### Why was it built?
+
+Traditional delivery systems often lack live tracking, have poor communication, and are hard to scale. QuickDrop solves these problems with GPS-enabled real-time tracking, role-specific dashboards, automated notifications, and a secure payment flow powered by SSLCommerz.
+
+### Tech highlights
+
+Built with **Java 17 + Spring Boot** on the backend, **PostgreSQL** for data storage, **Thymeleaf & Tailwind CSS** for the frontend, and deployed on **Azure VM** (production) and **Render** (development). Includes full observability with OpenTelemetry, Prometheus, Grafana, and Loki.
 
 ---
+
 <div align="center">
 
 [![DeliveryParcel.me - Live](https://img.shields.io/badge/DeliveryParcel.me-Live-brightgreen?style=for-the-badge&logo=google-chrome&logoColor=white)](https://deliveryparcel.me)
@@ -65,6 +87,7 @@
 <details>
 <summary> Click to expand/collapse</summary>
 
+- [About the Project](#-about-the-project)
 - [Live Deployment](#-live-deployment)
 - [Team Members & Mentor](#-team-members--mentor)
 - [Project Introduction](#-project-introduction)
